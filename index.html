@@ -152,6 +152,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     <button class="bc-tab" role="tab" data-tab="trends" id="tab-trends">State trends</button>
     <button class="bc-tab" role="tab" data-tab="counties" id="tab-counties">Counties</button>
     <button class="bc-tab" role="tab" data-tab="forecast" id="tab-forecast">2026 forecast check</button>
+    <button class="bc-tab" role="tab" data-tab="gas" id="tab-gas">Gas prices</button>
   </nav>
 
   <!-- NEEDLES -->
@@ -412,6 +413,32 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     </div>
   </section>
 
+  <!-- GAS -->
+  <section class="bc-page" id="gas" data-page="gas" hidden>
+    <div class="bc-card">
+      <div class="bc-tiles">
+        <div class="bc-tile"><span class="v" data-draw="gas-now" data-source="gas_elections">—</span><span class="k">Average gas price, October 2026</span></div>
+        <div class="bc-tile"><span class="v" data-draw="gas-chg" data-source="gas_elections">—</span><span class="k">Change from October 2025</span></div>
+        <div class="bc-tile"><span class="v" data-draw="gas-slope" data-source="gas_elections">—</span><span class="k">Midterm swing against the president's party per extra $1 a gallon (1978-2022)</span></div>
+        <div class="bc-tile"><span class="v" data-draw="gas-26" data-source="gas_elections">—</span><span class="k">2026: trend line vs actual swing against Republicans</span></div>
+      </div>
+    </div>
+    <div class="bc-card" id="gas-card">
+      <h2>Expensive gas has gone with bigger midterm losses for the president's party</h2>
+      <p class="bc-note">Each dot is a federal election: the national average price of regular gas before it (in 2026 dollars) against the change in the president's party's House popular-vote margin from two years earlier. Dots are colored by the president's party; filled dots are midterms, hollow ones presidential years. The dashed line is the midterm trend for 1978-2022. The midterm penalty does most of the work, and gas adds to it. 25 elections is a signal for the model's fundamentals, not a forecast on its own.</p>
+      <div class="bc-controls"><label>Across<select id="gas-x" aria-label="Gas measure"><option value="gas_real_2026">Gas price (2026 dollars)</option><option value="gas_change_1yr_pct">Change in the gas price over the prior year</option></select></label></div>
+      <div class="bc-chart" data-draw="gas-chart" data-source="gas_elections"></div>
+    </div>
+    <div class="bc-card" id="gas-table-card">
+      <h2>Every election since 1976</h2>
+      <div class="bc-tablebox"><table data-source="gas_elections" data-row-key="year" id="gas-table">
+        <thead><tr><th>Year</th><th>President</th><th class="n">Gas</th><th class="n">In 2026 $</th><th class="n">1-year change</th><th class="n">House vote</th><th class="n">President's party swing</th></tr></thead>
+        <tbody data-draw="gas-rows"></tbody>
+      </table></div>
+      <p class="bc-note">Gas: EIA retail regular, October average from 1992 (via FRED), annual average before that (EIA Annual Energy Review), adjusted with CPI-U (BLS). House vote: summed from MEDSL district returns, 1976-2024; 2026 is the New York Times' D+13 national estimate, still unofficial.</p>
+    </div>
+  </section>
+
   <p class="bc-note">Sources: MIT Election Data and Science Lab (official returns), OpenElections, Virginia Department of Elections, New Jersey Division of Elections, Kentucky State Board of Elections, U.S. Census Bureau ACS, NBC News/AP (2026, unofficial). Odd-year House specials use Wikipedia's tables of certified results.</p>
 </div>
 
@@ -542,7 +569,7 @@ const DEF = { tfrom: '2000', tab: 'needles', nrace: 'GA-senate', myear: '2024', 
 const P = () => ({ ...DEF, ...Object.fromEntries(Object.entries(dash.params()).filter(([, v]) => v != null)) });
 document.querySelectorAll('.bc-tab').forEach((b) => b.addEventListener('click', () => { dash.setParams({ tab: b.dataset.tab }); dash.setLink(b.dataset.tab); }));
 const named = location.hash.slice(1);
-if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast'].includes(named)) dash.setParams({ tab: named });
+if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas'].includes(named)) dash.setParams({ tab: named });
 dash.onData(() => {
   const tab = P().tab;
   document.querySelectorAll('.bc-page').forEach((s) => { s.hidden = s.dataset.page !== tab; });
@@ -1177,6 +1204,55 @@ dash.draw('hd-cross', (tb) => {
     .sort((a, b) => Math.abs(+b.pres_margin) - Math.abs(+a.pres_margin));
   for (const r of rows) { const tr = tb.insertRow(); [r.state_po + '-' + (r.district === 'AT-LARGE' ? 'AL' : r.district), r.winner, bcParty(r.winner_party), bcFmt.m(+r.margin), bcFmt.m(+r.pres_margin)].forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i === 2) td.className = bcPartyClass(r.winner_party); if (i > 2) td.className = 'n'; }); }
   if (!rows.length) { const td = tb.insertRow().insertCell(); td.colSpan = 5; td.textContent = ['2018', '2022'].includes(yr) ? 'The presidential vote by district is available for 2016, 2020 and 2024.' : 'No crossover districts.'; }
+});
+</script>
+<script>
+// ---- Gas tab: gas price before each election vs the president's party's House swing ----
+window.gasFit = (rows, xk) => {
+  const f = rows.filter((d) => d.kind === 'midterm' && +d.year < 2026 && d[xk] !== '' && d.house_inc_swing !== '');
+  const xs = f.map((d) => +d[xk]), ys = f.map((d) => +d.house_inc_swing), mx = d3.mean(xs), my = d3.mean(ys);
+  const sxy = d3.sum(xs, (x, i) => (x - mx) * (ys[i] - my)), sxx = d3.sum(xs, (x) => (x - mx) ** 2), syy = d3.sum(ys, (y) => (y - my) ** 2);
+  const b = sxy / sxx; return { b, a: my - b * mx, r: sxy / Math.sqrt(sxx * syy), n: f.length };
+};
+const gasG = () => { const g = dash.data('gas_elections'); return g.status === 'ok' ? g.data : null; };
+dash.draw('gas-now', (el) => { const d = gasG(); const r = d && d.find((x) => x.year === '2026'); el.textContent = r ? '$' + d3.format('.2f')(+r.gas) : '—'; });
+dash.draw('gas-chg', (el) => { const d = gasG(); const r = d && d.find((x) => x.year === '2026'); el.textContent = r ? (+r.gas_change_1yr_pct > 0 ? '+' : '') + d3.format('.0f')(+r.gas_change_1yr_pct) + '%' : '—'; });
+dash.draw('gas-slope', (el) => { const d = gasG(); el.textContent = d ? d3.format('.1f')(Math.abs(gasFit(d, 'gas_real_2026').b)) + ' pts' : '—'; });
+dash.draw('gas-26', (el) => { const d = gasG(); const r = d && d.find((x) => x.year === '2026'); if (!r) { el.textContent = '—'; return; } const f = gasFit(d, 'gas_real_2026'); el.textContent = d3.format('.1f')(-(f.a + f.b * +r.gas_real_2026)) + ' vs ' + d3.format('.1f')(-r.house_inc_swing); });
+document.querySelectorAll('#gas-x').forEach((s) => s.addEventListener('change', () => dash.setParams({ gasx: s.value })));
+dash.onData(() => document.querySelectorAll('#gas-x').forEach((s) => { s.value = P().gasx || 'gas_real_2026'; }));
+dash.draw('gas-chart', (el) => {
+  const g = dash.data('gas_elections'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
+  const xk = P().gasx || 'gas_real_2026', money = xk === 'gas_real_2026';
+  const pts = g.data.filter((d) => d[xk] !== '' && d.house_inc_swing !== '').map((d) => ({ d, x: +d[xk], y: +d.house_inc_swing, mid: d.kind === 'midterm' }));
+  const W = el.clientWidth || 600, H = 380, left = 52, right = 40, top = 14, bottom = 42;
+  const x = d3.scaleLinear(d3.extent(pts, (p) => p.x), [left, W - right]).nice();
+  const y = d3.scaleLinear([-20, 12], [H - bottom, top]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Gas price against the president\'s party House swing');
+  svg.append('g').selectAll('line').data(y.ticks(6)).join('line').attr('x1', left).attr('x2', W - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(6)).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => (t > 0 ? '+' : '') + t);
+  const fx = (t) => money ? '$' + d3.format('.2~f')(t) : (t > 0 ? '+' : '') + t + '%';
+  svg.append('g').selectAll('text').data(x.ticks(Math.max(3, Math.floor(W / 100)))).join('text').attr('x', (t) => x(t)).attr('y', H - bottom + 16).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(fx);
+  svg.append('text').attr('x', (left + W - right) / 2).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(money ? 'Gas price before the election, 2026 dollars per gallon' : 'Change in the gas price over the prior 12 months');
+  svg.append('text').attr('x', left).attr('y', top - 2).attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('President\'s party swing, pts');
+  const f = gasFit(g.data, xk), [x0, x1] = x.domain();
+  svg.append('line').attr('x1', x(x0)).attr('x2', x(x1)).attr('y1', y(f.a + f.b * x0)).attr('y2', y(f.a + f.b * x1)).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '5 4');
+  const tip = bcTip(el), fg = 'var(--color-fg)';
+  const gg = svg.append('g').selectAll('g').data(pts).join('g').attr('transform', (p) => `translate(${x(p.x)},${y(Math.max(-20, Math.min(12, p.y)))})`);
+  gg.append('circle').attr('r', (p) => p.d.year === '2026' ? 7 : 5.5).attr('fill', (p) => p.mid ? bcColor(el, p.d.president_party === 'D' ? 1 : -1) : 'var(--color-panel)')
+    .attr('stroke', (p) => p.mid ? 'var(--color-panel)' : bcColor(el, p.d.president_party === 'D' ? 1 : -1)).attr('stroke-width', 1.5)
+    .on('mousemove', (ev, p) => tip.show(ev, [p.d.year + ' · ' + p.d.kind + ' · ' + (p.d.president_party === 'D' ? 'Democratic' : 'Republican') + ' president', 'Gas $' + d3.format('.2f')(+p.d.gas) + ' ($' + d3.format('.2f')(+p.d.gas_real_2026) + ' in 2026 dollars), ' + (+p.d.gas_change_1yr_pct > 0 ? '+' : '') + p.d.gas_change_1yr_pct + '% in a year', 'President\'s party House swing ' + (p.y > 0 ? '+' : '') + d3.format('.1f')(p.y), 'House vote ' + bcFmt.m(+p.d.house_margin_dem) + (p.d.year === '2026' ? ' (NYT estimate)' : '')]))
+    .on('mouseleave', () => tip.hide());
+  gg.filter((p) => p.mid).append('text').attr('x', 9).attr('y', 4).attr('font-size', 11).attr('font-weight', (p) => p.d.year === '2026' ? 600 : 400).attr('fill', fg).attr('pointer-events', 'none').text((p) => p.d.year);
+  svg.append('text').attr('x', W - right).attr('y', H - bottom - 6).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('Midterm trend: ' + d3.format('+.1f')(f.b) + ' pts per ' + (money ? '$1' : '1%') + ' · correlation ' + d3.format('.2f')(f.r) + ' (' + f.n + ' midterms)');
+});
+dash.draw('gas-rows', (tb) => {
+  const d = gasG(); tb.replaceChildren(); if (!d) return;
+  for (const r of [...d].sort((a, b) => b.year - a.year)) {
+    const tr = tb.insertRow(); tr.dataset.key = r.year; const sw = r.house_inc_swing === '' ? null : +r.house_inc_swing;
+    [r.year + (r.kind === 'midterm' ? ' (midterm)' : ''), r.president_party, '$' + d3.format('.2f')(+r.gas), '$' + d3.format('.2f')(+r.gas_real_2026), (+r.gas_change_1yr_pct > 0 ? '+' : '') + r.gas_change_1yr_pct + '%', bcFmt.m(+r.house_margin_dem), sw == null ? '—' : (sw > 0 ? '+' : '') + d3.format('.1f')(sw)]
+      .forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i > 1) td.className = 'n'; if (i === 1) td.className = r.president_party === 'D' ? 'dem' : 'rep'; if (i === 5) td.classList.add(+r.house_margin_dem > 0 ? 'dem' : 'rep'); });
+  }
 });
 </script>
 
