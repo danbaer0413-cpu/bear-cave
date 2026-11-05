@@ -4,7 +4,7 @@ import pandas as pd
 repo, app = sys.argv[1], sys.argv[2]
 called = pd.read_csv(f"{repo}/data/house/called.csv", dtype=str)
 called["district"] = called.district.str.lstrip("0").replace("", "1")
-nights = sorted(glob.glob(f"{repo}/data/night/house_*.csv"), key=os.path.getmtime)
+nights = sorted(glob.glob(f"{repo}/data/night/house_*.csv"))   # by name, like the needle (later names win)
 live = pd.concat([pd.read_csv(f, dtype=str).assign(_f=os.path.basename(f)) for f in nights]) if nights else pd.DataFrame()
 live["district"] = live.district.str.lstrip("0").replace("", "1")
 live = live.groupby(["state", "district"]).tail(1).set_index(["state", "district"])
