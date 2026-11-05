@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 96" role="img" aria-label="Bear Cave mascot: a bear peeking out of a cave"><style>.m-rock{fill:#8a8478}.m-rock2{fill:#6e685e}.m-hole{fill:#2a2622}g>*{fill:#7a4b2a}.m-ear{fill:#b07a50}.m-snout{fill:#c9996b}.m-nose,.m-eye{fill:#1c1714}.m-glint{fill:#fff}.m-mouth,.m-claw{stroke:#1c1714;stroke-width:1.4;stroke-linecap:round;fill:none}</style>
+      <path class="m-rock" d="M4 94 C6 52 26 14 60 12 C94 14 114 52 116 94 Z"/>
+      <path class="m-rock2" d="M12 94 C16 62 30 36 44 30 L52 40 L64 28 L76 38 L84 32 C96 42 106 64 108 94 Z" opacity=".35"/>
+      <path class="m-hole" d="M26 94 C28 64 42 42 60 40 C78 42 92 64 94 94 Z"/>
+      <g>
+        <circle cx="45" cy="56" r="8"/><circle cx="75" cy="56" r="8"/>
+        <circle class="m-ear" cx="45" cy="56" r="4"/><circle class="m-ear" cx="75" cy="56" r="4"/>
+        <ellipse cx="60" cy="72" rx="21" ry="19"/>
+        <ellipse class="m-snout" cx="60" cy="79" rx="10" ry="7.5"/>
+        <ellipse class="m-nose" cx="60" cy="75.5" rx="4" ry="2.8"/>
+        <path class="m-mouth" d="M60 78 v3 M56 82 q4 3 8 0" fill="none"/>
+        <circle class="m-eye" cx="52" cy="67" r="2.4"/><circle class="m-eye" cx="68" cy="67" r="2.4"/>
+        <circle class="m-glint" cx="52.8" cy="66.2" r=".8"/><circle class="m-glint" cx="68.8" cy="66.2" r=".8"/>
+        <ellipse cx="42" cy="92" rx="9" ry="6"/><ellipse cx="78" cy="92" rx="9" ry="6"/>
+        <path class="m-claw" d="M37 89 v4 M42 88 v5 M47 89 v4 M73 89 v4 M78 88 v5 M83 89 v4" fill="none"/>
+      </g>
+    </svg>

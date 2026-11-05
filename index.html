@@ -1,0 +1,1185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bear Cave Election Database</title>
+<meta name="description" content="Live election needles, maps and results for President, Senate, House and Governor, with history back to 1976.">
+<meta name="theme-color" content="#7a4b2a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* Design tokens the dashboard page expects (Claude provides these inside the app). Light and dark. */
+:root {
+  --font-anthropic-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-anthropic-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --color-bg: #faf9f5; --color-panel: #ffffff; --color-fg: #1f1e1d; --color-fg-muted: #6b6a66;
+  --color-border-line: #e6e3da; --color-bad: #c0392b;
+  --cds-border: #e6e3da; --cds-text-secondary: #6b6a66;
+  --cds-chart-axis: #a8a59c; --cds-chart-grid: #eeebe3; --cds-chart-muted: #b4b1a8; --cds-chart-reference: #8f8c83;
+  --cds-surface-popover: #ffffff; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.12);
+  --cds-radius: 10px; --cds-dur-slow: 400ms;
+  --cds-font-size-body: 14px; --cds-font-size-caption: 12.5px; --cds-font-size-heading: 17px; --cds-font-size-title: 28px; --cds-font-weight-medium: 600;
+  --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 14px; --cds-gap-lg: 22px;
+  --cds-pad-xs: 4px; --cds-pad-sm: 10px; --cds-pad-md: 16px; --cds-pad-lg: 22px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #1f1e1c; --color-panel: #2a2926; --color-fg: #f0eee6; --color-fg-muted: #a6a39a;
+    --color-border-line: #3d3b37; --color-bad: #ec7a70;
+    --cds-border: #3d3b37; --cds-text-secondary: #a6a39a;
+    --cds-chart-axis: #77746c; --cds-chart-grid: #34322f; --cds-chart-muted: #6d6a63; --cds-chart-reference: #8a877f;
+    --cds-surface-popover: #33322e; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --color-bg: #1f1e1c; --color-panel: #2a2926; --color-fg: #f0eee6; --color-fg-muted: #a6a39a;
+  --color-border-line: #3d3b37; --color-bad: #ec7a70; --cds-border: #3d3b37; --cds-text-secondary: #a6a39a;
+  --cds-chart-axis: #77746c; --cds-chart-grid: #34322f; --cds-chart-muted: #6d6a63; --cds-chart-reference: #8a877f;
+  --cds-surface-popover: #33322e; --cds-shadow-popover: 0 4px 16px rgba(0,0,0,.5); color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: var(--cds-font-size-body); }
+.bc-site { max-width: 1200px; margin: 0 auto; padding: 12px 16px 40px; }
+.bc-sitebar { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); padding: 4px 0 12px; }
+select, input, button { font: inherit; color: inherit; }
+select, input[type="search"] { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: 6px; padding: 5px 8px; }
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="dash.js"></script>
+</head>
+<body>
+<div class="bc-site">
+<div class="bc-sitebar"><span id="bc-updated">Loading data…</span></div>
+
+<style>
+  .bc { font-family: var(--font-anthropic-sans); color: var(--color-fg); display: grid; gap: var(--cds-gap-lg); }
+  .bc h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0; }
+  .bc h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .bc p { margin: 0; }
+  .bc-lead { color: var(--color-fg-muted); max-width: 60rem; }
+  .bc-page { display: grid; gap: var(--cds-gap-md); }
+  .bc-page[hidden] { display: none; }
+  .bc-tabs { display: flex; flex-wrap: wrap; gap: var(--cds-gap-xs); border-bottom: 1px solid var(--color-border-line); }
+  .bc-tab { font: inherit; background: none; border: 0; border-bottom: 2px solid transparent; padding: var(--cds-pad-sm) var(--cds-pad-md); color: var(--color-fg-muted); cursor: pointer; }
+  .bc-tab[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); }
+  .bc-tab:focus-visible, .bc select:focus-visible, .bc input:focus-visible, .bc th button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+  .bc-controls { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); align-items: end; }
+  .bc-controls label { display: grid; gap: 2px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .bc select, .bc input[type=search] { font: inherit; font-size: var(--cds-font-size-body); padding: 4px 8px; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); background: var(--color-bg); color: var(--color-fg); min-width: 9rem; }
+  .bc-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr)); }
+  .bc-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: grid; gap: var(--cds-gap-sm); min-width: 0; align-content: start; }
+  .bc-note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .bc-tiles { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); }
+  .bc-tile { display: grid; gap: 2px; }
+  .bc-tile .v { font-family: var(--font-anthropic-serif); font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; }
+  .bc-tile .k { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .bc-chart { position: relative; min-height: 220px; }
+  .bc-chart svg { display: block; overflow: visible; }
+  .bc-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
+  .bc-tip .h { color: var(--cds-text-secondary); }
+  .bc-tablebox { max-height: 34rem; overflow: auto; }
+  .bc table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: var(--cds-font-size-body); }
+  .bc th, .bc td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .bc th { position: sticky; top: 0; background: var(--color-panel); font-weight: var(--cds-font-weight-medium); }
+  .bc th button { font: inherit; background: none; border: 0; padding: 0; color: inherit; cursor: pointer; }
+  .bc td.n, .bc th.n { text-align: right; }
+  .bc .dem { color: var(--bc-dem); } .bc .rep { color: var(--bc-rep); } .bc .ind { color: var(--bc-ind); }
+  .bc-pill { display: inline-block; padding: 0 6px; border-radius: 999px; font-size: var(--cds-font-size-caption); border: 1px solid var(--color-border-line); color: var(--color-fg-muted); }
+  .bc { --bc-dem: #2f6fb3; --bc-rep: #c4453b; --bc-ind: #7b55a8; --bc-mid: #f1efe9; --bc-none: #dcdad4; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .bc { --bc-dem: #6ea8e6; --bc-rep: #ec7a70; --bc-ind: #b394dc; --bc-mid: #2c2c30; --bc-none: #3a3a3f; } }
+  :root[data-theme="dark"] .bc { --bc-dem: #6ea8e6; --bc-rep: #ec7a70; --bc-ind: #b394dc; --bc-mid: #2c2c30; --bc-none: #3a3a3f; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+  [data-dash-source-state=empty] { color: transparent; }
+  .nd-grid { display: grid; gap: var(--cds-gap-md); grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); }
+  .nd-card { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-sm); background: var(--color-bg); cursor: pointer; display: grid; gap: 2px; text-align: left; font: inherit; color: inherit; }
+  .nd-card[aria-pressed="true"] { outline: 2px solid var(--color-fg); }
+  .nd-card .t { font-weight: var(--cds-font-weight-medium); }
+  .nd-card .s { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .bc-warn { color: var(--color-fg); border-left: 3px solid var(--bc-ind); padding-left: 8px; }
+  .bc-head { display: grid; grid-template-columns: 1fr auto; gap: var(--cds-gap-md); align-items: end; }
+  .bc-mascot { width: clamp(64px, 12vw, 104px); height: auto; }
+  .bc-mascot .m-rock { fill: #8a8478; } .bc-mascot .m-rock2 { fill: #6e685e; } .bc-mascot .m-hole { fill: #2a2622; }
+  .bc-mascot .m-bear > * { fill: #7a4b2a; } .bc-mascot .m-bear .m-ear { fill: #b07a50; } .bc-mascot .m-bear .m-snout { fill: #c9996b; }
+  .bc-mascot .m-bear .m-nose, .bc-mascot .m-bear .m-eye { fill: #1c1714; } .bc-mascot .m-bear .m-glint { fill: #fff; }
+  .bc-mascot .m-mouth, .bc-mascot .m-claw { stroke: #1c1714; stroke-width: 1.4; stroke-linecap: round; fill: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .bc-mascot .m-rock { fill: #5c574f; } :root:not([data-theme="light"]) .bc-mascot .m-hole { fill: #0e0c0b; } }
+  :root[data-theme="dark"] .bc-mascot .m-rock { fill: #5c574f; } :root[data-theme="dark"] .bc-mascot .m-hole { fill: #0e0c0b; }
+  .bc-mascot .m-bear { animation: bc-peek 6s ease-in-out infinite; transform-origin: 60px 96px; }
+  @keyframes bc-peek { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(5px); } 88% { transform: translateY(-2px); } }
+  @media (prefers-reduced-motion: reduce) { .bc-mascot .m-bear { animation: none; } }
+  .bc-fail { display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); min-height: 200px; }
+  .bc-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+</style>
+
+<div class="bc">
+  <header class="bc-head">
+    <div style="display:grid;gap:var(--cds-gap-xs)">
+    <h1 id="top">Bear Cave Election Database</h1>
+    <p class="bc-lead">The live 2026 needles, plus certified results for President, Senate, House and Governor and unofficial 2026 returns, by state, district and county, with history back to 1976 for the Senate and House, 1996 for Governor and 2000 for President. Margins are the leading Republican's opponent minus the leading Republican, in points: usually the Democrat, but an independent such as Dan Osborn or Bernie Sanders when he is the main opponent.</p>
+    </div>
+    <svg class="bc-mascot" viewBox="0 0 120 96" role="img" aria-label="Bear Cave mascot: a bear peeking out of a cave">
+      <path class="m-rock" d="M4 94 C6 52 26 14 60 12 C94 14 114 52 116 94 Z"/>
+      <path class="m-rock2" d="M12 94 C16 62 30 36 44 30 L52 40 L64 28 L76 38 L84 32 C96 42 106 64 108 94 Z" opacity=".35"/>
+      <path class="m-hole" d="M26 94 C28 64 42 42 60 40 C78 42 92 64 94 94 Z"/>
+      <g class="m-bear">
+        <circle cx="45" cy="56" r="8"/><circle cx="75" cy="56" r="8"/>
+        <circle class="m-ear" cx="45" cy="56" r="4"/><circle class="m-ear" cx="75" cy="56" r="4"/>
+        <ellipse cx="60" cy="72" rx="21" ry="19"/>
+        <ellipse class="m-snout" cx="60" cy="79" rx="10" ry="7.5"/>
+        <ellipse class="m-nose" cx="60" cy="75.5" rx="4" ry="2.8"/>
+        <path class="m-mouth" d="M60 78 v3 M56 82 q4 3 8 0" fill="none"/>
+        <circle class="m-eye" cx="52" cy="67" r="2.4"/><circle class="m-eye" cx="68" cy="67" r="2.4"/>
+        <circle class="m-glint" cx="52.8" cy="66.2" r=".8"/><circle class="m-glint" cx="68.8" cy="66.2" r=".8"/>
+        <ellipse cx="42" cy="92" rx="9" ry="6"/><ellipse cx="78" cy="92" rx="9" ry="6"/>
+        <path class="m-claw" d="M37 89 v4 M42 88 v5 M47 89 v4 M73 89 v4 M78 88 v5 M83 89 v4" fill="none"/>
+      </g>
+    </svg>
+  </header>
+
+  <nav class="bc-tabs" role="tablist">
+    <button class="bc-tab" role="tab" data-tab="needles" id="tab-needles">Live needles</button>
+    <button class="bc-tab" role="tab" data-tab="senate" id="tab-senate">Senate</button>
+    <button class="bc-tab" role="tab" data-tab="house" id="tab-house">House</button>
+    <button class="bc-tab" role="tab" data-tab="maps" id="tab-maps">Maps</button>
+    <button class="bc-tab" role="tab" data-tab="results" id="tab-results">Results</button>
+    <button class="bc-tab" role="tab" data-tab="trends" id="tab-trends">State trends</button>
+    <button class="bc-tab" role="tab" data-tab="counties" id="tab-counties">Counties</button>
+    <button class="bc-tab" role="tab" data-tab="forecast" id="tab-forecast">2026 forecast check</button>
+  </nav>
+
+  <!-- NEEDLES -->
+  <section class="bc-page" id="needles" data-page="needles">
+    <div class="bc-card">
+      <div class="bc-tiles">
+        <div class="bc-tile"><span class="v" data-draw="nd-senate" data-source="needle_control">—</span><span class="k">Senate: Democratic chance of a majority</span></div>
+        <div class="bc-tile"><span class="v" data-draw="nd-seats" data-source="needle_control">—</span><span class="k">Expected Democratic wins among the 15 tracked Senate races</span></div>
+        <div class="bc-tile"><span class="v" data-draw="nd-asof" data-source="needle_now">—</span><span class="k">Needle last updated (ET)</span></div>
+      </div>
+    </div>
+    <div class="bc-card" id="nd-grid-card">
+      <h2>Every needle</h2>
+      <p class="bc-note">Each needle points at the model's estimate of the final margin, with the shaded arc covering its 80% range (10th to 90th percentile). Click a needle to see how it moved on election night.</p>
+      <div class="nd-grid" data-draw="nd-grid" data-source="needle_now"></div>
+    </div>
+    <div class="bc-card" id="nd-history-card">
+      <div class="bc-controls"><label>Race<select id="nd-race" data-draw="nd-race" data-source="needle_now" aria-label="Race"></select></label></div>
+      <h2>How the needle moved</h2>
+      <p class="bc-note">The line is the estimated final margin after each update; the band is the 80% range. The dashed grey line is the share of the expected vote counted (right axis).</p>
+      <div class="bc-chart" data-draw="nd-history" data-source="needle_history"></div>
+    </div>
+  </section>
+
+  <!-- SENATE -->
+  <section class="bc-page" id="senate" data-page="senate" hidden>
+    <div class="bc-card">
+      <div class="bc-tiles">
+        <div class="bc-tile"><span class="v dem" data-draw="se-d" data-source="senate_seats">—</span><span class="k">Democratic seats (incl. leads)</span></div>
+        <div class="bc-tile"><span class="v rep" data-draw="se-r" data-source="senate_seats">—</span><span class="k">Republican seats (incl. leads)</span></div>
+        <div class="bc-tile"><span class="v" data-draw="se-open" data-source="senate_seats">—</span><span class="k">Races not yet called</span></div>
+        <div class="bc-tile"><span class="v" data-draw="se-ctrl" data-source="senate_seats">—</span><span class="k">Control</span></div>
+      </div>
+    </div>
+    <div class="bc-card" id="se-arc-card">
+      <h2>Senate seats</h2>
+      <p class="bc-note">Solid dots are seats not up this year or races NBC/AP has called; hollow dots are races still being counted, shown for the current leader. Democrats need 51 for control, Republicans 50 (the Vice President breaks ties).</p>
+      <div class="bc-chart" data-draw="se-arc" data-source="senate_seats"></div>
+    </div>
+    <div class="bc-card" id="se-map-card">
+      <h2>2026 Senate races</h2>
+      <p class="bc-note">States shaded by the winner's margin; striped states are still being counted. Grey states had no Senate race this year.</p>
+      <div class="bc-chart" data-draw="se-map" data-source="senate_seats map_states contests"></div>
+    </div>
+  </section>
+
+  <!-- HOUSE -->
+  <section class="bc-page" id="house" data-page="house" hidden>
+    <div class="bc-card">
+      <div class="bc-tiles">
+        <div class="bc-tile"><span class="v dem" data-draw="ho-d" data-source="house_seats">—</span><span class="k">Democratic seats called</span></div>
+        <div class="bc-tile"><span class="v rep" data-draw="ho-r" data-source="house_seats">—</span><span class="k">Republican seats called</span></div>
+        <div class="bc-tile"><span class="v" data-draw="ho-lead" data-source="house_seats">—</span><span class="k">Uncalled: Democratic lead / Republican lead</span></div>
+        <div class="bc-tile"><span class="v" data-draw="ho-flip" data-source="house_seats">—</span><span class="k">Districts changing party from 2024</span></div>
+      </div>
+    </div>
+    <div class="bc-card" id="ho-arc-card">
+      <h2>House seats</h2>
+      <p class="bc-note">Solid dots are called seats; hollow dots are uncalled seats shown for the current leader. 218 seats is a majority.</p>
+      <div class="bc-chart" data-draw="ho-arc" data-source="house_seats"></div>
+    </div>
+    <div class="bc-card" id="ho-grid-card">
+      <h2>Every district, by state</h2>
+      <p class="bc-note">One square per district, colored by party: solid for called, light for leading. California and Washington districts with two finalists from the same party count for that party. A dark outline marks a district whose party changed from 2024; some states redrew their maps, so a few of those are new lines rather than true flips. Hover for details.</p>
+      <div class="bc-chart" data-draw="ho-grid" data-source="house_seats"></div>
+    </div>
+    <div class="bc-card" id="hd-card">
+      <h2>Districts against demographics</h2>
+      <p class="bc-note">Each dot is a House district, colored by the party that won it. Demographics are Census ACS 5-year estimates for the district lines in use that year; the presidential vote by district is built from precinct returns (2016, 2020 and 2024; states where too many precincts span two districts are left out).</p>
+      <div class="bc-controls">
+        <label>Year<select id="hd-year" aria-label="District year"><option>2024</option><option>2022</option><option>2020</option><option>2018</option><option>2016</option></select></label>
+        <label>Up and down<select id="hd-y" aria-label="Margin"><option value="margin">House margin</option><option value="pres_margin">Presidential margin in the district</option></select></label>
+        <label>Compare with<select id="hd-var" aria-label="District demographic">
+          <option value="pct_bachelors_or_higher_25plus">College degree (% of adults 25+)</option><option value="pct_white_nonhispanic">White, non-Hispanic (%)</option><option value="pct_black_nonhispanic">Black, non-Hispanic (%)</option><option value="pct_hispanic">Hispanic (%)</option><option value="pct_asian_nonhispanic">Asian, non-Hispanic (%)</option><option value="median_household_income">Median household income ($)</option><option value="median_age">Median age</option>
+        </select></label>
+      </div>
+      <div class="bc-chart" data-draw="hd-chart" data-source="district_view"></div>
+    </div>
+    <div class="bc-card" id="hd-cross-card">
+      <h2>Crossover districts</h2>
+      <p class="bc-note">Districts that elected a House member from the party that lost the district's presidential vote, biggest presidential margin first.</p>
+      <div class="bc-tablebox"><table data-source="district_view" data-row-key="key" id="hd-cross-table">
+        <thead><tr><th>District</th><th>Winner</th><th>Party</th><th class="n">House</th><th class="n">President</th></tr></thead>
+        <tbody data-draw="hd-cross"></tbody>
+      </table></div>
+    </div>
+    <div class="bc-card" id="ho-open-card">
+      <h2>Races still being counted</h2>
+      <p class="bc-note">Uncalled seats, closest first. Margin is the leader's lead in the unofficial count.</p>
+      <div class="bc-tablebox"><table data-source="house_seats" data-row-key="key" id="ho-open-table">
+        <thead><tr><th>District</th><th>Leader</th><th>Party</th><th class="n">Margin</th><th class="n">Counted</th><th>Won in 2024 by</th></tr></thead>
+        <tbody data-draw="ho-open"></tbody>
+      </table></div>
+    </div>
+    <div class="bc-card" id="ho-flips-card">
+      <h2>Seats changing party</h2>
+      <p class="bc-note">Districts where this year's winner or leader is from a different party than the 2024 winner of the same district number. Some states redrew their maps, so a few of these are new lines rather than true flips.</p>
+      <div class="bc-tablebox"><table data-source="house_seats" data-row-key="key" id="ho-flips-table">
+        <thead><tr><th>District</th><th>2024</th><th>2026</th><th>Status</th><th>Leader</th><th class="n">Margin</th></tr></thead>
+        <tbody data-draw="ho-flips"></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- MAPS -->
+  <section class="bc-page" id="maps" data-page="maps" hidden>
+    <div class="bc-controls">
+      <label>Year<select id="mp-year" data-draw="mp-year" data-source="contests" aria-label="Map year"></select></label>
+      <label>Office<select id="mp-office" data-draw="mp-office" data-source="contests" aria-label="Map office"></select></label>
+      <label>Show<select id="mp-level" aria-label="Map level">
+        <option value="state">States</option>
+        <option value="county">Counties</option>
+        <option value="shift">County shift since the last race</option>
+        <option value="district">Congressional districts (House)</option>
+      </select></label>
+      <label>Zoom to<select id="mp-state" data-draw="mp-state" data-source="map_states" aria-label="Zoom to state"></select></label>
+    </div>
+    <div class="bc-card" id="mp-card">
+      <h2 data-draw="mp-title">—</h2>
+      <p class="bc-note">Blue is a lead for the Republican's main opponent (usually the Democrat), red a Republican lead; the darker the shade, the bigger the margin. The shift view shows how far each county moved since the previous race for the same office. In California, Washington and Louisiana two candidates of the same party can meet in the general; there the margin is the gap between those two, and no shift is shown. County maps cover President from 2000 and Senate and Governor from 2016; 2026 county results are not in yet.</p>
+      <p class="bc-note" data-draw="mp-none" data-source="contests">Hover a state or county for details.</p>
+      <div class="bc-chart" data-draw="mp-map" data-source="map_states map_counties map_districts contests county_view house_seats house_county"></div>
+      <div data-draw="mp-legend"></div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="bc-page" id="results" data-page="results" hidden>
+    <div class="bc-controls">
+      <label>Year<select id="res-year" data-draw="res-year" data-source="contests" aria-label="Year"></select></label>
+      <label>Office<select id="res-office" data-draw="res-office" data-source="contests" aria-label="Office"></select></label>
+      <label>State<select id="res-state" data-draw="res-state" data-source="contests" aria-label="State"></select></label>
+    </div>
+    <div class="bc-card">
+      <div class="bc-tiles">
+        <div class="bc-tile"><span class="v" data-draw="res-n" data-source="contests">—</span><span class="k">Contests</span></div>
+        <div class="bc-tile"><span class="v dem" data-draw="res-d" data-source="contests">—</span><span class="k">Won by Democrats</span></div>
+        <div class="bc-tile"><span class="v rep" data-draw="res-r" data-source="contests">—</span><span class="k">Won by Republicans</span></div>
+        <div class="bc-tile"><span class="v ind" data-draw="res-o" data-source="contests">—</span><span class="k">Won by independents or others</span></div>
+        <div class="bc-tile"><span class="v" data-draw="res-votes" data-source="contests">—</span><span class="k">Votes counted</span></div>
+        <div class="bc-tile"><span class="v" data-draw="res-margin" data-source="contests">—</span><span class="k">Combined margin</span></div>
+      </div>
+    </div>
+    <div class="bc-card" id="res-chart-card">
+      <h2>Margin by contest</h2>
+      <p class="bc-note">Each bar is one contest's margin between the leading Republican and the main opponent. Bars are colored by the winner: blue Democrat, red Republican, purple independent; hover for the top two finishers. 2026 bars are unofficial NBC/AP shares.</p>
+      <div class="bc-chart" data-draw="res-chart" data-source="contests"></div>
+    </div>
+    <div class="bc-card" id="res-table-card">
+      <h2>All contests</h2>
+      <div class="bc-controls"><label>Search<input type="search" id="res-q" aria-label="Search contests" placeholder="Candidate, state or district"></label></div>
+      <div class="bc-tablebox">
+        <table data-source="contests" data-row-key="contest_id" id="res-table">
+          <thead><tr>
+            <th data-field="contest_id"><button data-sort="contest">Contest</button></th>
+            <th data-field="election_date"><button data-sort="election_date">Date</button></th>
+            <th data-field="first_candidate">Winner</th>
+            <th class="n" data-field="first_pct"><button data-sort="first_pct">%</button></th>
+            <th data-field="second_candidate">Runner-up</th>
+            <th class="n" data-field="second_pct"><button data-sort="second_pct">%</button></th>
+            <th class="n" data-field="other_pct"><button data-sort="other_pct">Others %</button></th>
+            <th class="n" data-field="margin"><button data-sort="margin">Margin</button></th>
+            <th class="n" data-field="total_votes"><button data-sort="total_votes">Total votes</button></th>
+            <th data-field="status">Status</th>
+          </tr></thead>
+          <tbody data-draw="res-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDS -->
+  <section class="bc-page" id="trends" data-page="trends" hidden>
+    <div class="bc-controls">
+      <label>State<select id="tr-state" data-draw="tr-state" data-source="contests" aria-label="State"></select></label>
+      <label>Since<select id="tr-from" aria-label="Start year">
+        <option value="1976">1976</option><option value="1990">1990</option><option value="2000">2000</option><option value="2010">2010</option><option value="2016">2016</option>
+      </select></label>
+    </div>
+    <div class="bc-card" id="tr-card">
+      <h2 data-draw="tr-title" data-source="contests">How the state has voted</h2>
+      <p class="bc-note">Margin in each statewide race, plus the state's combined House vote (all districts added together). Above zero is a Democratic lead. Senate and House go back to 1976, Governor to 1996, President to 2000.</p>
+      <div class="bc-chart" data-draw="tr-chart" data-source="contests house_by_state"></div>
+    </div>
+    <div class="bc-card" id="tr-table-card">
+      <h2>House seats won by party</h2>
+      <div class="bc-tablebox">
+        <table data-source="house_by_state" data-row-key="key" id="tr-table">
+          <thead><tr>
+            <th data-field="key">Year</th>
+            <th class="n" data-field="dem_seats">D seats</th>
+            <th class="n" data-field="rep_seats">R seats</th>
+            <th class="n" data-field="dem_votes">D votes</th>
+            <th class="n" data-field="rep_votes">R votes</th>
+            <th class="n" data-field="margin">House vote margin</th>
+          </tr></thead>
+          <tbody data-draw="tr-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTIES -->
+  <section class="bc-page" id="counties" data-page="counties" hidden>
+    <div class="bc-controls">
+      <label>Year<select id="co-year" data-draw="co-year" data-source="county_view" aria-label="Year"></select></label>
+      <label>Office<select id="co-office" data-draw="co-office" data-source="county_view" aria-label="Office"></select></label>
+      <label>State<select id="co-state" data-draw="co-state" data-source="county_view" aria-label="State"></select></label>
+      <label>Compare with<select id="co-var" aria-label="Demographic">
+        <option value="pct_bachelors_or_higher_25plus">College degree (% of adults 25+)</option>
+        <option value="pct_white_nonhispanic">White, non-Hispanic (%)</option>
+        <option value="pct_black_nonhispanic">Black, non-Hispanic (%)</option>
+        <option value="pct_hispanic">Hispanic (%)</option>
+        <option value="median_household_income">Median household income ($)</option>
+        <option value="median_age">Median age</option>
+        <option value="unemployment_rate">Unemployment rate (election year)</option>
+      </select></label>
+    </div>
+    <div class="bc-card" id="co-card">
+      <h2>County margin against demographics</h2>
+      <p class="bc-note">Each dot is a county, sized by votes cast. Demographics are Census ACS 5-year estimates for the closest survey at or before the election (2008-2014 elections: 2010 Census and ACS 2006-10; 2000-2006: the 2000 Census); unemployment is the county's annual rate in the election year (BLS, via USDA; 2024 uses 2023).</p>
+      <p class="bc-note" data-draw="co-cov" data-source="county_view">Checking the county figures against the certified statewide total.</p>
+      <div class="bc-chart" data-draw="co-chart" data-source="county_view"></div>
+    </div>
+    <div class="bc-card" id="co-table-card">
+      <h2>Every county, largest first</h2>
+      <p class="bc-note">All counties in the race and state you picked (pick "All states" for the whole country). Scroll the table for more. Alaska is missing because it reports results by state House district, not by borough.</p>
+      <div class="bc-tablebox">
+        <table data-source="county_view" data-row-key="key" id="co-table">
+          <thead><tr>
+            <th data-field="key">County</th>
+            <th class="n" data-field="dem">Main opponent votes</th>
+            <th class="n" data-field="rep">Republican votes</th>
+            <th class="n" data-field="total">Total</th>
+            <th class="n" data-field="margin">Margin</th>
+            <th class="n" data-field="shift">Shift from last race for this office</th>
+          </tr></thead>
+          <tbody data-draw="co-rows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORECAST -->
+  <section class="bc-page" id="forecast" data-page="forecast" hidden>
+    <div class="bc-card">
+      <div class="bc-tiles">
+        <div class="bc-tile"><span class="v" data-draw="fc-right" data-source="forecast_check">—</span><span class="k">Winners called right</span></div>
+        <div class="bc-tile"><span class="v" data-draw="fc-bias" data-source="forecast_check">—</span><span class="k">Average miss (+ = Democrats beat the forecast)</span></div>
+        <div class="bc-tile"><span class="v" data-draw="fc-abs" data-source="forecast_check">—</span><span class="k">Average miss, either direction</span></div>
+        <div class="bc-tile"><span class="v" data-draw="fc-poll" data-source="forecast_check">—</span><span class="k">Poll average's miss, either direction</span></div>
+      </div>
+    </div>
+    <div class="bc-card" id="fc-card">
+      <h2>Locked Nov 2 forecast against the count</h2>
+      <p class="bc-note">Grey dot: our final forecast margin. Colored dot: NBC/AP count on Nov 4 (unofficial). Races where we picked the wrong winner are labeled. Alaska and Mississippi Senate are still being counted.</p>
+      <div class="bc-chart" data-draw="fc-chart" data-source="forecast_2026 forecast_check"></div>
+    </div>
+  </section>
+
+  <p class="bc-note">Sources: MIT Election Data and Science Lab (official returns), OpenElections, Virginia Department of Elections, New Jersey Division of Elections, Kentucky State Board of Elections, U.S. Census Bureau ACS, NBC News/AP (2026, unofficial). Odd-year House specials use Wikipedia's tables of certified results.</p>
+</div>
+
+<script>
+// ---------- calculations ----------
+dash.calc('house_by_state', {
+  inputs: ['contests'],
+  title: 'House vote and seats by state',
+  description: 'Each state and year: House votes added over all districts (regular general elections), and seats won by party.',
+  fn: (contests) => {
+    const m = new Map();
+    // a December runoff (Louisiana) decides the seat; the November round still supplies the vote totals
+    const ro = new Map(contests.filter((c) => c.office === 'U.S. House' && c.election_type === 'runoff').map((c) => [c.state_po + '|' + c.year + '|' + c.district, c.winner_party]));
+    for (const c of contests) {
+      if (c.office !== 'U.S. House' || c.election_type !== 'general' || c.status !== 'certified') continue;
+      const k = c.state_po + '|' + c.year;
+      const o = m.get(k) || { key: c.year + ' ' + c.state_po, state_po: c.state_po, year: +c.year, dem_votes: 0, rep_votes: 0, total: 0, dem_seats: 0, rep_seats: 0 };
+      const dv = c.first_party === 'DEMOCRAT' ? +c.first_votes : c.second_party === 'DEMOCRAT' ? +c.second_votes : 0;
+      const rv = c.first_party === 'REPUBLICAN' ? +c.first_votes : c.second_party === 'REPUBLICAN' ? +c.second_votes : 0;
+      o.dem_votes += dv || 0; o.rep_votes += rv || 0; o.total += +c.total_votes || 0;
+      const wp = ro.get(c.state_po + '|' + c.year + '|' + c.district) || c.winner_party;
+      if (wp === 'DEMOCRAT') o.dem_seats++; else if (wp === 'REPUBLICAN') o.rep_seats++;
+      m.set(k, o);
+    }
+    return [...m.values()].map((o) => ({ ...o, margin: o.total ? Math.round(10000 * (o.dem_votes - o.rep_votes) / o.total) / 100 : null }));
+  },
+});
+
+dash.calc('county_view', {
+  inputs: ['county_results', 'demographics', 'unemployment'],
+  title: 'County results with demographics',
+  description: 'County margins joined to Census ACS 5-year figures for the latest survey year at or before the election, plus the change from the previous election for the same office (left blank when either race had two finalists from the same party).',
+  fn: (county_results, demographics, unemployment) => {
+    const un = new Map(unemployment.map((u) => [u.year + '|' + u.fips, +u.unemployment_rate]));
+    const acs = new Map();
+    for (const d of demographics) acs.set(d.acs_year + '|' + d.fips, d);
+    const years = [...new Set(demographics.map((d) => +d.acs_year))].sort((a, b) => a - b);
+    const prev = new Map();
+    // where a runoff decided the race (Louisiana Dec 2016, Georgia Jan 2021), show the runoff instead of the first round
+    const roKey = new Set(county_results.filter((r) => r.election_type === 'runoff').map((r) => r.year + '|' + r.office + '|' + r.county_fips));
+    const rows = county_results.filter((r) => (r.election_type === 'runoff' || (r.election_type === 'general' && !roKey.has(r.year + '|' + r.office + '|' + r.county_fips))) && (r.office !== 'U.S. House'))
+      .map((r) => ({ ...r, year: +r.year, margin: +r.margin, dem: +r.dem, rep: +r.rep, total: +r.total, same: +r.same_party === 1 }));
+    rows.sort((a, b) => a.year - b.year);
+    const out = [];
+    for (const r of rows) {
+      const ay = years.filter((y) => y <= r.year).pop() ?? null;   // Census ACS starts with 2016 here: no demographics for earlier elections
+      const d = acs.get(ay + '|' + r.county_fips) || {};
+      const pk = r.office + '|' + r.county_fips;
+      const p = prev.get(pk);
+      out.push({
+        key: r.year + ' ' + r.office + ' ' + r.state_po + ' ' + r.county_name + ' ' + r.county_fips,
+        year: r.year, office: r.office, state_po: r.state_po, county: r.county_name, fips: r.county_fips,
+        dem: r.dem, rep: r.rep, total: r.total, margin: r.margin, shift: p && !r.same && !p.same ? Math.round((r.margin - p.margin) * 100) / 100 : null, prev_year: p ? p.year : null, same_party: r.same,
+        acs_year: ay, demo_label: d.demo_label || (ay ? 'ACS ' + ay : ''), check: r.check || '',
+        unemployment_rate: un.get(Math.min(r.year, 2023) + '|' + r.county_fips) ?? null, unemp_year: Math.min(r.year, 2023), race_coverage: r.race_coverage === '' || r.race_coverage == null ? null : +r.race_coverage,
+        pct_bachelors_or_higher_25plus: d.pct_bachelors_or_higher_25plus === '' || d.pct_bachelors_or_higher_25plus == null ? null : +d.pct_bachelors_or_higher_25plus,
+        pct_white_nonhispanic: d.pct_white_nonhispanic == null || d.pct_white_nonhispanic === '' ? null : +d.pct_white_nonhispanic,
+        pct_black_nonhispanic: d.pct_black_nonhispanic == null || d.pct_black_nonhispanic === '' ? null : +d.pct_black_nonhispanic,
+        pct_hispanic: d.pct_hispanic == null || d.pct_hispanic === '' ? null : +d.pct_hispanic,
+        median_household_income: d.median_household_income == null || d.median_household_income === '' ? null : +d.median_household_income,
+        median_age: d.median_age == null || d.median_age === '' ? null : +d.median_age,
+      });
+      prev.set(pk, r);
+    }
+    return out;
+  },
+});
+
+dash.calc('forecast_check', {
+  inputs: ['forecast_2026'],
+  title: 'Forecast scorecard',
+  description: 'Over races NBC/AP had counted (Alaska and Mississippi Senate left out): winners called right, average miss of the forecast and of the poll average.',
+  fn: (forecast_2026) => {
+    const s = forecast_2026.filter((r) => !/ranked|tied/.test(r.status) && r.result_margin !== '' && r.result_margin != null);
+    const err = s.map((r) => +r.result_margin - +r.fc_margin);
+    const perr = s.filter((r) => r.poll_avg !== '' && r.poll_avg != null).map((r) => +r.result_margin - +r.poll_avg);
+    const right = s.filter((r) => (+r.fc_pdem > 0.5) === (+r.result_margin > 0)).length;
+    return [{ races: s.length, right, bias: d3.mean(err), abs: d3.mean(err, Math.abs), poll_abs: d3.mean(perr, Math.abs) }];
+  },
+});
+
+// ---------- helpers ----------
+window.bcFmt = {
+  m: (v) => v == null || isNaN(v) ? '—' : (v > 0.05 ? 'D+' + d3.format('.1f')(v) : v < -0.05 ? 'R+' + d3.format('.1f')(-v) : 'Even'),
+  n: (v) => v == null || isNaN(v) ? '—' : d3.format(',')(Math.round(v)),
+  big: (v) => v == null || isNaN(v) ? '—' : new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(v),
+  pct: (v) => v == null || v === '' || isNaN(+v) ? '—' : d3.format('.1f')(+v) + '%',
+};
+window.bcParty = (p) => ({ DEMOCRAT: 'D', REPUBLICAN: 'R', INDEPENDENT: 'I', LIBERTARIAN: 'L', 'WRITE-IN': 'write-in', NONPARTISAN: 'nonpartisan' }[p] || (p ? 'other' : '—'));
+window.bcPartyClass = (p) => p === 'DEMOCRAT' ? 'dem' : p === 'REPUBLICAN' ? 'rep' : 'ind';
+window.bcPartyColor = (el, p, m) => {
+  const cs = getComputedStyle(el.closest('.bc'));
+  if (p === 'DEMOCRAT') return cs.getPropertyValue('--bc-dem').trim();
+  if (p === 'REPUBLICAN') return cs.getPropertyValue('--bc-rep').trim();
+  if (p === 'NONPARTISAN') return cs.getPropertyValue('--bc-ind').trim();
+  return cs.getPropertyValue('--bc-ind').trim();
+};
+window.bcColor = (el, v) => {
+  const cs = getComputedStyle(el.closest('.bc'));
+  return v > 0 ? cs.getPropertyValue('--bc-dem').trim() : cs.getPropertyValue('--bc-rep').trim();
+};
+window.bcTip = (box) => {
+  let t = box.querySelector('.bc-tip');
+  if (!t) { t = document.createElement('div'); t.className = 'bc-tip'; t.hidden = true; box.appendChild(t); }
+  return {
+    show(ev, lines) {
+      t.replaceChildren(...lines.map((l, i) => { const d = document.createElement('div'); if (i === 0) d.className = 'h'; d.textContent = l; return d; }));
+      t.hidden = false;
+      const b = box.getBoundingClientRect();
+      let x = ev.clientX - b.left + 12, y = ev.clientY - b.top + 12;
+      const w = t.offsetWidth, h = t.offsetHeight;
+      if (x + w > b.width) x = Math.max(0, ev.clientX - b.left - w - 12);
+      if (y + h > b.height + 40) y = Math.max(0, ev.clientY - b.top - h - 12);
+      t.style.left = x + 'px'; t.style.top = y + 'px';
+    },
+    hide() { t.hidden = true; },
+  };
+};
+window.bcFail = (el, status) => {
+  if (status === 'error' || status === 'connect') { const d = document.createElement('div'); d.className = 'bc-fail'; d.textContent = 'Failed to load'; el.replaceChildren(d); return true; }
+  return false;
+};
+</script>
+
+<script>
+// ---------- tabs and filters ----------
+const DEF = { tfrom: '2000', tab: 'needles', nrace: 'GA-senate', myear: '2024', moffice: 'U.S. President', mlevel: 'state', mstate: '', year: '2024', office: 'U.S. Senate', state: '', tstate: 'GA', cyear: '2024', coffice: 'U.S. President', cstate: 'GA', cvar: 'pct_bachelors_or_higher_25plus', sort: 'margin', dir: 'asc', q: '' };
+const P = () => ({ ...DEF, ...Object.fromEntries(Object.entries(dash.params()).filter(([, v]) => v != null)) });
+document.querySelectorAll('.bc-tab').forEach((b) => b.addEventListener('click', () => { dash.setParams({ tab: b.dataset.tab }); dash.setLink(b.dataset.tab); }));
+const named = location.hash.slice(1);
+if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast'].includes(named)) dash.setParams({ tab: named });
+dash.onData(() => {
+  const tab = P().tab;
+  document.querySelectorAll('.bc-page').forEach((s) => { s.hidden = s.dataset.page !== tab; });
+  document.querySelectorAll('.bc-tab').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
+  document.querySelectorAll('#co-var').forEach((s) => { s.value = P().cvar; });
+  document.querySelectorAll('#res-q').forEach((s) => { if (s !== document.activeElement) s.value = P().q; });
+});
+document.querySelectorAll('#co-var').forEach((s) => s.addEventListener('change', () => dash.setParams({ cvar: s.value })));
+document.querySelectorAll('#tr-from').forEach((s) => s.addEventListener('change', () => dash.setParams({ tfrom: s.value })));
+dash.onData(() => document.querySelectorAll('#tr-from').forEach((s) => { s.value = P().tfrom; }));
+document.querySelectorAll('#res-q').forEach((s) => s.addEventListener('input', () => dash.setParams({ q: s.value })));
+document.querySelectorAll('#res-table th button').forEach((b) => b.addEventListener('click', () => {
+  const p = P(); dash.setParams({ sort: b.dataset.sort, dir: p.sort === b.dataset.sort && p.dir === 'asc' ? 'desc' : 'asc' });
+}));
+
+const selectDraw = (name, source, values, param, label) => dash.draw(name, (sel) => {
+  const g = dash.data(source);
+  const vals = g.status === 'ok' ? values(g.data) : [];
+  sel.replaceChildren(...(label ? [new Option(label, '')] : []), ...vals.map((v) => new Option(v.t ?? v, v.v ?? v)));
+  sel.value = P()[param] ?? '';
+  sel.onchange = () => dash.setParams({ [param]: sel.value });
+});
+const uniq = (a) => [...new Set(a)];
+window.P = P; window.selectDraw = selectDraw; window.uniq = uniq;
+selectDraw('res-year', 'contests', (d) => uniq(d.map((r) => r.year)).sort().reverse(), 'year');
+selectDraw('res-office', 'contests', (d) => uniq(d.filter((r) => r.year === P().year).map((r) => r.office)).sort(), 'office');
+selectDraw('res-state', 'contests', (d) => uniq(d.filter((r) => r.year === P().year && r.office === P().office).map((r) => r.state_po)).sort(), 'state', 'All states');
+selectDraw('tr-state', 'contests', (d) => uniq(d.map((r) => r.state_po)).sort(), 'tstate');
+selectDraw('co-year', 'county_view', (d) => uniq(d.map((r) => r.year)).sort((a, b) => b - a).map(String), 'cyear');
+selectDraw('co-office', 'county_view', (d) => uniq(d.filter((r) => String(r.year) === P().cyear).map((r) => r.office)).sort(), 'coffice');
+selectDraw('co-state', 'county_view', (d) => uniq(d.filter((r) => String(r.year) === P().cyear && r.office === P().coffice).map((r) => r.state_po)).sort(), 'cstate', 'All states');
+</script>
+
+<script>
+// ---------- results page ----------
+const resRows = () => {
+  const g = dash.data('contests'); if (g.status !== 'ok') return null;
+  const p = P();
+  let office = p.office;
+  const inYear = g.data.filter((r) => r.year === p.year);
+  if (!inYear.some((r) => r.office === office)) office = inYear[0]?.office;
+  return inYear.filter((r) => r.office === office && (!p.state || r.state_po === p.state));
+};
+const tile = (name, f) => dash.draw(name, (el) => { const rows = resRows(); el.textContent = rows ? f(rows) : '—'; });
+tile('res-n', (r) => bcFmt.n(r.length));
+tile('res-d', (r) => bcFmt.n(r.filter((x) => x.winner_party === 'DEMOCRAT').length));
+tile('res-r', (r) => bcFmt.n(r.filter((x) => x.winner_party === 'REPUBLICAN').length));
+tile('res-o', (r) => bcFmt.n(r.filter((x) => x.winner_party !== 'REPUBLICAN' && x.winner_party !== 'DEMOCRAT').length));
+tile('res-votes', (r) => { const v = d3.sum(r, (x) => +x.total_votes || 0); return v ? bcFmt.big(v) : 'Shares only'; });
+tile('res-margin', (r) => {
+  const t = d3.sum(r, (x) => +x.total_votes || 0);
+  return t ? bcFmt.m(d3.sum(r, (x) => (+x.margin || 0) * (+x.total_votes || 0)) / t) : bcFmt.m(d3.mean(r, (x) => x.margin === '' ? NaN : +x.margin));
+});
+
+dash.draw('res-chart', (el) => {
+  const g = dash.data('contests');
+  if (bcFail(el, g.status)) return;
+  const rows = resRows(); el.replaceChildren(); if (!rows || !rows.length) return;
+  const data = rows.filter((r) => r.margin !== '' && !isNaN(+r.margin)).map((r) => ({ r, m: +r.margin })).sort((a, b) => b.m - a.m);
+  const W = el.clientWidth || 600, bh = data.length > 60 ? 8 : 18, gap = data.length > 60 ? 1 : 4;
+  const showLabels = data.length <= 60;
+  const left = showLabels ? 70 : 8, right = 56, top = 22, H = top + data.length * (bh + gap) + 10;
+  const ext = Math.max(10, d3.max(data, (d) => Math.abs(d.m)));
+  const x = d3.scaleLinear([-ext, ext], [left, W - right]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Margin by contest');
+  svg.append('g').selectAll('line').data(x.ticks(6)).join('line').attr('x1', (t) => x(t)).attr('x2', (t) => x(t)).attr('y1', top - 4).attr('y2', H - 6)
+    .attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(x.ticks(6)).join('text').attr('x', (t) => x(t)).attr('y', 12).attr('text-anchor', 'middle')
+    .attr('fill', 'var(--color-fg-muted)').attr('font-size', 11).text((t) => t === 0 ? 'Even' : (t > 0 ? 'D+' : 'R+') + Math.abs(t));
+  const tip = bcTip(el);
+  const gg = svg.append('g').selectAll('g').data(data).join('g').attr('transform', (d, i) => `translate(0,${top + i * (bh + gap)})`);
+  gg.append('rect').attr('x', (d) => Math.min(x(0), x(d.m))).attr('width', (d) => Math.max(1, Math.abs(x(d.m) - x(0)))).attr('height', bh).attr('rx', 2)
+    .attr('fill', (d) => bcPartyColor(el, d.r.winner_party, d.m)).attr('opacity', (d) => d.r.status === 'unofficial' ? 0.55 : 0.9)
+    .on('mousemove', (ev, d) => tip.show(ev, [d.r.contest + ' · ' + d.r.election_date + (d.r.status === 'unofficial' ? ' · unofficial' : ''),
+      '1st ' + (d.r.first_candidate || '—') + ' (' + bcParty(d.r.first_party) + ') ' + bcFmt.pct(d.r.first_pct), '2nd ' + (d.r.second_candidate || '—') + ' (' + bcParty(d.r.second_party) + ') ' + bcFmt.pct(d.r.second_pct), 'Margin ' + bcFmt.m(d.m) + (d.r.total_votes ? ' · ' + bcFmt.n(+d.r.total_votes) + ' votes' : ''), d.r.margin_note || '']))
+    .on('mouseleave', () => tip.hide());
+  if (showLabels) {
+    gg.append('text').attr('x', left - 6).attr('y', bh / 2 + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg)').text((d) => d.r.contest.replace(/^(\w\w) (Senate|Governor|President)$/, '$1'));
+    gg.append('text').attr('x', (d) => d.m >= 0 ? x(d.m) + 4 : x(d.m) - 4).attr('y', bh / 2 + 4).attr('text-anchor', (d) => d.m >= 0 ? 'start' : 'end')
+      .attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((d) => bcFmt.m(d.m));
+  }
+});
+
+dash.draw('res-rows', (tb) => {
+  const rows = resRows(); tb.replaceChildren(); if (!rows) return;
+  const p = P(), q = (p.q || '').toLowerCase();
+  const num = ['first_pct', 'second_pct', 'other_pct', 'margin', 'total_votes'].includes(p.sort);
+  const list = rows.filter((r) => !q || [r.contest, r.first_candidate, r.second_candidate, r.state_po].join(' ').toLowerCase().includes(q))
+    .sort((a, b) => { const A = num ? +a[p.sort] : String(a[p.sort]), B = num ? +b[p.sort] : String(b[p.sort]); return (A > B ? 1 : A < B ? -1 : 0) * (p.dir === 'asc' ? 1 : -1); });
+  document.querySelectorAll('#res-table th').forEach((th) => { const b = th.querySelector('button'); th.setAttribute('aria-sort', b && b.dataset.sort === p.sort ? (p.dir === 'asc' ? 'ascending' : 'descending') : 'none'); });
+  for (const r of list) {
+    const tr = tb.insertRow(); tr.dataset.key = r.contest_id;
+    const pl = (c, p) => (c || '—') + (p ? ' (' + bcParty(p) + ')' : '');
+    const cells = [r.contest + (r.election_type !== 'general' ? ' (' + r.election_type + ')' : ''), r.election_date, pl(r.first_candidate, r.first_party), bcFmt.pct(r.first_pct), pl(r.second_candidate, r.second_party), bcFmt.pct(r.second_pct), bcFmt.pct(r.other_pct), r.margin === '' ? '—' : bcFmt.m(+r.margin), r.total_votes ? bcFmt.n(+r.total_votes) : '—', r.status];
+    cells.forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if ([3, 5, 6, 7, 8].includes(i)) td.className = 'n'; if (i === 2) td.classList.add(bcPartyClass(r.first_party)); if (i === 7 && r.margin !== '') td.classList.add(+r.margin > 0 ? 'dem' : 'rep'); if (i === 7 && r.margin_note) td.title = r.margin_note; });
+  }
+});
+</script>
+
+<script>
+// ---------- trends page ----------
+dash.draw('tr-chart', (el) => {
+  const g = dash.data('contests'), h = dash.data('house_by_state');
+  if (bcFail(el, g.status)) return;
+  el.replaceChildren(); if (g.status !== 'ok' || h.status !== 'ok') return;
+  const st = P().tstate;
+  const series = ['U.S. President', 'U.S. Senate', 'Governor'].map((off, i) => ({
+    name: off.replace('U.S. ', ''), color: dash.colors[i],
+    pts: g.data.filter((r) => r.state_po === st && r.office === off && r.status === 'certified' && (r.election_type === 'general' || r.election_type === 'special general'))
+      .map((r) => ({ x: +r.election_date.slice(0, 4) + (+r.election_date.slice(5, 7) - 1) / 12, m: +r.margin, r })).sort((a, b) => a.x - b.x),
+  }));
+  series.push({ name: 'House vote', color: dash.colors[3], pts: h.data.filter((r) => r.state_po === st).map((r) => ({ x: r.year + 10 / 12, m: r.margin, r: { contest: st + ' House (all districts)', election_date: String(r.year), first_candidate: r.dem_seats + ' D seats', second_candidate: r.rep_seats + ' R seats' } })).sort((a, b) => a.x - b.x) });
+  const from = +P().tfrom || 2000;
+  for (const s of series) s.pts = s.pts.filter((p) => p.x >= from);
+  const all = series.flatMap((s) => s.pts); if (!all.length) return;
+  const W = el.clientWidth || 600, H = 300, left = 52, right = 96, top = 14, bottom = 28;
+  const x = d3.scaleLinear([from, 2026.9], [left, W - right]);
+  const step = 2026 - from > 30 ? 8 : 2026 - from > 12 ? 4 : 2;
+  const ext = Math.max(10, d3.max(all, (p) => Math.abs(p.m)));
+  const y = d3.scaleLinear([-ext, ext], [H - bottom, top]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Margins over time');
+  svg.append('g').selectAll('line').data(y.ticks(6)).join('line').attr('x1', left).attr('x2', W - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(6)).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t === 0 ? 'Even' : (t > 0 ? 'D+' : 'R+') + Math.abs(t));
+  svg.append('g').selectAll('text').data(d3.range(2026, from - 1, -step).reverse()).join('text').attr('x', (t) => x(t + 10 / 12)).attr('y', H - 8).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t);
+  const tip = bcTip(el);
+  const ends = [];
+  for (const s of series) {
+    if (!s.pts.length) continue;
+    svg.append('path').attr('d', d3.line((p) => x(p.x), (p) => y(p.m))(s.pts)).attr('fill', 'none').attr('stroke', s.color).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round');
+    svg.append('g').selectAll('circle').data(s.pts).join('circle').attr('cx', (p) => x(p.x)).attr('cy', (p) => y(p.m)).attr('r', s.pts.length > 12 ? 3 : 4).attr('fill', s.color)
+      .on('mousemove', (ev, p) => tip.show(ev, [p.r.contest + ' · ' + p.r.election_date, (p.r.first_candidate || '') + (p.r.second_candidate ? ' vs ' + p.r.second_candidate : ''), s.name + ' margin ' + bcFmt.m(p.m)]))
+      .on('mouseleave', () => tip.hide());
+    const last = s.pts[s.pts.length - 1]; ends.push({ y: y(last.m), s, last });
+  }
+  ends.sort((a, b) => a.y - b.y); for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+  svg.append('g').selectAll('text').data(ends).join('text').attr('x', W - right + 8).attr('y', (e) => e.y + 4).attr('font-size', 11).attr('fill', (e) => e.s.color).text((e) => e.s.name + ' ' + bcFmt.m(e.last.m));
+});
+
+dash.draw('tr-title', (el) => { el.textContent = 'How ' + (P().tstate || 'the state') + ' has voted since ' + P().tfrom; });
+dash.draw('tr-rows', (tb) => {
+  const h = dash.data('house_by_state'); tb.replaceChildren(); if (h.status !== 'ok') return;
+  for (const r of h.data.filter((r) => r.state_po === P().tstate).sort((a, b) => b.year - a.year)) {
+    const tr = tb.insertRow(); tr.dataset.key = r.key;
+    [r.key, bcFmt.n(r.dem_seats), bcFmt.n(r.rep_seats), bcFmt.n(r.dem_votes), bcFmt.n(r.rep_votes), bcFmt.m(r.margin)].forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i) td.className = 'n'; if (i === 5) td.classList.add(r.margin > 0 ? 'dem' : 'rep'); });
+  }
+});
+</script>
+
+<script>
+// ---------- counties page ----------
+const coRows = () => {
+  const g = dash.data('county_view'); if (g.status !== 'ok') return null;
+  const p = P();
+  let off = p.coffice; const yr = g.data.filter((r) => String(r.year) === p.cyear);
+  if (!yr.some((r) => r.office === off)) off = yr[0]?.office;
+  return yr.filter((r) => r.office === off && (!p.cstate || r.state_po === p.cstate));
+};
+const VAR = { pct_bachelors_or_higher_25plus: ['College degree', (v) => d3.format('.0f')(v) + '%'], pct_white_nonhispanic: ['White, non-Hispanic', (v) => d3.format('.0f')(v) + '%'], pct_black_nonhispanic: ['Black, non-Hispanic', (v) => d3.format('.0f')(v) + '%'], pct_hispanic: ['Hispanic', (v) => d3.format('.0f')(v) + '%'], median_household_income: ['Median income', (v) => '$' + d3.format('~s')(v)], median_age: ['Median age', (v) => d3.format('.0f')(v)], unemployment_rate: ['Unemployment', (v) => d3.format('.1f')(v) + '%'] };
+dash.draw('co-chart', (el) => {
+  const g = dash.data('county_view');
+  if (bcFail(el, g.status)) return;
+  el.replaceChildren(); const rows = coRows(); if (!rows) return;
+  const v = P().cvar, [vname, vf] = VAR[v] || VAR.pct_bachelors_or_higher_25plus;
+  const pts = rows.filter((r) => r[v] != null && !isNaN(r[v]));
+  if (!pts.length) return;
+  const W = el.clientWidth || 600, H = 380, left = 52, right = 16, top = 12, bottom = 40;
+  const x = d3.scaleLinear(d3.extent(pts, (r) => r[v]), [left, W - right]).nice();
+  const ext = Math.max(10, d3.max(pts, (r) => Math.abs(r.margin)));
+  const y = d3.scaleLinear([-ext, ext], [H - bottom, top]).nice();
+  const rr = d3.scaleSqrt([0, d3.max(pts, (r) => r.total)], [1.5, pts.length > 600 ? 12 : 20]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'County margin against ' + vname);
+  svg.append('g').selectAll('line').data(y.ticks(6)).join('line').attr('x1', left).attr('x2', W - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(6)).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t === 0 ? 'Even' : (t > 0 ? 'D+' : 'R+') + Math.abs(t));
+  svg.append('g').selectAll('text').data(x.ticks(6)).join('text').attr('x', (t) => x(t)).attr('y', H - bottom + 16).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(vf);
+  svg.append('text').attr('x', (left + W - right) / 2).attr('y', H - 4).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(vname);
+  const tip = bcTip(el);
+  svg.append('g').selectAll('circle').data(pts.sort((a, b) => b.total - a.total)).join('circle').attr('cx', (r) => x(r[v])).attr('cy', (r) => y(r.margin)).attr('r', (r) => rr(r.total))
+    .attr('fill', (r) => bcColor(el, r.margin)).attr('fill-opacity', 0.45).attr('stroke', (r) => bcColor(el, r.margin)).attr('stroke-width', 0.75)
+    .on('mousemove', (ev, r) => tip.show(ev, [r.county + ', ' + r.state_po + ' · ' + r.year, 'Margin ' + bcFmt.m(r.margin) + ' · ' + bcFmt.n(r.total) + ' votes', vname + ' ' + vf(r[v]) + ' (' + (v === 'unemployment_rate' ? 'BLS, ' + r.unemp_year : r.demo_label) + ')', r.shift == null ? '' : 'Shift since ' + r.prev_year + ': ' + (r.shift > 0 ? 'D' : 'R') + ' ' + d3.format('.1f')(Math.abs(r.shift))]))
+    .on('mouseleave', () => tip.hide());
+});
+dash.draw('co-rows', (tb) => {
+  tb.replaceChildren(); const rows = coRows(); if (!rows) return;
+  for (const r of [...rows].sort((a, b) => b.total - a.total)) {
+    const tr = tb.insertRow(); tr.dataset.key = r.key;
+    [r.county + ', ' + r.state_po + (r.check ? ' ⚠' : ''), bcFmt.n(r.dem), bcFmt.n(r.rep), bcFmt.n(r.total), bcFmt.m(r.margin), r.shift == null ? '—' : (r.shift > 0 ? 'D ' : 'R ') + d3.format('.1f')(Math.abs(r.shift)) + ' since ' + r.prev_year]
+      .forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i) td.className = 'n'; if (i === 0 && r.check) td.title = 'Data check: ' + r.check + ' (compared with EAVS ballots counted, voter-file turnout and the county\'s other races)'; if (i === 4) td.classList.add(r.margin > 0 ? 'dem' : 'rep'); if (i === 5 && r.shift != null) td.classList.add(r.shift > 0 ? 'dem' : 'rep'); });
+  }
+});
+// a note when the county rows for this race don't add up to the certified statewide total, or some counties are flagged
+dash.draw('co-cov', (el) => {
+  const rows = coRows(); el.textContent = 'County figures for this race add up to the certified statewide total.'; el.classList.remove('bc-warn'); if (!rows || !rows.length) { el.textContent = 'No county results for this choice.'; return; }
+  const by = d3.group(rows, (r) => r.state_po), msgs = [];
+  for (const [st, rs] of by) {
+    const cov = rs[0].race_coverage;
+    if (cov != null && (cov < 0.98 || cov > 1.02)) msgs.push(st + ': county figures add up to ' + d3.format('.0%')(cov) + ' of the certified statewide vote' + (cov < 0.98 ? ' (some counties are missing from the source)' : ' (the county files include blank or extra ballots)'));
+  }
+  if (+P().cyear >= 2008 && +P().cyear < 2016 && P().cvar === 'median_age') msgs.push('Median age is not loaded for the 2008-2014 elections.');
+  const fl = rows.filter((r) => r.check).length;
+  if (fl) msgs.push(fl + ' ' + (fl === 1 ? 'county is' : 'counties are') + ' marked ⚠: their totals disagree with the ballots counted there (EAVS) and the county\'s other races, so treat them with caution.');
+  if (msgs.length) { el.textContent = msgs.join(' · '); el.classList.add('bc-warn'); }
+});
+</script>
+
+<script>
+// ---------- forecast page ----------
+const fcTile = (name, f) => dash.draw(name, (el) => { const g = dash.data('forecast_check'); el.textContent = g.status === 'ok' && g.data.length ? f(g.data[0]) : '—'; });
+fcTile('fc-right', (s) => s.right + ' of ' + s.races);
+fcTile('fc-bias', (s) => (s.bias > 0 ? '+' : '') + d3.format('.1f')(s.bias) + ' pts');
+fcTile('fc-abs', (s) => d3.format('.1f')(s.abs) + ' pts');
+fcTile('fc-poll', (s) => d3.format('.1f')(s.poll_abs) + ' pts');
+dash.draw('fc-chart', (el) => {
+  const g = dash.data('forecast_2026');
+  if (bcFail(el, g.status)) return;
+  el.replaceChildren(); if (g.status !== 'ok') return;
+  const rows = g.data.filter((r) => r.result_margin !== '' && r.result_margin != null).map((r) => ({ r, f: +r.fc_margin, a: +r.result_margin, live: /ranked|tied/.test(r.status) }))
+    .sort((p, q) => (q.a - q.f) - (p.a - p.f));
+  const W = el.clientWidth || 600, bh = 22, left = 110, right = 120, top = 22, H = top + rows.length * bh + 10;
+  const ext = Math.max(15, d3.max(rows, (d) => Math.max(Math.abs(d.f), Math.abs(d.a))));
+  const x = d3.scaleLinear([-ext, ext], [left, W - right]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Forecast against results');
+  svg.append('g').selectAll('line').data(x.ticks(6)).join('line').attr('x1', (t) => x(t)).attr('x2', (t) => x(t)).attr('y1', top - 6).attr('y2', H - 4).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(x.ticks(6)).join('text').attr('x', (t) => x(t)).attr('y', 12).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t === 0 ? 'Even' : (t > 0 ? 'D+' : 'R+') + Math.abs(t));
+  const tip = bcTip(el);
+  const gg = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (d, i) => `translate(0,${top + i * bh + bh / 2})`);
+  gg.append('text').attr('x', left - 8).attr('y', 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg)').text((d) => d.r.race.replace('-', ' ').replace('governor', 'Gov').replace('senate', 'Sen'));
+  gg.append('line').attr('x1', (d) => x(d.f)).attr('x2', (d) => x(d.a)).attr('stroke', 'var(--cds-chart-muted)').attr('stroke-width', 2);
+  gg.append('circle').attr('cx', (d) => x(d.f)).attr('r', 4).attr('fill', 'var(--cds-chart-muted)');
+  gg.append('circle').attr('cx', (d) => x(d.a)).attr('r', 5).attr('fill', (d) => bcColor(el, d.a)).attr('opacity', (d) => d.live ? 0.5 : 1)
+    .on('mousemove', (ev, d) => tip.show(ev, [d.r.race + (d.live ? ' · still counting' : ''), 'Forecast ' + bcFmt.m(d.f) + ' (D win ' + d3.format('.0%')(+d.r.fc_pdem) + ')', 'Poll average ' + bcFmt.m(+d.r.poll_avg), 'Count ' + bcFmt.m(d.a) + ' at ' + d3.format('.0f')(+d.r.pct_in) + '% in', 'Miss ' + (d.a - d.f > 0 ? '+' : '') + d3.format('.1f')(d.a - d.f)]))
+    .on('mouseleave', () => tip.hide());
+  gg.filter((d) => !d.live && ((+d.r.fc_pdem > 0.5) !== (d.a > 0))).append('text').attr('x', W - right + 8).attr('y', 4).attr('font-size', 11).attr('fill', 'var(--color-bad)').text('winner missed');
+});
+</script>
+<script>
+// ---------- live needles ----------
+dash.draw('nd-senate', (el) => { const g = dash.data('needle_control'); const r = g.status === 'ok' ? g.data.find((x) => x.chamber === 'senate') : null; el.textContent = r ? d3.format('.0%')(+r.p_dem_majority) : '—'; });
+dash.draw('nd-seats', (el) => { const g = dash.data('needle_control'); const r = g.status === 'ok' ? g.data.find((x) => x.chamber === 'senate') : null; el.textContent = r ? d3.format('.1f')(+r.expected_dem_wins) + ' of ' + r.races : '—'; });
+dash.draw('nd-asof', (el) => {
+  const g = dash.data('needle_now');
+  el.textContent = g.status === 'ok' && g.data.length ? new Date(d3.max(g.data, (r) => r.as_of)).toLocaleString('en-US', { timeZone: 'America/New_York', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
+});
+selectDraw('nd-race', 'needle_now', (d) => d.map((r) => ({ v: r.race, t: r.state + ' ' + r.office + ': ' + r.dem + ' vs ' + r.rep })), 'nrace');
+dash.draw('nd-grid', (el) => {
+  const g = dash.data('needle_now');
+  if (bcFail(el, g.status)) return;
+  el.replaceChildren(); if (g.status !== 'ok') return;
+  const cur = P().nrace;
+  const rows = [...g.data].sort((a, b) => (a.office + a.state).localeCompare(b.office + b.state));
+  const dem = bcColor(el, 1), rep = bcColor(el, -1);
+  for (const r of rows) {
+    const b = document.createElement('button'); b.className = 'nd-card'; b.type = 'button'; b.setAttribute('aria-pressed', String(r.race === cur));
+    b.onclick = () => dash.setParams({ nrace: r.race });
+    const t = document.createElement('span'); t.className = 't'; t.textContent = r.state + ' ' + r.office; b.appendChild(t);
+    const W = 200, H = 112, cx = W / 2, cy = 100, R = 82, ext = 20;
+    const ang = (m) => (-Math.max(-ext, Math.min(ext, m)) / ext) * (Math.PI / 2);
+    const svg = d3.select(b).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', r.state + ' ' + r.office + ' needle');
+    const arc = d3.arc().innerRadius(R - 14).outerRadius(R);
+    svg.append('path').attr('transform', `translate(${cx},${cy})`).attr('d', arc({ startAngle: -Math.PI / 2, endAngle: 0 })).attr('fill', dem).attr('fill-opacity', 0.18);
+    svg.append('path').attr('transform', `translate(${cx},${cy})`).attr('d', arc({ startAngle: 0, endAngle: Math.PI / 2 })).attr('fill', rep).attr('fill-opacity', 0.18);
+    const a1 = ang(+r.p10), a2 = ang(+r.p90);
+    svg.append('path').attr('transform', `translate(${cx},${cy})`).attr('d', arc({ startAngle: Math.min(a1, a2), endAngle: Math.max(a1, a2) + 0.0001 })).attr('fill', 'var(--color-fg)').attr('fill-opacity', 0.28);
+    const a = ang(+r.median);
+    svg.append('line').attr('x1', cx).attr('y1', cy).attr('x2', cx + Math.sin(a) * (R - 4)).attr('y2', cy - Math.cos(a) * (R - 4)).attr('stroke', 'var(--color-fg)').attr('stroke-width', 2.5).attr('stroke-linecap', 'round');
+    svg.append('circle').attr('cx', cx).attr('cy', cy).attr('r', 4).attr('fill', 'var(--color-fg)');
+    svg.append('text').attr('x', 8).attr('y', cy + 10).attr('font-size', 10).attr('fill', dem).text('D+20');
+    svg.append('text').attr('x', W - 8).attr('y', cy + 10).attr('text-anchor', 'end').attr('font-size', 10).attr('fill', rep).text('R+20');
+    const s1 = document.createElement('span'); s1.className = 's'; s1.textContent = r.dem + ' vs ' + r.rep + ' · ' + bcFmt.m(+r.median); b.appendChild(s1);
+    const s2 = document.createElement('span'); s2.className = 's';
+    const wp = +r.win_prob;
+    s2.textContent = d3.format('.0f')(+r.pct_in) + '% counted · ' + (wp >= 0.5 ? r.dem + ' ' + d3.format('.0%')(wp) : r.rep + ' ' + d3.format('.0%')(1 - wp)) + ' to win';
+    b.appendChild(s2);
+    el.appendChild(b);
+  }
+});
+dash.draw('nd-history', (el) => {
+  const g = dash.data('needle_history');
+  if (bcFail(el, g.status)) return;
+  el.replaceChildren(); if (g.status !== 'ok') return;
+  const pts = g.data.filter((r) => r.id === P().nrace).map((r) => ({ t: new Date(r.timestamp), m: +r.median, lo: +r.p10, hi: +r.p90, pin: +r.pct_in, w: +r.win_prob })).sort((a, b) => a.t - b.t);
+  if (!pts.length) return;
+  const W = el.clientWidth || 600, H = 300, left = 52, right = 48, top = 12, bottom = 28;
+  const x = d3.scaleUtc(d3.extent(pts, (p) => p.t), [left, W - right]);
+  const ext = Math.max(5, d3.max(pts, (p) => Math.max(Math.abs(p.lo), Math.abs(p.hi))));
+  const y = d3.scaleLinear([-ext, ext], [H - bottom, top]).nice();
+  const yp = d3.scaleLinear([0, 100], [H - bottom, top]);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Needle history');
+  svg.append('g').selectAll('line').data(y.ticks(6)).join('line').attr('x1', left).attr('x2', W - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(6)).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t === 0 ? 'Even' : (t > 0 ? 'D+' : 'R+') + Math.abs(t));
+  svg.append('g').selectAll('text').data([0, 50, 100]).join('text').attr('x', W - right + 6).attr('y', (t) => yp(t) + 4).attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t + '%');
+  const fmtT = (d) => d.toLocaleString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' });
+  svg.append('g').selectAll('text').data(x.ticks(Math.max(2, Math.floor(W / 120)))).join('text').attr('x', (t) => x(t)).attr('y', H - 8).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => fmtT(t));
+  svg.append('path').attr('d', d3.line((p) => x(p.t), (p) => yp(p.pin))(pts)).attr('fill', 'none').attr('stroke', 'var(--cds-chart-muted)').attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3');
+  const last = pts[pts.length - 1], col = bcColor(el, last.m);
+  svg.append('path').attr('d', d3.area((p) => x(p.t), (p) => y(p.lo), (p) => y(p.hi))(pts)).attr('fill', col).attr('fill-opacity', 0.16);
+  svg.append('path').attr('d', d3.line((p) => x(p.t), (p) => y(p.m))(pts)).attr('fill', 'none').attr('stroke', col).attr('stroke-width', 2).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round');
+  svg.append('circle').attr('cx', x(last.t)).attr('cy', y(last.m)).attr('r', 4).attr('fill', col);
+  const tip = bcTip(el);
+  const near = d3.bisector((p) => p.t).center;
+  svg.append('rect').attr('x', left).attr('y', top).attr('width', W - left - right).attr('height', H - top - bottom).attr('fill', 'transparent')
+    .on('mousemove', (ev) => {
+      const [mx] = d3.pointer(ev); const p = pts[near(pts, x.invert(mx))];
+      tip.show(ev, [fmtT(p.t) + ' ET', 'Estimate ' + bcFmt.m(p.m) + ' (80%: ' + bcFmt.m(p.lo) + ' to ' + bcFmt.m(p.hi) + ')', d3.format('.0f')(p.pin) + '% counted · D win ' + d3.format('.0%')(p.w)]);
+    })
+    .on('mouseleave', () => tip.hide());
+});
+</script>
+<script>
+// ---------- seat charts and maps ----------
+window.bcRamp = (el, m, cap) => {
+  const cs = getComputedStyle(el.closest('.bc'));
+  const dem = cs.getPropertyValue('--bc-dem').trim(), rep = cs.getPropertyValue('--bc-rep').trim(), mid = cs.getPropertyValue('--bc-mid').trim();
+  if (m == null || isNaN(m)) return cs.getPropertyValue('--bc-none').trim();
+  const t = Math.min(1, Math.abs(m) / cap);
+  return d3.interpolateRgb(mid, m > 0 ? dem : rep)(0.25 + 0.75 * t);
+};
+
+// a contest's fill: party color when there is no D-vs-R margin (independent winner, or same-party finalists with no runner-up figure)
+window.bcContestFill = (el, r, cap) => {
+  if (r.winner_party === 'INDEPENDENT') return bcPartyColor(el, 'INDEPENDENT');
+  if (r.margin === '' || r.margin == null || isNaN(+r.margin)) return bcPartyColor(el, r.winner_party);
+  return bcRamp(el, +r.margin, cap);
+};
+window.bcContestLines = (r, pre) => [pre + (r.first_candidate || '') + ' ' + bcFmt.pct(r.first_pct) + (r.second_candidate ? ' vs ' + r.second_candidate + ' ' + bcFmt.pct(r.second_pct) : '') + ' · ' + bcFmt.m(+r.margin), ...(r.margin_note ? [r.margin_note] : [])];
+// parliament arc: seats in rows, filled left to right in the given order
+window.bcArc = (el, seats, need, label) => {
+  el.replaceChildren();
+  const W = el.clientWidth || 600, n = seats.length;
+  const rows = n > 200 ? 12 : 6, H = Math.min(W / 2 + 40, n > 200 ? 360 : 300);
+  const R = Math.min(W / 2 - 10, H - 50), r0 = R * 0.38;
+  const radii = d3.range(rows).map((i) => r0 + (R - r0) * (i / (rows - 1)));
+  const tot = d3.sum(radii);
+  let counts = radii.map((r) => Math.round(n * r / tot)); counts[rows - 1] += n - d3.sum(counts);
+  const pos = [];
+  radii.forEach((r, i) => { for (let j = 0; j < counts[i]; j++) { const a = Math.PI * (counts[i] === 1 ? 0.5 : j / (counts[i] - 1)); pos.push({ a, r }); } });
+  pos.sort((p, q) => q.a - p.a || q.r - p.r);
+  const dot = Math.max(2, Math.min(9, (Math.PI * R / (counts[rows - 1])) * 0.42));
+  const cx = W / 2, cy = H - 30;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', label);
+  const tip = bcTip(el);
+  svg.append('g').selectAll('circle').data(seats).join('circle')
+    .attr('cx', (s, i) => cx + Math.cos(pos[i].a) * pos[i].r).attr('cy', (s, i) => cy - Math.sin(pos[i].a) * pos[i].r).attr('r', dot)
+    .attr('fill', (s) => s.status === 'leading' ? 'var(--color-panel)' : bcPartyColor(el, s.party))
+    .attr('stroke', (s) => bcPartyColor(el, s.party)).attr('stroke-width', (s) => s.status === 'leading' ? 1.8 : 0)
+    .on('mousemove', (ev, s) => tip.show(ev, s.tip())).on('mouseleave', () => tip.hide());
+  const ang = Math.PI * (1 - (need - 0.5) / n);
+  svg.append('line').attr('x1', cx + Math.cos(ang) * (r0 - 14)).attr('y1', cy - Math.sin(ang) * (r0 - 14)).attr('x2', cx + Math.cos(ang) * (R + 14)).attr('y2', cy - Math.sin(ang) * (R + 14))
+    .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 3');
+  svg.append('text').attr('x', cx).attr('y', cy - r0 + 30).attr('text-anchor', 'middle').attr('font-size', 13).attr('fill', 'var(--color-fg-muted)').text(need + ' for a majority');
+};
+const seatOrder = { DEMOCRAT: 0, INDEPENDENT: 1, REPUBLICAN: 2 };
+const statusOrder = (s) => s.party === 'REPUBLICAN' ? { leading: 0, called: 1, holdover: 2 }[s.status] : { holdover: 0, called: 1, leading: 2 }[s.status];
+
+// ---- Senate ----
+const seN = (f) => { const g = dash.data('senate_seats'); return g.status === 'ok' ? f(g.data) : null; };
+dash.draw('se-d', (el) => { const v = seN((d) => d.filter((s) => s.party === 'DEMOCRAT').length); el.textContent = v == null ? '—' : String(v); });
+dash.draw('se-r', (el) => { const v = seN((d) => d.filter((s) => s.party === 'REPUBLICAN').length); el.textContent = v == null ? '—' : String(v); });
+dash.draw('se-open', (el) => { const v = seN((d) => d.filter((s) => s.status === 'leading').map((s) => s.state_po).join(', ') || 'None'); el.textContent = v ?? '—'; });
+dash.draw('se-ctrl', (el) => {
+  const v = seN((d) => { const dd = d.filter((s) => s.party !== 'REPUBLICAN' && s.status !== 'leading').length, rr = d.filter((s) => s.party === 'REPUBLICAN' && s.status !== 'leading').length; return dd >= 51 ? 'Democrats' : rr >= 50 ? 'Republicans' : 'Not decided'; });
+  el.textContent = v ?? '—';
+});
+dash.draw('se-arc', (el) => {
+  const g = dash.data('senate_seats'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
+  const seats = g.data.map((s) => ({ ...s, tip: () => s.status === 'holdover' ? [bcParty(s.party) + ' seat', 'Not up in 2026'] : [s.state_po + (s.seat === 'special' ? ' (special)' : ''), s.candidate + ' (' + bcParty(s.party) + ') ' + bcFmt.m(+s.margin), s.status === 'leading' ? 'Leading, not called' : 'Called'] }))
+    .sort((a, b) => seatOrder[a.party] - seatOrder[b.party] || statusOrder(a) - statusOrder(b));
+  bcArc(el, seats, 51, 'Senate seats');
+});
+window.bcStateMap = (el, fill, tipf, stripes) => {
+  const g = dash.data('map_states'); if (g.status !== 'ok') return null;
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', '-70 0 1045 610').attr('role', 'img').attr('aria-label', 'Map of the United States');
+  const cs = getComputedStyle(el.closest('.bc'));
+  const defs = svg.append('defs');
+  for (const [id, c] of [['bc-hatch-d', cs.getPropertyValue('--bc-dem').trim()], ['bc-hatch-r', cs.getPropertyValue('--bc-rep').trim()]]) {
+    const p = defs.append('pattern').attr('id', id).attr('width', 6).attr('height', 6).attr('patternUnits', 'userSpaceOnUse').attr('patternTransform', 'rotate(45)');
+    p.append('rect').attr('width', 6).attr('height', 6).attr('fill', cs.getPropertyValue('--bc-mid').trim());
+    p.append('rect').attr('width', 3).attr('height', 6).attr('fill', c);
+  }
+  const tip = bcTip(el);
+  svg.append('g').selectAll('path').data(g.data).join('path').attr('d', (s) => s.d)
+    .attr('fill', (s) => { const st = stripes && stripes(s); return st ? `url(#bc-hatch-${st})` : fill(s); })
+    .attr('stroke', 'var(--color-panel)').attr('stroke-width', 0.8)
+    .on('mousemove', (ev, s) => { const t = tipf(s); if (t) tip.show(ev, t); }).on('mouseleave', () => tip.hide());
+  return svg;
+};
+dash.draw('se-map', (el) => {
+  const g = dash.data('senate_seats'), c = dash.data('contests'); if (bcFail(el, g.status)) return; el.replaceChildren();
+  if (g.status !== 'ok' || c.status !== 'ok') return;
+  const races = c.data.filter((r) => r.year === '2026' && r.office === 'U.S. Senate');
+  const by = d3.group(races, (r) => r.state_po);
+  const lead = new Set(g.data.filter((s) => s.status === 'leading').map((s) => s.state_po));
+  const main = (st) => (by.get(st) || []).find((r) => r.election_type === 'runoff') || (by.get(st) || []).find((r) => r.election_type === 'general') || (by.get(st) || [])[0];
+  bcStateMap(el, (s) => { const r = main(s.state_po); return r ? bcContestFill(el, r, 30) : getComputedStyle(el.closest('.bc')).getPropertyValue('--bc-none').trim(); },
+    (s) => { const rs = by.get(s.state_po); if (!rs) return [s.name, 'No Senate race in 2026']; return [s.name + (lead.has(s.state_po) ? ' · still counting' : ''), ...rs.flatMap((r) => bcContestLines(r, r.election_type.includes('special') ? 'Special: ' : ''))]; },
+    (s) => lead.has(s.state_po) ? (+(main(s.state_po) || {}).margin > 0 ? 'd' : 'r') : null);
+});
+
+// ---- House ----
+const hoN = (f) => { const g = dash.data('house_seats'); return g.status === 'ok' ? f(g.data) : null; };
+dash.draw('ho-d', (el) => { const v = hoN((d) => d.filter((s) => s.party === 'DEMOCRAT' && s.status === 'called').length); el.textContent = v == null ? '—' : String(v); });
+dash.draw('ho-r', (el) => { const v = hoN((d) => d.filter((s) => s.party === 'REPUBLICAN' && s.status === 'called').length); el.textContent = v == null ? '—' : String(v); });
+dash.draw('ho-lead', (el) => { const v = hoN((d) => d.filter((s) => s.status === 'leading' && s.party === 'DEMOCRAT').length + ' / ' + d.filter((s) => s.status === 'leading' && s.party === 'REPUBLICAN').length); el.textContent = v ?? '—'; });
+dash.draw('ho-flip', (el) => { const v = hoN((d) => { const f = d.filter((s) => String(s.flip) === 'True' || s.flip === true); return f.filter((s) => s.party === 'DEMOCRAT').length + ' to D, ' + f.filter((s) => s.party === 'REPUBLICAN').length + ' to R'; }); el.textContent = v ?? '—'; });
+const hoTip = (s) => [...[s.state_po + '-' + s.district + (s.status === 'called' ? ' · called' : ' · leading, not called'), bcParty(s.party) + (s.leader ? ' ' + s.leader : '') + (s.margin !== '' && s.margin != null ? ' ' + bcFmt.m(+s.margin) : '') + (s.pct_in ? ' · ' + d3.format('.0f')(+s.pct_in) + '% counted' : ''), s.party_2024 ? 'Won by ' + bcParty(s.party_2024) + ' in 2024' + ((String(s.flip) === 'True') ? ' · changed party' : '') : ''], ...(s.note ? [s.note + ': no D-vs-R margin'] : [])];
+dash.draw('ho-arc', (el) => {
+  const g = dash.data('house_seats'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
+  const seats = g.data.map((s) => ({ ...s, tip: () => hoTip(s) })).sort((a, b) => seatOrder[a.party] - seatOrder[b.party] || statusOrder(a) - statusOrder(b));
+  bcArc(el, seats, 218, 'House seats');
+});
+const TILE = { AK: [0, 0], ME: [10, 0], VT: [9, 1], NH: [10, 1], WA: [0, 2], ID: [1, 2], MT: [2, 2], ND: [3, 2], MN: [4, 2], IL: [5, 2], WI: [6, 2], MI: [7, 2], NY: [8, 2], RI: [9, 2], MA: [10, 2],
+  OR: [0, 3], NV: [1, 3], WY: [2, 3], SD: [3, 3], IA: [4, 3], IN: [5, 3], OH: [6, 3], PA: [7, 3], NJ: [8, 3], CT: [9, 3], CA: [0, 4], UT: [1, 4], CO: [2, 4], NE: [3, 4], MO: [4, 4], KY: [5, 4], WV: [6, 4], VA: [7, 4], MD: [8, 4], DE: [9, 4],
+  AZ: [1, 5], NM: [2, 5], KS: [3, 5], AR: [4, 5], TN: [5, 5], NC: [6, 5], SC: [7, 5], DC: [8, 5], OK: [3, 6], LA: [4, 6], MS: [5, 6], AL: [6, 6], GA: [7, 6], HI: [0, 7], TX: [3, 7], FL: [8, 7] };
+dash.draw('ho-grid', (el) => {
+  const g = dash.data('house_seats'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
+  const W = el.clientWidth || 600, cols = 11, rowsN = 8, pad = 3;
+  const tw = Math.floor((W - pad * (cols - 1)) / cols), th = tw;
+  const H = rowsN * (th + pad);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'House districts by state');
+  const tip = bcTip(el);
+  const by = d3.group(g.data, (s) => s.state_po);
+  for (const [st, [cx, cy]] of Object.entries(TILE)) {
+    const ds = (by.get(st) || []).sort((a, b) => (+a.district) - (+b.district));
+    const x0 = cx * (tw + pad), y0 = cy * (th + pad);
+    const gg = svg.append('g').attr('transform', `translate(${x0},${y0})`);
+    gg.append('rect').attr('width', tw).attr('height', th).attr('rx', 3).attr('fill', 'var(--color-bg)').attr('stroke', 'var(--color-border-line)');
+    gg.append('text').attr('x', 4).attr('y', 12).attr('font-size', Math.max(9, Math.min(12, tw / 5))).attr('fill', 'var(--color-fg-muted)').text(st);
+    if (!ds.length) continue;
+    const n = ds.length, k = Math.ceil(Math.sqrt(n)), area = tw - 8, top = 16, sz = Math.max(2, Math.min(18, (Math.min(area, th - top - 4)) / k - 1));
+    gg.append('g').selectAll('rect').data(ds).join('rect')
+      .attr('x', (s, i) => 4 + (i % k) * (sz + 1)).attr('y', (s, i) => top + Math.floor(i / k) * (sz + 1)).attr('width', sz).attr('height', sz).attr('rx', 1)
+      .attr('fill', (s) => bcPartyColor(el, s.party)).attr('fill-opacity', (s) => s.status === 'leading' ? 0.35 : 1)
+      .attr('stroke', (s) => (String(s.flip) === 'True') ? 'var(--color-fg)' : 'none').attr('stroke-width', 1.2)
+      .on('mousemove', (ev, s) => tip.show(ev, hoTip(s))).on('mouseleave', () => tip.hide());
+  }
+});
+
+// ---- Maps ----
+selectDraw('mp-year', 'contests', (d) => uniq(d.filter((r) => ['U.S. President', 'U.S. Senate', 'Governor'].includes(r.office)).map((r) => r.year)).sort().reverse(), 'myear');
+selectDraw('mp-state', 'map_states', (d) => d.map((s) => ({ v: s.state_po, t: s.name })).sort((a, b) => a.t.localeCompare(b.t)), 'mstate', 'Whole country');
+const MPO = [['U.S. President', 'President'], ['U.S. Senate', 'Senate'], ['Governor', 'Governor'], ['U.S. House', 'House']];
+selectDraw('mp-office', 'contests', (d) => { const have = new Set(d.filter((r) => r.year === P().myear).map((r) => r.office)); return MPO.filter(([v]) => have.has(v)).map(([v, t]) => ({ v, t })); }, 'moffice');
+// the office actually shown: the chosen one if that year has it, otherwise the first one the year has
+window.mpOffice = () => { const g = dash.data('contests'); const p = P(); if (g.status !== 'ok') return p.moffice; const have = new Set(g.data.filter((r) => r.year === p.myear).map((r) => r.office)); return have.has(p.moffice) ? p.moffice : (MPO.find(([v]) => have.has(v)) || [p.moffice])[0]; };
+document.querySelectorAll('#mp-level').forEach((s) => s.addEventListener('change', () => dash.setParams(s.value === 'district' ? { mlevel: 'district', moffice: 'U.S. House', myear: ['2016', '2018', '2020', '2022', '2024', '2026'].includes(P().myear) ? P().myear : '2026' } : { mlevel: s.value })));
+dash.onData(() => {
+  document.querySelectorAll('#mp-level').forEach((s) => { s.value = P().mlevel; });
+});
+window.OFFN = { 'U.S. President': 'President', 'U.S. Senate': 'Senate', Governor: 'Governor', 'U.S. House': 'House' };
+// House by state: seats won by each party and the combined House vote margin (2026: average district margin, since only shares are in)
+window.bcHouseState = (races) => {
+  const by = d3.group(races.filter((r) => r.election_type === 'general' || r.election_type === 'runoff'), (r) => r.state_po), out = new Map();
+  for (const [st, rs] of by) {
+    const ro = new Map(rs.filter((r) => r.election_type === 'runoff').map((r) => [r.district, r.winner_party]));
+    const gen = rs.filter((r) => r.election_type === 'general');
+    let dv = 0, rv = 0, tv = 0, d = 0, rr = 0, o = 0, ms = [];
+    for (const r of gen) {
+      const wp = ro.get(r.district) || r.winner_party;
+      if (wp === 'DEMOCRAT') d++; else if (wp === 'REPUBLICAN') rr++; else o++;
+      const fv = +r.first_votes, sv = +r.second_votes;
+      if (fv) { dv += r.first_party === 'DEMOCRAT' ? fv : r.second_party === 'DEMOCRAT' ? (sv || 0) : 0; rv += r.first_party === 'REPUBLICAN' ? fv : r.second_party === 'REPUBLICAN' ? (sv || 0) : 0; tv += +r.total_votes || 0; }
+      if (r.margin !== '' && !isNaN(+r.margin)) ms.push(+r.margin);
+    }
+    const byVotes = tv > 0;
+    out.set(st, { d, r: rr, o, n: gen.length, margin: byVotes ? 100 * (dv - rv) / tv : (ms.length ? d3.mean(ms) : null), byVotes });
+  }
+  return out;
+};
+dash.draw('mp-title', (el) => { const p = { ...P(), moffice: mpOffice() }; el.textContent = p.myear + ' ' + OFFN[p.moffice] + (p.mlevel === 'shift' ? ': county shift since the last race' : p.mlevel === 'county' ? ' by county' : p.mlevel === 'district' ? ' by congressional district' : ' by state'); });
+dash.draw('mp-legend', (el) => {
+  el.replaceChildren(); const lvl = P().mlevel;
+  const box = d3.select(el).append('svg').attr('width', '100%').style('max-width', '420px').style('display', 'block').attr('viewBox', '0 0 420 36').attr('role', 'img').attr('aria-label', 'Map color key');
+  const cap = lvl === 'state' ? 30 : lvl === 'shift' ? 15 : 40, steps = d3.range(-cap, cap + 0.1, cap / 5);
+  steps.forEach((m, i) => box.append('rect').attr('x', 10 + i * 36).attr('y', 4).attr('width', 34).attr('height', 12).attr('fill', bcRamp(el, m, cap)));
+  [[-cap, 'R+' + cap], [0, lvl === 'shift' ? 'No change' : 'Even'], [cap, (lvl === 'shift' ? 'D' : 'D') + '+' + cap]].forEach(([m, t]) =>
+    box.append('text').attr('x', 10 + ((m + cap) / (cap / 5)) * 36 + 17).attr('y', 30).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(t));
+});
+dash.draw('mp-map', (el) => {
+  const gs = dash.data('map_states'); if (bcFail(el, gs.status)) return; el.replaceChildren();
+  const p = { ...P(), moffice: mpOffice() }, c = dash.data('contests');
+  if (gs.status !== 'ok' || c.status !== 'ok') return;
+  const races = c.data.filter((r) => r.year === p.myear && r.office === p.moffice);
+  const by = d3.group(races, (r) => r.state_po);
+  const main = (st) => (by.get(st) || []).find((r) => r.election_type === 'runoff') || (by.get(st) || []).find((r) => r.election_type === 'general') || (by.get(st) || [])[0];
+  const none = getComputedStyle(el.closest('.bc')).getPropertyValue('--bc-none').trim();
+  let svg;
+  if (p.mlevel === 'state' && p.moffice === 'U.S. House') {
+    let hs = bcHouseState(races);
+    const hseat = dash.data('house_seats');
+    if (p.myear === '2026' && hseat.status === 'ok') {   // all 435 seats: NBC/AP calls plus current leaders
+      hs = new Map();
+      for (const [st, rs] of d3.group(hseat.data, (r) => r.state_po)) {
+        hs.set(st, { d: rs.filter((r) => r.party === 'DEMOCRAT').length, r: rs.filter((r) => r.party === 'REPUBLICAN').length, o: rs.filter((r) => !['DEMOCRAT', 'REPUBLICAN'].includes(r.party)).length, n: rs.length,
+          lead: rs.filter((r) => r.status === 'leading').length, byVotes: false, bySeats: true });
+        const h = hs.get(st); h.margin = 100 * (h.d - h.r) / h.n;   // no vote totals yet: shade by the seat split
+      }
+    }
+    svg = bcStateMap(el, (s) => { const h = hs.get(s.state_po); return !h || h.margin == null ? none : bcRamp(el, h.margin, h.bySeats ? 100 : 30); },
+      (s) => { const h = hs.get(s.state_po); if (!h) return [s.name, 'No House results for ' + p.myear]; return [s.name, h.n + (h.n === 1 ? ' seat' : ' seats') + ': ' + h.d + ' D, ' + h.r + ' R' + (h.o ? ', ' + h.o + ' other' : '') + (h.lead ? ' (' + h.lead + ' not yet called, counted for the leader)' : ''), h.bySeats ? 'Seat split ' + bcFmt.m(h.margin) + ' (2026 vote totals not in yet)' : (h.byVotes ? 'Combined House vote ' : 'Average district margin (unofficial) ') + bcFmt.m(h.margin)]; });
+  } else if (p.mlevel === 'district') {
+    // district lines in use each year: 2016 lines; 2018 adds Pennsylvania's new map; 2020 adds North Carolina's; 2022 and 2024 use 118th Congress lines
+    const gd = dash.data('map_districts'); if (gd.status !== 'ok') return;
+    const y = +p.myear;
+    // 2024: 119th Congress lines (Census); 2026: 120th Congress lines (Redistricting Data Hub), new in AL, CA, FL, LA, NC, OH, TN, TX and UT
+    const REDRAWN24 = new Set();
+    const sets = y >= 2026 ? ['2024', '2026'] : y >= 2024 ? ['2024'] : y >= 2022 ? ['2022'] : y >= 2020 ? ['2016', '2018', '2020'] : y >= 2018 ? ['2016', '2018'] : ['2016'];
+    const shp = new Map();
+    for (const ls of sets) for (const s of gd.data.filter((r) => r.lines === ls)) shp.set(s.state_po + '-' + s.district, s);
+    const shapes = [...shp.values()].filter((s) => !(y === 2024 && REDRAWN24.has(s.state_po)));
+    const gen = new Map(), ro = new Map();
+    for (const r of races) { const k = r.state_po + '-' + r.district; if (r.election_type === 'general') gen.set(k, r); else if (r.election_type === 'runoff') ro.set(k, r); }
+    const seats26 = new Map();
+    const hseat = dash.data('house_seats');
+    if (y === 2026 && hseat.status === 'ok') {
+      const nst = d3.rollup(hseat.data, (v) => v.length, (s) => s.state_po);   // single-seat states are filed as district 1 in the seat list
+      for (const s of hseat.data) seats26.set(s.state_po + '-' + (nst.get(s.state_po) === 1 || s.district === '0' || s.district === 'AL' ? 'AT-LARGE' : s.district), s);
+    }
+    const cs = getComputedStyle(el.closest('.bc'));
+    const fill26 = (s) => { if (!s) return none; const base = bcPartyColor(el, s.party); return s.status === 'leading' ? d3.interpolateRgb(cs.getPropertyValue('--bc-mid').trim(), base)(0.45) : base; };
+    svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', '-70 0 1045 610').attr('role', 'img').attr('aria-label', 'Congressional district map');
+    const tip = bcTip(el);
+    svg.append('g').selectAll('path').data(gs.data.filter((s) => y === 2024 && REDRAWN24.has(s.state_po))).join('path').attr('d', (s) => s.d).attr('fill', none);
+    svg.append('g').selectAll('path').data(shapes).join('path').attr('d', (s) => s.d)
+      .attr('fill', (s) => { const k = s.state_po + '-' + s.district; if (y === 2026) return fill26(seats26.get(k)); const r = ro.get(k) || gen.get(k); return r ? bcContestFill(el, r, 40) : none; })
+      .attr('stroke', 'var(--color-panel)').attr('stroke-width', 0.3)
+      .on('mousemove', (ev, s) => { const k = s.state_po + '-' + s.district, r = gen.get(k), rr = ro.get(k);
+        if (y === 2026) { const st = seats26.get(k); tip.show(ev, st ? [s.state_po + '-' + (s.district === 'AT-LARGE' ? 'AL' : s.district) + ' · 2026' + (['AL', 'CA', 'FL', 'LA', 'NC', 'OH', 'TN', 'TX', 'UT'].includes(s.state_po) ? ' (new lines)' : ''), (st.leader ? st.leader + ' ' : '') + '(' + bcParty(st.party) + ') · ' + (st.status === 'called' ? 'called' : 'leading, not called') + (st.margin !== '' && st.margin != null ? ' ' + bcFmt.m(+st.margin) : ''), ...(st.note ? [st.note] : [])] : [k, 'No result yet']); return; } tip.show(ev, r ? [s.state_po + '-' + (s.district === 'AT-LARGE' ? 'AL' : s.district) + ' · ' + p.myear, ...bcContestLines(r, ''), ...(rr ? bcContestLines(rr, 'Runoff: ') : [])] : [k, 'No result for this district']); })
+      .on('mouseleave', () => tip.hide());
+    svg.append('g').selectAll('path').data(gs.data).join('path').attr('d', (s) => s.d).attr('fill', 'none').attr('stroke', 'var(--color-fg-muted)').attr('stroke-width', 0.6).attr('pointer-events', 'none');
+  } else if (p.mlevel === 'state') {
+    svg = bcStateMap(el, (s) => { const r = main(s.state_po); return !r ? none : bcContestFill(el, r, 30); },
+      (s) => { const rs = by.get(s.state_po); if (!rs) return [s.name, 'No ' + OFFN[p.moffice] + ' race in ' + p.myear]; return [s.name, ...rs.flatMap((r) => bcContestLines(r, r.election_type !== 'general' ? r.election_type + ': ' : ''))]; });
+  } else {
+    const gc = dash.data('map_counties'), cv = dash.data(p.moffice === 'U.S. House' ? 'house_county' : 'county_view');
+    if (gc.status !== 'ok' || cv.status !== 'ok') return;
+    let rows;
+    if (p.moffice === 'U.S. House') {   // House vote by county: every district in the county added together
+      rows = cv.data.filter((r) => String(r.year) === p.myear).map((r) => ({ ...r, fips: r.county_fips, county: r.county_name, margin: +r.margin, total: +r.total, shift: r.shift === '' || r.shift == null ? null : +r.shift, prev_year: r.prev_year ? String(r.prev_year).replace('.0', '') : null, house: true }));
+    } else rows = cv.data.filter((r) => String(r.year) === p.myear && r.office === p.moffice);
+    const val = new Map(rows.map((r) => [String(r.fips).padStart(5, '0'), r]));
+    svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', '-70 0 1045 610').attr('role', 'img').attr('aria-label', 'County map');
+    const tip = bcTip(el);
+    svg.append('g').selectAll('path').data(gc.data).join('path').attr('d', (s) => s.d)
+      .attr('fill', (s) => { const r = val.get(s.fips); if (!r) return none; return bcRamp(el, p.mlevel === 'shift' ? r.shift : r.margin, p.mlevel === 'shift' ? 15 : 40); })
+      .attr('stroke', 'var(--color-panel)').attr('stroke-width', 0.15)
+      .on('mousemove', (ev, s) => { const r = val.get(s.fips); if (r && r.house) { tip.show(ev, [r.county + ', ' + r.state_po + ' · District' + (String(r.districts).includes(',') ? 's ' : ' ') + r.districts, 'House vote ' + bcFmt.m(r.margin) + ' · ' + bcFmt.n(r.total) + ' votes', r.shift == null ? 'No ' + (+p.myear - 2) + ' House vote to compare' : 'Shift since ' + r.prev_year + ': ' + (r.shift > 0 ? 'D' : 'R') + ' ' + d3.format('.1f')(Math.abs(r.shift)), ...(+r.n_uncontested ? [r.n_uncontested + (r.n_uncontested == 1 ? ' district here was' : ' districts here were') + ' uncontested by one party, which skews the margin'] : [])]); return; } tip.show(ev, r ? [r.county + ', ' + r.state_po, 'Margin ' + bcFmt.m(r.margin) + ' · ' + bcFmt.n(r.total) + ' votes', r.shift == null ? (r.same_party ? 'Two finalists from the same party, so no shift' : r.prev_year ? 'No shift: the ' + r.prev_year + ' race had two finalists from the same party' : 'No earlier race to compare') : 'Shift since ' + r.prev_year + ': ' + (r.shift > 0 ? 'D' : 'R') + ' ' + d3.format('.1f')(Math.abs(r.shift)), ...(r.check ? ['⚠ ' + r.check] : [])] : [s.name || s.fips, 'No result for this race']); })
+      .on('mouseleave', () => tip.hide());
+    svg.append('g').selectAll('path').data(gs.data).join('path').attr('d', (s) => s.d).attr('fill', 'none').attr('stroke', 'var(--color-fg-muted)').attr('stroke-width', 0.6).attr('pointer-events', 'none');
+  }
+  if (svg && p.mstate) {
+    const node = svg.selectAll('path').filter((s) => s && s.state_po === p.mstate && s.name).node();   // the state outline, not a district inside it
+    if (node) {
+      const b = node.getBBox(), A = 1045 / 610;
+      let w = b.width * 1.12, h = b.height * 1.12;
+      if (w / h > A) h = w / A; else w = h * A;
+      svg.attr('viewBox', `${b.x + b.width / 2 - w / 2} ${b.y + b.height / 2 - h / 2} ${w} ${h}`).style('overflow', 'hidden');
+      svg.selectAll('path').attr('vector-effect', 'non-scaling-stroke');
+    }
+  }
+});
+dash.draw('mp-none', (el) => {
+  const p = { ...P(), moffice: mpOffice() };
+  el.classList.remove('bc-warn'); el.hidden = false;
+  el.textContent = p.mlevel === 'state' ? 'Hover a state for the candidates and margin.' : 'Hover a county for its margin, votes and shift.';
+  if (p.mlevel === 'district') {
+    if (p.moffice !== 'U.S. House') { el.textContent = 'District maps are for the House: pick House under Office.'; el.classList.add('bc-warn'); return; }
+    const y = +p.myear;
+    if (y < 2016) { el.textContent = 'District outlines cover 2016 onward; earlier district lines are not in the database yet.'; el.classList.add('bc-warn'); return; }
+    el.textContent = y === 2026 ? 'Each district is colored by the party that won it (solid) or leads the unofficial count (light). Alabama, California, Florida, Louisiana, North Carolina, Ohio, Tennessee, Texas and Utah use new mid-decade lines (Redistricting Data Hub review copy, Sept. 2026); every other state keeps its 2024 lines.'
+      : 'Each district is shaded by its House margin; hover for the candidates. Lines are the ones in use that year, including mid-decade redraws (Pennsylvania 2018, North Carolina 2020, six states in 2024).';
+    return;
+  }
+  if (p.moffice === 'U.S. House' && p.mlevel === 'state') { el.textContent = 'States are shaded by the combined House vote, with seats won on hover. For 2026, until vote totals are in, states are shaded by the seat split (Democratic minus Republican seats as a share of the state\'s seats; uncalled seats count for the leader).'; return; }
+  if (p.moffice === 'U.S. House') { el.textContent = +p.myear >= 2016 && +p.myear <= 2024 ? (p.mlevel === 'shift' ? 'Counties are shaded by how far their House vote moved since two years earlier (every district in the county added together); blue moved toward Democrats, red toward Republicans. A district with no Democrat or no Republican on the ballot in either year exaggerates the shift; hover to see.' : 'Counties are shaded by their House vote: every district in the county added together. Counties where a district had no Democrat or no Republican on the ballot lean toward the party that ran; hover to see.') : 'County House results start in 2016 and run through 2024; 2026 county results are not in yet.'; if (!(+p.myear >= 2016 && +p.myear <= 2024)) el.classList.add('bc-warn'); return; }
+  if (p.mlevel === 'state') return;
+  const cv = dash.data('county_view'); if (cv.status !== 'ok') return;
+  if (!cv.data.some((r) => String(r.year) === p.myear && r.office === p.moffice)) { el.textContent = 'There are no county results for the ' + p.myear + ' ' + OFFN[p.moffice] + ' race in the database, so the map is blank. Switch Show to States, or pick President 2000 or later, or any race from 2016 on.'; el.classList.add('bc-warn'); }
+});
+</script>
+<script>
+// ---- House tab: seats that changed party, and races still being counted ----
+dash.draw('ho-flips', (tb) => {
+  const g = dash.data('house_seats'); tb.replaceChildren(); if (g.status !== 'ok') return;
+  const rows = g.data.filter((s) => String(s.flip) === 'True').sort((a, b) => (a.party + a.key).localeCompare(b.party + b.key));
+  for (const s of rows) {
+    const tr = tb.insertRow();
+    [s.key, bcParty(s.party_2024), bcParty(s.party), s.status === 'called' ? 'Called' : 'Leading', s.leader || '', s.margin === '' || s.margin == null ? '' : bcFmt.m(+s.margin)].forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i === 2) td.className = bcPartyClass(s.party); if (i === 5) td.className = 'n'; });
+  }
+  if (!rows.length) { const td = tb.insertRow().insertCell(); td.colSpan = 6; td.textContent = 'No seats have changed party.'; }
+});
+dash.draw('ho-open', (tb) => {
+  const g = dash.data('house_seats'); tb.replaceChildren(); if (g.status !== 'ok') return;
+  const rows = g.data.filter((s) => s.status === 'leading').sort((a, b) => Math.abs(+a.margin || 0) - Math.abs(+b.margin || 0));
+  for (const s of rows) {
+    const tr = tb.insertRow();
+    [s.key, s.leader || '', bcParty(s.party), s.margin === '' || s.margin == null ? (s.note || '') : bcFmt.m(+s.margin), s.pct_in === '' || s.pct_in == null ? '' : d3.format('.0f')(+s.pct_in) + '%', bcParty(s.party_2024)].forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i === 2) td.className = bcPartyClass(s.party); if (i === 3 || i === 4) td.className = 'n'; });
+  }
+  if (!rows.length) { const td = tb.insertRow().insertCell(); td.colSpan = 6; td.textContent = 'Every race has been called.'; }
+});
+</script>
+<script>
+// ---- House tab: every district against its demographics ----
+const DVAR = { pct_bachelors_or_higher_25plus: ['College degree', '%'], pct_white_nonhispanic: ['White, non-Hispanic', '%'], pct_black_nonhispanic: ['Black, non-Hispanic', '%'], pct_hispanic: ['Hispanic', '%'], pct_asian_nonhispanic: ['Asian, non-Hispanic', '%'], median_household_income: ['Median household income', '$'], median_age: ['Median age', ''] };
+document.querySelectorAll('#hd-year').forEach((s) => s.addEventListener('change', () => dash.setParams({ hdyear: s.value })));
+document.querySelectorAll('#hd-var').forEach((s) => s.addEventListener('change', () => dash.setParams({ hdvar: s.value })));
+document.querySelectorAll('#hd-y').forEach((s) => s.addEventListener('change', () => dash.setParams({ hdy: s.value })));
+dash.onData(() => { const p = P(); document.querySelectorAll('#hd-year').forEach((s) => { s.value = p.hdyear || '2024'; }); document.querySelectorAll('#hd-var').forEach((s) => { s.value = p.hdvar || 'pct_bachelors_or_higher_25plus'; }); document.querySelectorAll('#hd-y').forEach((s) => { s.value = p.hdy || 'margin'; }); });
+dash.draw('hd-chart', (el) => {
+  const g = dash.data('district_view'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
+  const p = P(), yr = p.hdyear || '2024', v = p.hdvar || 'pct_bachelors_or_higher_25plus', yk = p.hdy || 'margin';
+  const pts = g.data.filter((r) => String(r.year) === yr && r[v] !== '' && r[v] != null && r[yk] !== '' && r[yk] != null && !isNaN(+r[yk])).map((r) => ({ r, x: +r[v], y: +r[yk] }));
+  if (!pts.length) { const pp = document.createElement('p'); pp.className = 'bc-note'; pp.textContent = yk === 'pres_margin' ? 'The presidential vote by district is available for 2016, 2020 and 2024.' : 'No districts to show.'; el.appendChild(pp); return; }
+  const W = el.clientWidth || 600, H = 420, left = 54, right = 16, top = 12, bottom = 40;
+  const x = d3.scaleLinear(d3.extent(pts, (d) => d.x), [left, W - right]).nice();
+  const ext = Math.min(100, Math.max(20, d3.max(pts, (d) => Math.abs(d.y))));
+  const y = d3.scaleLinear([-ext, ext], [H - bottom, top]).nice();
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Districts against demographics');
+  svg.append('g').selectAll('line').data(y.ticks(6)).join('line').attr('x1', left).attr('x2', W - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
+  svg.append('g').selectAll('text').data(y.ticks(6)).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t === 0 ? 'Even' : (t > 0 ? 'D+' : 'R+') + Math.abs(t));
+  const unit = DVAR[v][1], fx = (t) => unit === '$' ? '$' + d3.format('~s')(t) : d3.format('~r')(t) + unit;
+  svg.append('g').selectAll('text').data(x.ticks(Math.max(3, Math.floor(W / 110)))).join('text').attr('x', (t) => x(t)).attr('y', H - bottom + 16).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(fx);
+  svg.append('text').attr('x', (left + W - right) / 2).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text(DVAR[v][0]);
+  const tip = bcTip(el);
+  svg.append('g').selectAll('circle').data(pts).join('circle').attr('cx', (d) => x(d.x)).attr('cy', (d) => y(Math.max(-ext, Math.min(ext, d.y)))).attr('r', 3.5)
+    .attr('fill', (d) => bcPartyColor(el, d.r.winner_party)).attr('fill-opacity', 0.75).attr('stroke', 'var(--color-panel)').attr('stroke-width', 0.6)
+    .on('mousemove', (ev, d) => tip.show(ev, [d.r.state_po + '-' + (d.r.district === 'AT-LARGE' ? 'AL' : d.r.district) + ' · ' + yr, (d.r.winner || '') + ' (' + bcParty(d.r.winner_party) + ')', 'House ' + (d.r.margin === '' ? '—' : bcFmt.m(+d.r.margin)) + (d.r.pres_margin !== '' && d.r.pres_margin != null ? ' · President ' + bcFmt.m(+d.r.pres_margin) : ''), DVAR[v][0] + ' ' + fx(d.x) + ' (ACS ' + (+d.r.year - 4) + '-' + String(d.r.year).slice(2) + ')']))
+    .on('mouseleave', () => tip.hide());
+});
+dash.draw('hd-cross', (tb) => {
+  const g = dash.data('district_view'); tb.replaceChildren(); if (g.status !== 'ok') return;
+  const yr = P().hdyear || '2024';
+  const rows = g.data.filter((r) => String(r.year) === yr && r.pres_margin !== '' && r.pres_margin != null && r.margin !== '' && ['DEMOCRAT', 'REPUBLICAN'].includes(r.winner_party) && ((r.winner_party === 'DEMOCRAT') !== (+r.pres_margin > 0)))
+    .sort((a, b) => Math.abs(+b.pres_margin) - Math.abs(+a.pres_margin));
+  for (const r of rows) { const tr = tb.insertRow(); [r.state_po + '-' + (r.district === 'AT-LARGE' ? 'AL' : r.district), r.winner, bcParty(r.winner_party), bcFmt.m(+r.margin), bcFmt.m(+r.pres_margin)].forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i === 2) td.className = bcPartyClass(r.winner_party); if (i > 2) td.className = 'n'; }); }
+  if (!rows.length) { const td = tb.insertRow().insertCell(); td.colSpan = 5; td.textContent = ['2018', '2022'].includes(yr) ? 'The presidential vote by district is available for 2016, 2020 and 2024.' : 'No crossover districts.'; }
+});
+</script>
+
+</div>
+</body>
+</html>

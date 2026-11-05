@@ -1,0 +1,31 @@
+race,fc_margin,fc_pdem,poll_avg,result_margin,pct_in,status
+AK-governor,3.4,0.708,5.77,25.5,73.9,ranked choice / counting
+AK-senate,0.7,0.547,1.74,0.3,74.3,ranked choice / counting
+FL-governor,-7.3,0.142,-5.55,-1.3,99.0,near final
+FL-senate,-8.4,0.106,-7.23,-2.9,99.0,near final
+GA-governor,0.3,0.526,0.53,8.6,99.0,near final
+GA-senate,8.1,0.884,8.92,18.0,99.0,near final
+IA-governor,2.7,0.652,8.06,11.0,99.0,near final
+IA-senate,-0.9,0.448,1.56,4.2,98.7,near final
+KS-governor,-5.5,0.214,0.65,0.6,98.3,"uncalled, D leads"
+KS-senate,-0.2,0.49,4.53,4.9,98.3,near final
+ME-governor,14.1,0.983,10.36,19.1,91.0,near final
+ME-senate,3.2,0.695,4.61,6.9,91.0,near final
+MI-governor,8.7,0.905,8.79,10.9,98.2,near final
+MI-senate,5.1,0.778,6.02,7.1,98.2,near final
+MN-governor,15.2,0.987,13.54,13.1,98.8,near final
+MN-senate,7.2,0.858,5.31,10.4,98.9,near final
+MS-senate,-6.2,0.178,,0.0,95.4,"tied, uncalled"
+NC-senate,9.0,0.915,12.19,20.0,99.0,near final
+NE-governor,-8.4,0.112,-9.18,-9.2,92.4,near final
+NE-senate,-1.0,0.444,-3.2,-7.2,92.3,near final
+NH-governor,-6.1,0.198,-5.33,-4.4,93.9,near final
+NH-senate,9.3,0.91,8.79,14.1,94.0,near final
+NV-governor,2.7,0.645,2.14,7.8,87.9,near final
+OH-governor,2.3,0.631,4.83,8.2,98.0,near final
+OH-senate,2.1,0.622,3.37,5.0,98.0,near final
+SC-governor,-12.5,0.034,-10.71,-4.6,99.0,near final
+SC-senate,-5.9,0.197,-2.9,4.5,99.0,near final
+TX-governor,-1.2,0.428,-1.11,7.2,99.0,near final
+TX-senate,1.7,0.601,3.92,12.3,99.0,near final
+WI-governor,3.5,0.698,5.5,8.2,98.5,near final

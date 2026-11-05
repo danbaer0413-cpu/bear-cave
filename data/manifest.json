@@ -1,0 +1,51 @@
+{
+ "built": "2026-11-05T16:40:20+00:00",
+ "updated": "2026-11-05T16:42:37+00:00",
+ "datasets": {
+  "contests": {
+   "file": "contests.csv"
+  },
+  "county_results": {
+   "file": "county_results.csv"
+  },
+  "demographics": {
+   "file": "demographics.csv"
+  },
+  "unemployment": {
+   "file": "unemployment.csv"
+  },
+  "forecast_2026": {
+   "file": "forecast_2026.csv"
+  },
+  "needle_now": {
+   "file": "needle_now.csv"
+  },
+  "needle_history": {
+   "file": "needle_history.csv"
+  },
+  "needle_control": {
+   "file": "needle_control.csv"
+  },
+  "house_seats": {
+   "file": "house_seats.csv"
+  },
+  "senate_seats": {
+   "file": "senate_seats.csv"
+  },
+  "house_county": {
+   "file": "house_county.csv"
+  },
+  "district_view": {
+   "file": "district_view.csv"
+  },
+  "map_states": {
+   "file": "map_states.json"
+  },
+  "map_counties": {
+   "file": "map_counties.json"
+  },
+  "map_districts": {
+   "file": "map_districts.json"
+  }
+ }
+}
