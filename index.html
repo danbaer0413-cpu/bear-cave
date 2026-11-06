@@ -153,6 +153,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     <button class="bc-tab" role="tab" data-tab="counties" id="tab-counties">Counties</button>
     <button class="bc-tab" role="tab" data-tab="forecast" id="tab-forecast">2026 forecast check</button>
     <button class="bc-tab" role="tab" data-tab="gas" id="tab-gas">Gas prices</button>
+    <button class="bc-tab" role="tab" data-tab="sim" id="tab-sim">Electorate simulator</button>
   </nav>
 
   <!-- NEEDLES -->
@@ -439,6 +440,82 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     </div>
   </section>
 
+  <!-- ELECTORATE SIMULATOR -->
+  <section class="bc-page" id="sim" data-page="sim" hidden>
+    <style>
+#sim{--d:var(--bc-dem);--r:var(--bc-rep);--empty:var(--bc-mid);--line:var(--color-border-line);--panel:var(--color-panel);--muted:var(--color-fg-muted);--fg:var(--color-fg);--accent:#7a4b2a}
+#sim #es-tip{position:fixed;pointer-events:none;background:var(--cds-surface-popover);border:1px solid var(--cds-border);border-radius:6px;padding:6px 8px;font-size:12.5px;box-shadow:var(--cds-shadow-popover);display:none;z-index:5}
+#sim .es-sub{max-width:62rem}
+#sim h2{font-size:15px;margin:0 0 6px}
+#sim .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+#sim .layout{display:grid;grid-template-columns:430px minmax(0,1fr);gap:14px;align-items:start}
+@media(max-width:900px){#sim .layout{grid-template-columns:1fr}}
+#sim .ctl{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;margin-bottom:8px}
+#sim .ctl label{color:var(--muted);font-size:12.5px}
+#sim select,#sim button{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+#sim button{cursor:pointer}
+#sim .g{display:grid;grid-template-columns:88px minmax(0,1fr) minmax(0,1fr);gap:4px 10px;align-items:center;font-size:13px}
+#sim .g .h{color:var(--muted);font-size:11.5px}
+#sim .rng{display:grid;grid-template-columns:minmax(0,1fr) 50px;align-items:center;gap:4px}
+#sim .rng input{width:100%;accent-color:var(--accent);margin:0}
+#sim .rng output{text-align:right;font-variant-numeric:tabular-nums;font-size:12.5px}
+#sim .rng.D output{color:var(--d)}
+#sim .rng.R output{color:var(--r)}
+#sim details{border-top:1px solid var(--line);padding:8px 0}
+#sim summary{cursor:pointer;font-weight:600;margin-bottom:6px}
+#sim summary .src{font-weight:400;color:var(--muted);font-size:11.5px;margin-left:6px}
+#sim .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:600px){#sim .kpis{grid-template-columns:1fr}}
+#sim .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+#sim .kpi .l{color:var(--muted);font-size:12px}
+#sim .kpi .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+#sim .kpi .s{font-size:12px;color:var(--muted)}
+#sim .bar{height:14px;border-radius:7px;overflow:hidden;display:flex;background:var(--empty);margin:6px 0 2px;position:relative}
+#sim .bar i{display:block;height:100%}
+#sim .bar b{position:absolute;left:50%;top:-3px;bottom:-3px;border-left:2px solid var(--fg)}
+#sim .D{color:var(--d)}
+#sim .R{color:var(--r)}
+#sim svg.map path{stroke:var(--panel);stroke-width:.8}
+#sim .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){#sim .two{grid-template-columns:1fr}}
+#sim table{border-collapse:collapse;width:100%;font-size:13px}
+#sim th,#sim td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
+#sim th{color:var(--muted);font-weight:500}
+#sim td.n{text-align:right;font-variant-numeric:tabular-nums}
+#sim .note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+#sim .legend{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+#sim .legend span{width:22px;height:10px;display:inline-block}
+#sim #es-tip-unused{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.15);display:none;z-index:5}
+#sim .pop{display:block;font-size:11px;color:var(--muted);line-height:1.2}
+#sim .imp{grid-column:1/3;font-size:11px;color:var(--muted);line-height:1.2;margin-top:-1px}
+#sim .imp.bad{color:var(--r);font-weight:600}
+#sim .edited{font-size:11px;color:var(--accent);margin-left:6px}
+    </style>
+    <div data-draw="es-root" data-source="electorate_sim map_states">
+
+<p class="bc-note es-sub">Pick an election to start from. The sliders open on that election's real electorate: each group's share of voters and how it voted. Swap in another year's turnout or vote patterns, or drag any slider, and every state's certified result moves with it.</p>
+<div class="layout"><div>
+<div class="card"><div class="ctl">
+<label for="es-start">Start from</label><select id="es-start"></select>
+<label for="es-ty">Who votes, like</label><select id="es-ty"></select>
+<label for="es-vy">How groups vote, like</label><select id="es-vy"></select>
+</div><button id="es-reset">Reset to the starting election</button>
+<div id="es-groups" style="margin-top:8px"></div>
+<p class="note">Under each group: its share of all adults, and the share of them who would have to vote to reach the share of voters on the slider (holding national turnout at that year's actual rate). Share: the group's share of all voters (the rest of that group's row rescales to keep 100%). Vote: the group's margin. Moving a vote slider frees the other categories' vote numbers, which then show what follows from your change.</p></div></div>
+<div>
+<div class="kpis"><div class="kpi"><div class="l" id="es-k1l"></div><div class="v" id="es-k1"></div><div class="bar" id="es-k1b"></div><div class="s" id="es-k1s"></div></div>
+<div class="kpi"><div class="l" id="es-k2l"></div><div class="v" id="es-k2"></div><div class="s" id="es-k2s"></div></div>
+<div class="kpi"><div class="l" id="es-k3l"></div><div class="v" id="es-k3"></div><div class="s" id="es-k3s"></div></div></div>
+<div class="card" style="margin-top:14px"><svg class="map" id="es-map" viewBox="-70 0 1045 610" width="100%" role="img" aria-label="Simulated margin by state"></svg>
+<div class="legend"><span style="background:var(--r)"></span>R+15 <span style="background:color-mix(in srgb,var(--r) 30%,var(--empty))"></span> <span style="background:var(--empty)"></span>even <span style="background:color-mix(in srgb,var(--d) 30%,var(--empty))"></span> <span style="background:var(--d)"></span>D+15 · hover a state</div></div>
+<div class="two"><div class="card"><h2>States that move the most</h2><table id="es-moves"></table></div>
+<div class="card"><h2>Where the numbers come from</h2><p class="note" id="es-srcs" style="margin-top:0"></p>
+<p class="note">How it works: survey respondents who were confirmed voters (CES) are reweighted so each group's share of voters matches the sliders, then each group's vote is shifted to match its vote slider. Each state's change is added to its certified result; small states lean on the national change. 2000-2012 start from the 2016 survey reshaped to that year's exit poll. Exit polls and the CES measure groups differently (exit polls count more college graduates), so comparing a CES year with an exit-poll year mixes the two. Maine and Nebraska districts aren't split out.</p></div></div>
+</div></div></div>
+    <div id="es-tip"></div>
+    </div>
+  </section>
+
   <p class="bc-note">Sources: MIT Election Data and Science Lab (official returns), OpenElections, Virginia Department of Elections, New Jersey Division of Elections, Kentucky State Board of Elections, U.S. Census Bureau ACS, NBC News/AP (2026, unofficial). Odd-year House specials use Wikipedia's tables of certified results.</p>
 </div>
 
@@ -569,7 +646,7 @@ const DEF = { tfrom: '2000', tab: 'needles', nrace: 'GA-senate', myear: '2024', 
 const P = () => ({ ...DEF, ...Object.fromEntries(Object.entries(dash.params()).filter(([, v]) => v != null)) });
 document.querySelectorAll('.bc-tab').forEach((b) => b.addEventListener('click', () => { dash.setParams({ tab: b.dataset.tab }); dash.setLink(b.dataset.tab); }));
 const named = location.hash.slice(1);
-if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas'].includes(named)) dash.setParams({ tab: named });
+if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas', 'sim'].includes(named)) dash.setParams({ tab: named });
 dash.onData(() => {
   const tab = P().tab;
   document.querySelectorAll('.bc-page').forEach((s) => { s.hidden = s.dataset.page !== tab; });
@@ -1256,6 +1333,98 @@ dash.draw('gas-rows', (tb) => {
     [r.year + (r.kind === 'midterm' ? ' (midterm)' : ''), r.president_party, '$' + d3.format('.2f')(+r.gas), '$' + d3.format('.2f')(+r.gas_real_2026), (+r.gas_change_1yr_pct > 0 ? '+' : '') + r.gas_change_1yr_pct + '%', bcFmt.m(+r.house_margin_dem), sw == null ? '—' : (sw > 0 ? '+' : '') + d3.format('.1f')(sw), seatTxt(r.house_seat_change_dem), seatTxt(r.senate_seat_change_dem)]
       .forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i > 1) td.className = 'n'; if (i === 1) td.className = r.president_party === 'D' ? 'dem' : 'rep'; if (i === 5) td.classList.add(+r.house_margin_dem > 0 ? 'dem' : 'rep'); if (i >= 7 && +[0, 0, 0, 0, 0, 0, 0, r.house_seat_change_dem, r.senate_seat_change_dem][i]) td.classList.add(+[0, 0, 0, 0, 0, 0, 0, r.house_seat_change_dem, r.senate_seat_change_dem][i] > 0 ? 'dem' : 'rep'); });
   }
+});
+</script>
+<script>
+// ---- Electorate simulator tab ----
+window.esInit = (SIM, MAPS) => {
+
+const S=SIM, MAP=MAPS.map((s)=>({s:s.state_po,d:s.d}));
+const DIMS=[['ri','Race',['White','Black','Hispanic','Asian','Other']],['ai','Age',['18–29','30–44','45–64','65+']],['ei','Education',['No degree','College degree']],['si','Sex',['Women','Men']],['pi','Party ID',['Democrats','Republicans','Independents']]];
+const $=(id)=>document.getElementById(id), fm=(m)=>Math.abs(m)<0.05?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(1), fm0=(m)=>Math.abs(m)<0.5?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(0);
+const startKeys=Object.keys(S.starts).sort((a,b)=>(a[0]===b[0]?S.starts[b].year-S.starts[a].year:a[0]==='P'?-1:1));
+$('es-start').innerHTML=startKeys.map(k=>`<option value="${k}">${S.starts[k].label}</option>`).join('');
+const yrs=Object.keys(S.targets).sort().reverse();
+let st={};
+function setYears(){const off=S.starts[$('es-start').value].office;
+ $('es-ty').innerHTML=yrs.map(y=>`<option value="${y}">${y} ${S.targets[y].office==='H'?'midterm':'presidential'} electorate</option>`).join('');
+ $('es-vy').innerHTML=yrs.filter(y=>S.targets[y].office===off).map(y=>`<option value="${y}">${y} ${off==='H'?'House':'presidential'} vote</option>`).join('');}
+// ---------- engine ----------
+function pool(){return S.pools[S.starts[st.start].pool];}
+function rake(P,shares){ // national weights: state-normalized cell weight x the state's actual total; IPF on each dimension's shares
+ const R=S.starts[st.start].res,c=P.cols,n=P.w.length,w=new Float64Array(n);for(let j=0;j<n;j++)w[j]=P.w[j]*R[S.states[c.st[j]]].t;
+ const f=DIMS.map(([k,,L])=>new Float64Array(L.length).fill(1));
+ for(let it=0;it<25;it++)DIMS.forEach(([k,,L],di)=>{const tg=shares[k];if(!tg)return;const tot=new Float64Array(L.length);let all=0;
+  for(let j=0;j<n;j++){let x=w[j];for(let e=0;e<5;e++)x*=f[e][c[DIMS[e][0]][j]];tot[c[k][j]]+=x;all+=x;}
+  for(let g=0;g<L.length;g++)if(tot[g]>0)f[di][g]*=(tg[g]/100*all)/tot[g];});
+ const out=new Float64Array(n);for(let j=0;j<n;j++){let x=w[j];for(let e=0;e<5;e++)x*=f[e][c[DIMS[e][0]][j]];out[j]=x;}return out;}
+function shiftFit(P,w,votes){ // additive margin shifts per (dimension, group), backfitted so constrained groups hit their target margins
+ const c=P.cols,n=P.w.length,del=DIMS.map(([,,L])=>new Float64Array(L.length)),base=new Float64Array(n);
+ for(let j=0;j<n;j++)base[j]=c.v[j]===0?100:c.v[j]===1?-100:0;
+ const act=DIMS.filter(([k])=>votes[k]);
+ for(let it=0;it<30&&act.length;it++)for(const [k,,L] of act){const di=DIMS.findIndex(d=>d[0]===k),num=new Float64Array(L.length),den=new Float64Array(L.length);
+  for(let j=0;j<n;j++){let m=base[j];for(let e=0;e<5;e++)m+=del[e][c[DIMS[e][0]][j]];num[c[k][j]]+=w[j]*m;den[c[k][j]]+=w[j];}
+  for(let g=0;g<L.length;g++)if(den[g]>0){const t=votes[k][g];if(t!=null)del[di][g]+=t-num[g]/den[g];}}
+ const m=new Float64Array(n);for(let j=0;j<n;j++){let x=base[j];for(let e=0;e<5;e++)x+=del[e][c[DIMS[e][0]][j]];m[j]=x;}return m;}
+function evaluate(shares,votes){const P=pool(),w=rake(P,shares),m=shiftFit(P,w,votes),c=P.cols,ns=S.states.length;
+ const W=new Float64Array(ns),M=new Float64Array(ns);for(let j=0;j<w.length;j++){W[c.st[j]]+=w[j];M[c.st[j]]+=w[j]*m[j];}
+ const grp={};DIMS.forEach(([k,,L])=>{const s=new Float64Array(L.length),mm=new Float64Array(L.length);for(let j=0;j<w.length;j++){s[c[k][j]]+=w[j];mm[c[k][j]]+=w[j]*m[j];}const tot=s.reduce((a,b)=>a+b);grp[k]={share:[...s].map(x=>100*x/tot),margin:[...mm].map((x,i)=>x/s[i])};});
+ return {W,M,grp};}
+const targetMargins=(y)=>{const o={};DIMS.forEach(([k])=>{const t=S.targets[y][k];o[k]=t?t.vote.map(v=>v[0]-v[1]):null;});return o;};
+const targetShares=(y,fallback)=>{const o={};DIMS.forEach(([k])=>{const t=S.targets[y][k];o[k]=t?t.share.slice():(fallback?fallback[k]:null);});return o;};
+function preset(){ // sliders to the chosen years' real values
+ st.shares=targetShares(st.ty,null);st.votes=targetMargins(st.vy);st.mode={};st.smode={};DIMS.forEach(([k])=>{st.mode[k]=st.votes[k]?'preset':'free';st.smode[k]=st.shares[k]?'preset':'free';});}
+function baseline(){const y=String(S.starts[st.start].year);const sh=targetShares(y,null),v=targetMargins(y);const b0=evaluate(sh,v);DIMS.forEach(([k])=>{if(!sh[k])sh[k]=b0.grp[k].share.slice();});st.base=evaluate(sh,v);}
+// ---------- UI ----------
+const g=$('es-groups');
+function buildSliders(){g.innerHTML=DIMS.map(([k,name,L],di)=>`<details ${di<2||k==='pi'?'open':''} data-k="${k}"><summary>${name}<span class="src" id="es-src-${k}"></span></summary><div class="g"><span></span><span class="h">Share of voters</span><span class="h">Vote</span>${L.map((l,i)=>`<span>${l}<span class="pop" id="es-pop-${k}-${i}"></span></span><span class="rng"><input type="range" min="0" max="95" step="0.5" data-k="${k}" data-i="${i}" data-f="s" aria-label="${l} share of voters"><output></output><span class="imp" id="es-imp-${k}-${i}"></span></span><span class="rng"><input type="range" min="-100" max="100" step="1" data-k="${k}" data-i="${i}" data-f="v" aria-label="${l} vote margin"><output></output></span>`).join('')}</div></details>`).join('');
+ g.querySelectorAll('input').forEach(el=>el.addEventListener('input',()=>{const k=el.dataset.k,i=+el.dataset.i,x=+el.value;
+  if(el.dataset.f==='s'){if(st.smode[k]!=='user'){DIMS.forEach(([kk])=>{if(kk===k)return;if(st.smode[kk]==='preset'){st.smode[kk]='free';st.shares[kk]=null;}if(st.mode[kk]==='preset'){st.mode[kk]='free';st.votes[kk]=null;}});if(!st.shares[k])st.shares[k]=st.cur.grp[k].share.slice();st.smode[k]='user';}const a=st.shares[k],rest=a.reduce((s,v,j)=>j===i?s:s+v,0),left=100-x;st.shares[k]=a.map((v,j)=>j===i?x:(rest>0?v*left/rest:left/(a.length-1)));}
+  else{if(st.mode[k]!=='user'){DIMS.forEach(([kk])=>{if(st.mode[kk]==='preset'){st.mode[kk]='free';st.votes[kk]=null;}});st.votes[k]=st.cur.grp[k].margin.slice();st.mode[k]='user';}st.votes[k][i]=x;}
+  run(el);}));}
+function syncSliders(skip){const grp=st.cur.grp;g.querySelectorAll('input').forEach(el=>{if(el===skip)return;const k=el.dataset.k,i=+el.dataset.i;const v=el.dataset.f==='s'?grp[k].share[i]:grp[k].margin[i];el.value=v;});
+ g.querySelectorAll('input').forEach(el=>{const k=el.dataset.k,i=+el.dataset.i,o=el.nextElementSibling;if(el.dataset.f==='s')o.textContent=grp[k].share[i].toFixed(1)+'%';else{const m=grp[k].margin[i];o.textContent=fm0(m);o.parentElement.className='rng '+(m>0.5?'D':m<-0.5?'R':'');}});
+ const py=S.pop[st.ty]?st.ty:(S.targets[st.ty].office==='H'?'2018':'2016'),PP=S.pop[py],T=S.turnout_all[st.ty]||PP.turnout;
+ DIMS.forEach(([k,,L])=>L.forEach((l,i)=>{const pp=PP[k].pop[i],rate=st.cur.grp[k].share[i]*T/pp,mx=Math.min(100,100*pp/T);$('es-pop-'+k+'-'+i).textContent=pp.toFixed(1)+'% of adults';const im=$('es-imp-'+k+'-'+i);im.textContent=rate>100?'needs '+rate.toFixed(0)+'% to vote: not possible (max '+mx.toFixed(0)+'%)':rate.toFixed(0)+'% of them vote';im.className='imp'+(rate>100?' bad':'');}));
+ DIMS.forEach(([k])=>{const t=$('es-src-'+k),bits=[];
+  if(st.smode[k]==='user')bits.push('your turnout');else if(st.smode[k]==='free'&&S.targets[st.ty][k]&&Object.values(st.smode).includes('user'))bits.push('turnout follows your changes');
+  if(st.mode[k]==='user')bits.push('your vote numbers');else if(st.mode[k]==='free')bits.push(S.targets[st.vy][k]?'vote follows your changes':st.vy+' has no '+(k==='ei'?'education':'')+' figures; survey default');
+  t.textContent=bits.length?'· '+bits.join(' · '):'';});}
+const col=m=>{const a=Math.min(1,Math.abs(m)/15),c=m>0?'var(--d)':'var(--r)';return Math.abs(m)<0.05?'var(--empty)':`color-mix(in srgb,${c} ${Math.round(18+82*a)}%,var(--empty))`;};
+const svg=$('es-map');svg.innerHTML=MAP.map(p=>`<path data-s="${p.s}" d="${p.d}"/>`).join('');const tip=$('es-tip');let last={};
+svg.onmousemove=e=>{const s=e.target.dataset&&e.target.dataset.s,x=s&&last[s];if(!x){tip.style.display='none';return}const H=S.starts[st.start].office==='H';tip.innerHTML=`<b>${s}</b> · ${x.ev} ${H?'seats':'EV'}<br>Simulated ${fm(x.m)}<br>Actual ${S.starts[st.start].year}: ${fm(x.m0)}${H?'<br>Simulated seats: '+x.dS+' D, '+x.rS+' R':''}`;tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';};svg.onmouseleave=()=>tip.style.display='none';
+function run(skip){const sd=S.starts[st.start],RS=sd.res,P=pool(),H=sd.office==='H';st.cur=evaluate(st.shares,st.votes);const b=st.base,c=st.cur;
+ let n0=0,n1=0,t0=0,t1=0;S.states.forEach((s,i)=>{const T=RS[s].t;if(!T||!b.W[i])return;n0+=b.M[i]/b.W[i]*T;n1+=c.M[i]/c.W[i]*T*c.W[i]/b.W[i];t0+=T;t1+=T*c.W[i]/b.W[i];});
+ const dNat=n1/t1-n0/t0,tNat=t1/t0,out=[];let evD=0,evR=0,pv=0,tot=0;
+ S.states.forEach((s,i)=>{const r=RS[s];if(!r.t){return;}const lam=P.n[i]/(P.n[i]+300),dl=b.W[i]?lam*(c.M[i]/c.W[i]-b.M[i]/b.W[i])+(1-lam)*dNat:dNat,tr=b.W[i]?(lam*(c.W[i]/b.W[i])+(1-lam)*tNat)/tNat:1,m=r.m+dl,t=r.t*tr;
+  const x={st:s,m,m0:r.m,ev:r.ev,dl,t};out.push(x);last[s]=x;pv+=m*t;tot+=t;if(!H){if(m>0)evD+=r.ev;else evR+=r.ev;}});
+ pv/=tot;const pv0=Object.values(RS).reduce((a,r)=>a+r.m*r.t,0)/Object.values(RS).reduce((a,r)=>a+r.t,0);
+ if(H){const dl=Object.fromEntries(out.map(x=>[x.st,x.dl]));let d=0,r=0;const byS={};for(const [si,m,w] of sd.dists){const s=S.states[si];byS[s]=byS[s]||{d:0,r:0};const consistent=(w===1&&m>0)||(w===0&&m<0);const win=Math.abs(m)>=99.9||!consistent?(w===1?1:0):(m+(dl[s]||0)>0?1:0);if(win){d++;byS[s].d++}else{r++;byS[s].r++}}
+  out.forEach(x=>{x.dS=(byS[x.st]||{}).d||0;x.rS=(byS[x.st]||{}).r||0;});const d0=sd.dists.filter(x=>x[2]===1).length;
+  $('es-k1l').textContent='House seats';$('es-k1').innerHTML=`<span class="D">${d}</span> – <span class="R">${r}</span>`;$('es-k1b').innerHTML=`<i style="width:${d/4.35}%;background:var(--d)"></i><i style="flex:1"></i><i style="width:${r/4.35}%;background:var(--r)"></i><b></b>`;
+  $('es-k1s').textContent=(d>=218?'Democratic majority':'Republican majority')+` · actual ${d0}–${435-d0} · 218 for control`;
+  $('es-k2l').textContent='National House vote';$('es-k2').innerHTML=`<span class="${pv>0?'D':'R'}">${fm(pv)}</span>`;$('es-k2s').textContent=`Actual ${fm(pv0)}`;
+  $('es-k3l').textContent='Seats changing hands';$('es-k3').textContent=(d-d0>0?'D+':d-d0<0?'R+':'')+Math.abs(d-d0)||'None';$('es-k3s').textContent='Uniform swing within each state; uncontested seats stay put';}
+ else{$('es-k1l').textContent='Electoral votes';$('es-k1').innerHTML=`<span class="D">${evD}</span> – <span class="R">${evR}</span>`;$('es-k1b').innerHTML=`<i style="width:${evD/5.38}%;background:var(--d)"></i><i style="flex:1"></i><i style="width:${evR/5.38}%;background:var(--r)"></i><b></b>`;
+  $('es-k1s').textContent=(evD>=270?'Democrat wins':evR>=270?'Republican wins':'269–269 tie')+' · 270 to win';
+  $('es-k2l').textContent='Popular vote';$('es-k2').innerHTML=`<span class="${pv>0?'D':'R'}">${fm(pv)}</span>`;$('es-k2s').textContent=`Actual ${fm(pv0)} · turnout ${((tot/Object.values(RS).reduce((a,r)=>a+r.t,0)-1)*100).toFixed(1).replace(/^(?!-)/,'+')}%`;
+  const win=evD>=270?1:-1,ord=out.slice().sort((a,b)=>win*(b.m-a.m));let cum=0,tp=null;for(const x of ord){cum+=x.ev;if(cum>=270){tp=x;break}}
+  $('es-k3l').textContent='Tipping-point state';$('es-k3').innerHTML=tp?`${tp.st} <span class="${tp.m>0?'D':'R'}" style="font-size:16px">${fm(tp.m)}</span>`:'—';$('es-k3s').textContent=tp?`Electoral College gap vs popular vote: ${(tp.m-pv>0?'D':'R')}+${Math.abs(tp.m-pv).toFixed(1)}`:'';}
+ svg.querySelectorAll('path').forEach(p=>{const x=last[p.dataset.s];p.setAttribute('fill',x&&RS[p.dataset.s].t?col(x.m):'var(--empty)')});
+ const mv=out.slice().sort((a,b)=>Math.abs(b.m-b.m0)-Math.abs(a.m-a.m0)).slice(0,8);
+ $('es-moves').innerHTML=`<tr><th>State</th><th class="n">Actual</th><th class="n">Simulated</th><th class="n">${H?'Seats':'EV'}</th></tr>`+mv.map(x=>`<tr><td>${x.st}${!H&&Math.sign(x.m)!==Math.sign(x.m0)?' <b class="'+(x.m>0?'D':'R')+'">flips</b>':''}</td><td class="n">${fm(x.m0)}</td><td class="n ${x.m>0?'D':'R'}">${fm(x.m)}</td><td class="n">${x.ev}</td></tr>`).join('');
+ const sy=String(sd.year);$('es-srcs').textContent=`Starting result: certified ${sd.label}. Who votes: ${st.ty} (${S.targets[st.ty].src}). How groups vote: ${st.vy} (${S.targets[st.vy].src}). Survey respondents: CES ${sd.pool} validated voters. Population: ${S.pop[st.ty]?st.ty:(S.targets[st.ty].office==='H'?'2018':'2016')+' (nearest year with survey data)'}; ${S.popnote} With national turnout at ${S.turnout_all[st.ty]}% of eligible voters in ${st.ty}, a group can make up at most its share of adults divided by that rate.`;
+ syncSliders(skip);}
+function onStart(){st.start=$('es-start').value;setYears();const y=String(S.starts[st.start].year);$('es-ty').value=y;$('es-vy').value=y;st.ty=y;st.vy=y;baseline();preset();run();}
+$('es-start').onchange=onStart;$('es-ty').onchange=()=>{st.ty=$('es-ty').value;const keepV=st.votes,keepM=st.mode;preset();st.votes=keepV;st.mode=keepM;run();};
+$('es-vy').onchange=()=>{st.vy=$('es-vy').value;const keepS=st.shares;preset();st.shares=keepS;run();};
+$('es-reset').onclick=onStart;buildSliders();$('es-start').value='P2024';onStart();
+
+};
+dash.draw('es-root', (el) => {
+  const g = dash.data('electorate_sim'), m = dash.data('map_states');
+  if (bcFail(el, g.status) || g.status !== 'ok' || m.status !== 'ok' || el.dataset.ready) return;
+  el.dataset.ready = '1'; esInit(g.data, m.data);
 });
 </script>
 
