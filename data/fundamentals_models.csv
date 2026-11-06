@@ -1,6 +1,0 @@
-model,inputs,typical_miss,avg_miss,est_2026,coefs
-Midterm only,midterm,5.45,4.37,-6.5,"{""const"": 2.133, ""midterm"": -8.658}"
-Midterm + approval,"midterm, approval",4.22,3.32,-10.7,"{""const"": -13.717, ""midterm"": -9.742, ""approval"": 0.342}"
-Midterm + approval + gas,"midterm, approval, gas_real_2026",4.56,3.6,-10.8,"{""const"": -11.113, ""midterm"": -9.718, ""approval"": 0.321, ""gas_real_2026"": -0.454}"
-Midterm + approval + economy,"midterm, approval, inflation, unemp_change, income_growth",5.17,4.21,-10.7,"{""const"": -13.976, ""midterm"": -10.109, ""approval"": 0.391, ""inflation"": -0.187, ""unemp_change"": 0.425, ""income_growth"": -0.532}"
-Everything,"midterm, approval, gas_real_2026, inflation, unemp_change, income_growth",5.56,4.58,-10.8,"{""const"": -10.778, ""midterm"": -10.168, ""approval"": 0.369, ""gas_real_2026"": -0.593, ""inflation"": -0.155, ""unemp_change"": 0.343, ""income_growth"": -0.593}"

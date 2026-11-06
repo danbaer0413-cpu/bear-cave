@@ -152,7 +152,6 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     <button class="bc-tab" role="tab" data-tab="trends" id="tab-trends">State trends</button>
     <button class="bc-tab" role="tab" data-tab="counties" id="tab-counties">Counties</button>
     <button class="bc-tab" role="tab" data-tab="forecast" id="tab-forecast">2026 forecast check</button>
-    <button class="bc-tab" role="tab" data-tab="fund" id="tab-fund">Fundamentals</button>
     <button class="bc-tab" role="tab" data-tab="gas" id="tab-gas">Gas prices</button>
   </nav>
 
@@ -414,51 +413,6 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     </div>
   </section>
 
-  <!-- FUNDAMENTALS -->
-  <section class="bc-page" id="fund" data-page="fund" hidden>
-    <div class="bc-card">
-      <div class="bc-tiles">
-        <div class="bc-tile"><span class="v" data-draw="fu-est" data-source="fundamentals">—</span><span class="k">2026 fundamentals estimate: Republicans' House swing, from approval and the midterm penalty (fit on 1978-2024)</span></div>
-        <div class="bc-tile"><span class="v" data-draw="fu-act" data-source="fundamentals">—</span><span class="k">What happened (NYT D+13 House estimate, unofficial)</span></div>
-        <div class="bc-tile"><span class="v" data-draw="fu-miss" data-source="fundamentals_models">—</span><span class="k">Typical miss, testing each election 1978-2024 with a fit that leaves it out</span></div>
-        <div class="bc-tile"><span class="v" data-draw="fu-appr" data-source="fundamentals">—</span><span class="k">Trump approval before the 2026 election (Silver Bulletin average)</span></div>
-      </div>
-    </div>
-    <div class="bc-card" id="fu-card">
-      <h2>Approval is the strongest single signal</h2>
-      <p class="bc-note">Each dot is a federal election: the president's approval before it against the change in the president's party's House popular-vote margin from two years earlier, colored by the president's party (filled: midterms, hollow: presidential years). The lines are the fundamentals estimate: the midterm penalty is about 10 points, and each point of approval is worth about a third of a point of swing.</p>
-      <div class="bc-chart" data-draw="fu-chart" data-source="fundamentals fundamentals_models"></div>
-    </div>
-    <div class="bc-grid">
-      <div class="bc-card" id="fu-factors-card">
-        <h2>How each factor lines up once the midterm penalty is taken out</h2>
-        <p class="bc-note">Correlation with the president's party's swing, 1978-2024, after removing the average midterm and presidential-year swing. Gas and inflation matter, but mostly through approval: when gas is high, approval tends to be low (correlation -0.52), and once approval is in, adding gas or the economy makes the estimate worse at predicting elections it hasn't seen.</p>
-        <div class="bc-chart" data-draw="fu-factors" data-source="fundamentals" style="min-height:160px"></div>
-      </div>
-      <div class="bc-card" id="fu-models-card">
-        <h2>Which combination predicts best</h2>
-        <p class="bc-note">Each election 1978-2024 predicted by a fit that leaves that election out. Typical miss is the root-mean-square error. With only 24 elections, adding more inputs fits the past better but predicts new elections worse.</p>
-        <div class="bc-tablebox"><table data-source="fundamentals_models" data-row-key="model" id="fu-models-table">
-          <thead><tr><th>Inputs</th><th class="n">Typical</th><th class="n">Average</th><th class="n">2026</th></tr></thead>
-          <tbody data-draw="fu-models"></tbody>
-        </table></div>
-      </div>
-    </div>
-    <div class="bc-card" id="fu-back-card">
-      <h2>Fundamentals estimate against what happened</h2>
-      <p class="bc-note">Grey dot: the estimate from approval and the midterm penalty, fit without that election; colored dot: the actual swing. The biggest misses are 2010 (the Tea Party wave, 10 points worse for Democrats than approval said) and 2002 (after 9/11, 7 points better for Republicans). 2026 came in about 5 points worse for Republicans than approval alone said.</p>
-      <div class="bc-chart" data-draw="fu-backtest" data-source="fundamentals"></div>
-    </div>
-    <div class="bc-card" id="fu-table-card">
-      <h2>Every election since 1976</h2>
-      <div class="bc-tablebox"><table data-source="fundamentals" data-row-key="year" id="fu-table">
-        <thead><tr><th>Year</th><th>President</th><th class="n">Approval</th><th class="n">Inflation</th><th class="n">Unemployment change</th><th class="n">Real income growth</th><th class="n">Gas (2026 $)</th><th class="n">President's party swing</th><th class="n">Estimate</th></tr></thead>
-        <tbody data-draw="fu-rows"></tbody>
-      </table></div>
-      <p class="bc-note">Approval: Gallup's last reading before the election (1976: June; 1980: September); 2018 and 2022 Gallup via uspollingdata.com; 2026 Silver Bulletin average on Oct 29, since Gallup ended its approval series. Economy: September of the election year against a year earlier (BLS CPI and unemployment, BEA real disposable income per person, via FRED). House vote: MEDSL district returns summed, 1976-2024; 2026 NYT estimate.</p>
-    </div>
-  </section>
-
   <!-- GAS -->
   <section class="bc-page" id="gas" data-page="gas" hidden>
     <div class="bc-card">
@@ -471,7 +425,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     </div>
     <div class="bc-card" id="gas-card">
       <h2>Expensive gas has gone with bigger midterm losses for the president's party</h2>
-      <p class="bc-note">Each dot is a federal election: the national average price of regular gas before it (in 2026 dollars) against the change in the president's party's House popular-vote margin from two years earlier. Dots are colored by the president's party; filled dots are midterms (labeled with the net House seat change), hollow ones presidential years. The dashed line is the midterm trend for 1978-2022. The midterm penalty does most of the work. High gas also tends to come with low approval, and once approval is accounted for, gas adds little on its own (see Fundamentals). 25 elections is a signal for the model's fundamentals, not a forecast on its own.</p>
+      <p class="bc-note">Each dot is a federal election: the national average price of regular gas before it (in 2026 dollars) against the change in the president's party's House popular-vote margin from two years earlier. Dots are colored by the president's party; filled dots are midterms (labeled with the net House seat change), hollow ones presidential years. The dashed line is the midterm trend for 1978-2022. The midterm penalty does most of the work. High gas also tends to come with low approval, and once approval is accounted for, gas adds little on its own. 25 elections is a signal for the model's fundamentals, not a forecast on its own.</p>
       <div class="bc-controls"><label>Across<select id="gas-x" aria-label="Gas measure"><option value="gas_real_2026">Gas price (2026 dollars)</option><option value="gas_change_1yr_pct">Change in the gas price over the prior year</option></select></label></div>
       <div class="bc-chart" data-draw="gas-chart" data-source="gas_elections"></div>
     </div>
@@ -615,7 +569,7 @@ const DEF = { tfrom: '2000', tab: 'needles', nrace: 'GA-senate', myear: '2024', 
 const P = () => ({ ...DEF, ...Object.fromEntries(Object.entries(dash.params()).filter(([, v]) => v != null)) });
 document.querySelectorAll('.bc-tab').forEach((b) => b.addEventListener('click', () => { dash.setParams({ tab: b.dataset.tab }); dash.setLink(b.dataset.tab); }));
 const named = location.hash.slice(1);
-if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'fund', 'gas'].includes(named)) dash.setParams({ tab: named });
+if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas'].includes(named)) dash.setParams({ tab: named });
 dash.onData(() => {
   const tab = P().tab;
   document.querySelectorAll('.bc-page').forEach((s) => { s.hidden = s.dataset.page !== tab; });
@@ -1301,90 +1255,6 @@ dash.draw('gas-rows', (tb) => {
     const tr = tb.insertRow(); tr.dataset.key = r.year; const sw = r.house_inc_swing === '' ? null : +r.house_inc_swing;
     [r.year + (r.kind === 'midterm' ? ' (midterm)' : ''), r.president_party, '$' + d3.format('.2f')(+r.gas), '$' + d3.format('.2f')(+r.gas_real_2026), (+r.gas_change_1yr_pct > 0 ? '+' : '') + r.gas_change_1yr_pct + '%', bcFmt.m(+r.house_margin_dem), sw == null ? '—' : (sw > 0 ? '+' : '') + d3.format('.1f')(sw), seatTxt(r.house_seat_change_dem), seatTxt(r.senate_seat_change_dem)]
       .forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i > 1) td.className = 'n'; if (i === 1) td.className = r.president_party === 'D' ? 'dem' : 'rep'; if (i === 5) td.classList.add(+r.house_margin_dem > 0 ? 'dem' : 'rep'); if (i >= 7 && +[0, 0, 0, 0, 0, 0, 0, r.house_seat_change_dem, r.senate_seat_change_dem][i]) td.classList.add(+[0, 0, 0, 0, 0, 0, 0, r.house_seat_change_dem, r.senate_seat_change_dem][i] > 0 ? 'dem' : 'rep'); });
-  }
-});
-</script>
-<script>
-// ---- Fundamentals tab: approval, the economy and gas against the president's party's House swing ----
-const fuG = () => { const g = dash.data('fundamentals'); return g.status === 'ok' ? g.data : null; };
-const fuM = () => { const g = dash.data('fundamentals_models'); return g.status === 'ok' ? g.data : null; };
-const fuBest = () => { const m = fuM(); return m && m.find((r) => r.model === 'Midterm + approval'); };
-const swingTxt = (v) => v == null || v === '' || isNaN(+v) ? '—' : (+v > 0 ? '+' : '') + d3.format('.1f')(+v);
-dash.draw('fu-est', (el) => { const d = fuG(), r = d && d.find((x) => x.year === '2026'); el.textContent = r ? swingTxt(r.fund_estimate) : '—'; });
-dash.draw('fu-act', (el) => { const d = fuG(), r = d && d.find((x) => x.year === '2026'); el.textContent = r ? swingTxt(r.house_inc_swing) : '—'; });
-dash.draw('fu-miss', (el) => { const b = fuBest(); el.textContent = b ? d3.format('.1f')(+b.typical_miss) + ' pts' : '—'; });
-dash.draw('fu-appr', (el) => { const d = fuG(), r = d && d.find((x) => x.year === '2026'); el.textContent = r ? d3.format('.1f')(+r.approval) + '%' : '—'; });
-dash.draw('fu-chart', (el) => {
-  const g = dash.data('fundamentals'); if (bcFail(el, g.status)) return; el.replaceChildren(); const b = fuBest(); if (g.status !== 'ok' || !b) return;
-  const c = JSON.parse(b.coefs);
-  const pts = g.data.filter((d) => d.house_inc_swing !== '').map((d) => ({ d, x: +d.approval, y: +d.house_inc_swing, mid: d.kind === 'midterm' }));
-  const W = el.clientWidth || 600, H = 380, left = 52, right = 110, top = 14, bottom = 42;
-  const x = d3.scaleLinear([20, 70], [left, W - right]), y = d3.scaleLinear([-20, 12], [H - bottom, top]);
-  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Presidential approval against the president\'s party House swing');
-  svg.append('g').selectAll('line').data(y.ticks(6)).join('line').attr('x1', left).attr('x2', W - right).attr('y1', (t) => y(t)).attr('y2', (t) => y(t)).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
-  svg.append('g').selectAll('text').data(y.ticks(6)).join('text').attr('x', left - 6).attr('y', (t) => y(t) + 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => (t > 0 ? '+' : '') + t);
-  svg.append('g').selectAll('text').data(x.ticks(6)).join('text').attr('x', (t) => x(t)).attr('y', H - bottom + 16).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => t + '%');
-  svg.append('text').attr('x', (left + W - right) / 2).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 12).attr('fill', 'var(--color-fg-muted)').text('President\'s approval before the election');
-  svg.append('text').attr('x', left).attr('y', top - 2).attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text('President\'s party House swing, pts');
-  for (const [mid, lab] of [[1, 'Midterm trend'], [0, 'Presidential-year trend']]) {
-    const f = (a) => c.const + c.midterm * mid + c.approval * a;
-    svg.append('line').attr('x1', x(20)).attr('x2', x(70)).attr('y1', y(f(20))).attr('y2', y(f(70))).attr('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', mid ? '5 4' : '2 3');
-    svg.append('text').attr('x', W - right + 6).attr('y', y(f(70)) + 4).attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text(lab);
-  }
-  const tip = bcTip(el);
-  const gg = svg.append('g').selectAll('g').data(pts).join('g').attr('transform', (p) => `translate(${x(p.x)},${y(Math.max(-20, Math.min(12, p.y)))})`);
-  gg.append('circle').attr('r', (p) => p.d.year === '2026' ? 7 : 5.5).attr('fill', (p) => p.mid ? bcColor(el, p.d.president_party === 'D' ? 1 : -1) : 'var(--color-panel)')
-    .attr('stroke', (p) => p.mid ? 'var(--color-panel)' : bcColor(el, p.d.president_party === 'D' ? 1 : -1)).attr('stroke-width', 1.5)
-    .on('mousemove', (ev, p) => tip.show(ev, [p.d.year + ' · ' + p.d.kind + ' · ' + (p.d.president_party === 'D' ? 'Democratic' : 'Republican') + ' president', 'Approval ' + p.x + '% (' + p.d.approval_source + ')', 'President\'s party swing ' + swingTxt(p.y) + ' · fundamentals estimate ' + swingTxt(p.d.fund_estimate)]))
-    .on('mouseleave', () => tip.hide());
-  gg.filter((p) => p.mid).append('text').attr('x', 9).attr('y', 4).attr('font-size', 11).attr('font-weight', (p) => p.d.year === '2026' ? 600 : 400).attr('fill', 'var(--color-fg)').attr('pointer-events', 'none').text((p) => p.d.year);
-});
-dash.draw('fu-factors', (el) => {
-  const g = dash.data('fundamentals'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
-  const t = g.data.filter((d) => +d.year >= 1978 && +d.year <= 2024).map((d) => ({ ...d, mid: d.kind === 'midterm' }));
-  const res = (k) => { const m = d3.rollup(t, (v) => d3.mean(v, (d) => +d[k]), (d) => d.mid); return t.map((d) => +d[k] - m.get(d.mid)); };
-  const ry = res('house_inc_swing');
-  const F = [['approval', 'Approval'], ['gas_real_2026', 'Gas price'], ['inflation', 'Inflation'], ['income_growth', 'Real income growth'], ['unemp_change', 'Unemployment change']].map(([k, l]) => {
-    const rx = res(k), mx = d3.mean(rx), my = d3.mean(ry); const r = d3.sum(rx, (v, i) => (v - mx) * (ry[i] - my)) / Math.sqrt(d3.sum(rx, (v) => (v - mx) ** 2) * d3.sum(ry, (v) => (v - my) ** 2)); return { l, r };
-  });
-  const W = el.clientWidth || 500, bh = 26, left = 150, right = 50, H = F.length * bh + 34;
-  const x = d3.scaleLinear([-1, 1], [left, W - right]);
-  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'How each factor lines up with the swing');
-  svg.append('g').selectAll('line').data([-1, -0.5, 0, 0.5, 1]).join('line').attr('x1', (v) => x(v)).attr('x2', (v) => x(v)).attr('y1', 4).attr('y2', H - 22).attr('stroke', (v) => v === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
-  svg.append('g').selectAll('text').data([-1, -0.5, 0, 0.5, 1]).join('text').attr('x', (v) => x(v)).attr('y', H - 6).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((v) => v);
-  const gg = svg.append('g').selectAll('g').data(F).join('g').attr('transform', (d, i) => `translate(0,${6 + i * bh})`);
-  gg.append('text').attr('x', left - 8).attr('y', 14).attr('text-anchor', 'end').attr('font-size', 12).attr('fill', 'var(--color-fg)').text((d) => d.l);
-  gg.append('rect').attr('x', (d) => Math.min(x(0), x(d.r))).attr('width', (d) => Math.abs(x(d.r) - x(0))).attr('y', 3).attr('height', bh - 10).attr('rx', 2).attr('fill', 'var(--cds-chart-reference)');
-  gg.append('text').attr('x', (d) => d.r >= 0 ? x(d.r) + 5 : x(d.r) - 5).attr('y', 14).attr('text-anchor', (d) => d.r >= 0 ? 'start' : 'end').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((d) => d3.format('+.2f')(d.r));
-});
-dash.draw('fu-backtest', (el) => {
-  const g = dash.data('fundamentals'); if (bcFail(el, g.status)) return; el.replaceChildren(); if (g.status !== 'ok') return;
-  const rows = g.data.filter((d) => d.fund_estimate !== '' && d.house_inc_swing !== '').map((d) => ({ d, e: +d.fund_estimate, a: +d.house_inc_swing })).sort((p, q) => q.d.year - p.d.year);
-  const W = el.clientWidth || 600, bh = 20, left = 92, right = 90, top = 22, H = top + rows.length * bh + 8;
-  const x = d3.scaleLinear([-20, 12], [left, W - right]);
-  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Fundamentals estimate against the result');
-  svg.append('g').selectAll('line').data(x.ticks(6)).join('line').attr('x1', (t) => x(t)).attr('x2', (t) => x(t)).attr('y1', top - 6).attr('y2', H - 4).attr('stroke', (t) => t === 0 ? 'var(--cds-chart-axis)' : 'var(--cds-chart-grid)');
-  svg.append('g').selectAll('text').data(x.ticks(6)).join('text').attr('x', (t) => x(t)).attr('y', 12).attr('text-anchor', 'middle').attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((t) => (t > 0 ? '+' : '') + t);
-  const tip = bcTip(el);
-  const gg = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (d, i) => `translate(0,${top + i * bh + bh / 2})`);
-  gg.append('text').attr('x', left - 8).attr('y', 4).attr('text-anchor', 'end').attr('font-size', 11).attr('fill', 'var(--color-fg)').text((p) => p.d.year + (p.d.kind === 'midterm' ? ' mid' : ''));
-  gg.append('line').attr('x1', (p) => x(p.e)).attr('x2', (p) => x(Math.max(-20, p.a))).attr('stroke', 'var(--cds-chart-muted)').attr('stroke-width', 2);
-  gg.append('circle').attr('cx', (p) => x(p.e)).attr('r', 4).attr('fill', 'var(--cds-chart-muted)');
-  gg.append('circle').attr('cx', (p) => x(Math.max(-20, p.a))).attr('r', 5).attr('fill', (p) => bcColor(el, p.d.president_party === 'D' ? 1 : -1))
-    .on('mousemove', (ev, p) => tip.show(ev, [p.d.year + ' · ' + (p.d.president_party === 'D' ? 'Democratic' : 'Republican') + ' president', 'Estimate ' + swingTxt(p.e) + (p.d.year === '2026' ? ' (from 1978-2024)' : ' (fit without this election)'), 'Actual ' + swingTxt(p.a), 'Miss ' + swingTxt(p.a - p.e)]))
-    .on('mouseleave', () => tip.hide());
-  gg.append('text').attr('x', W - right + 8).attr('y', 4).attr('font-size', 11).attr('fill', 'var(--color-fg-muted)').text((p) => 'miss ' + swingTxt(p.a - p.e));
-});
-dash.draw('fu-models', (tb) => {
-  const m = fuM(); tb.replaceChildren(); if (!m) return;
-  for (const r of m) { const tr = tb.insertRow(); tr.dataset.key = r.model; [r.model, d3.format('.1f')(+r.typical_miss) + ' pts', d3.format('.1f')(+r.avg_miss) + ' pts', swingTxt(r.est_2026)].forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i) td.className = 'n'; if (i === 0 && r.model === 'Midterm + approval') td.style.fontWeight = 600; }); }
-});
-dash.draw('fu-rows', (tb) => {
-  const d = fuG(); tb.replaceChildren(); if (!d) return;
-  for (const r of [...d].sort((a, b) => b.year - a.year)) {
-    const tr = tb.insertRow(); tr.dataset.key = r.year;
-    [r.year + (r.kind === 'midterm' ? ' (midterm)' : ''), r.president_party, r.approval + '%', d3.format('.1f')(+r.inflation) + '%', (+r.unemp_change > 0 ? '+' : '') + r.unemp_change, d3.format('+.1f')(+r.income_growth) + '%', '$' + d3.format('.2f')(+r.gas_real_2026), swingTxt(r.house_inc_swing), swingTxt(r.fund_estimate)]
-      .forEach((c, i) => { const td = tr.insertCell(); td.textContent = c; if (i > 1) td.className = 'n'; if (i === 1) td.className = r.president_party === 'D' ? 'dem' : 'rep'; });
   }
 });
 </script>

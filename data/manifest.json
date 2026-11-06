@@ -1,6 +1,6 @@
 {
- "built": "2026-11-06T00:32:57+00:00",
- "updated": "2026-11-06T00:32:57+00:00",
+ "built": "2026-11-06T00:38:30+00:00",
+ "updated": "2026-11-06T00:38:30+00:00",
  "datasets": {
   "contests": {
    "file": "contests.csv"
@@ -40,12 +40,6 @@
   },
   "gas_elections": {
    "file": "gas_elections.csv"
-  },
-  "fundamentals": {
-   "file": "fundamentals.csv"
-  },
-  "fundamentals_models": {
-   "file": "fundamentals_models.csv"
   },
   "map_states": {
    "file": "map_states.json"
