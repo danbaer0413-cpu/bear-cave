@@ -52,6 +52,9 @@
   },
   "map_districts": {
    "file": "map_districts.json"
+  },
+  "money": {
+   "file": "money.json"
   }
  }
 }

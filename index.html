@@ -154,6 +154,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     <button class="bc-tab" role="tab" data-tab="forecast" id="tab-forecast">2026 forecast check</button>
     <button class="bc-tab" role="tab" data-tab="gas" id="tab-gas">Gas prices</button>
     <button class="bc-tab" role="tab" data-tab="sim" id="tab-sim">Electorate simulator</button>
+    <button class="bc-tab" role="tab" data-tab="money" id="tab-money">Campaign money</button>
   </nav>
 
   <!-- NEEDLES -->
@@ -511,8 +512,97 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
 <div class="two"><div class="card"><h2>States that move the most</h2><table id="es-moves"></table></div>
 <div class="card"><h2>Where the numbers come from</h2><p class="note" id="es-srcs" style="margin-top:0"></p>
 <p class="note">How it works: survey respondents who were confirmed voters (CES) are reweighted so each group's share of voters matches the sliders, then each group's vote is shifted to match its vote slider. Each state's change is added to its certified result; small states lean on the national change. 2000-2012 start from the 2016 survey reshaped to that year's exit poll. Exit polls and the CES measure groups differently (exit polls count more college graduates), so comparing a CES year with an exit-poll year mixes the two. Maine and Nebraska districts aren't split out.</p></div></div>
-</div></div></div>
+</div></div>
     <div id="es-tip"></div>
+    </div>
+  </section>
+
+  <!-- CAMPAIGN MONEY -->
+  <section class="bc-page" id="money" data-page="money" hidden>
+    <style>
+#money{--d:var(--bc-dem);--r:var(--bc-rep);--i:var(--bc-ind);--empty:var(--bc-mid);--line:var(--color-border-line);--panel:var(--color-panel);--muted:var(--color-fg-muted);--fg:var(--color-fg);--accent:#7a4b2a;--grid:color-mix(in srgb,var(--color-border-line) 55%,transparent)}
+#money .mn-sub{max-width:62rem;margin:0 0 14px}
+#money #mn-tip{z-index:5}
+#money,#money>*,#money .ierow>div,#money .cands>div,#money .two>*{min-width:0}
+#money .ierow>div,#money .card{overflow-x:auto}
+#money td{overflow-wrap:anywhere}
+#money h2{font-size:16px;margin:0 0 4px}
+#money .sub{color:var(--muted);margin:0 0 14px;max-width:60rem}
+#money .badge{display:inline-block;font-size:11.5px;padding:2px 8px;border-radius:99px;background:var(--accent);color:#fff;margin-left:6px;vertical-align:middle;font-family:Inter,system-ui,sans-serif}
+#money .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+#money .note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+#money .ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:0 0 12px}
+#money .ctl label{display:grid;gap:2px;font-size:12px;color:var(--muted)}
+#money select{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px;min-width:14rem}
+#money .cands{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+#money .cand h3{margin:0;font-size:16px}
+#money .cand .p{font-size:12px;color:var(--muted)}
+#money .big{font:600 26px/1.1 Georgia,serif;font-variant-numeric:tabular-nums;margin:6px 0 2px}
+#money .D{color:var(--d)}
+#money .R{color:var(--r)}
+#money .I{color:var(--i)}
+#money .stack{display:flex;height:16px;border-radius:5px;overflow:hidden;background:var(--empty);margin:8px 0 6px}
+#money .stack i{display:block;height:100%}
+#money .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted)}
+#money .legend span{display:inline-flex;align-items:center;gap:4px}
+#money .sw{width:10px;height:10px;border-radius:2px;display:inline-block}
+#money table{border-collapse:collapse;width:100%;font-size:13px}
+#money th,#money td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+#money th{color:var(--muted);font-weight:500}
+#money td:first-child,#money th:first-child{text-align:left}
+#money .kv{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13px}
+#money .kv span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums}
+#money .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:820px){#money .two{grid-template-columns:1fr}}
+#money .geo{position:relative}
+#money .geo svg path{fill:var(--empty);stroke:var(--panel);stroke-width:.8}
+#money .geo .msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
+#money .geo .msg div{background:var(--panel);border:1px dashed var(--line);border-radius:10px;padding:12px 16px;max-width:30rem;font-size:13px}
+#money svg text{fill:var(--fg);font-size:11px}
+#money svg .ax{fill:var(--muted)}
+#money #mn-tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.15);display:none}
+#money .tblwrap{max-height:30rem;overflow:auto}
+#money .inc{font-size:.78em;font-weight:600;color:var(--muted);margin-left:2px}
+#money .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:10px;margin-bottom:6px}
+#money .tile .v{font:600 24px/1.1 Georgia,serif;font-variant-numeric:tabular-nums}
+#money .tile .k{font-size:12px;color:var(--muted)}
+#money .split{display:flex;height:18px;border-radius:5px;overflow:hidden;background:var(--empty);margin:4px 0 2px}
+#money .split i{display:block;height:100%}
+#money .ierow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+#money .iebar{display:grid;grid-template-columns:70px 1fr 70px;gap:6px;align-items:center;font-size:12.5px;margin:3px 0}
+#money .iebar .b{height:12px;border-radius:3px}
+#money .empty{border:1px dashed var(--line);border-radius:10px;padding:12px 16px;color:var(--muted);font-size:13px}
+    </style>
+    <div data-draw="mn-root" data-source="money map_states">
+
+<p class="bc-note mn-sub">Who raised what in each 2026 Senate race, the closest House races and every presidential race since 2008 (primaries included), where the money came from, who spent for and against each candidate from outside the campaign, and how money lined up with the result. From FEC filings; campaign totals run through each candidate's latest report, and donor, outside-spending and filing data refresh through the day.</p>
+<div class="card" id="mn-totcard"><div class="ctl" style="margin:0 0 8px"><label>Cycle<select id="mn-cyc" style="min-width:8rem"></select></label><span class="note" id="mn-totasof" style="margin:0 0 6px"></span></div>
+<div class="tiles" id="mn-tiles"></div>
+<svg id="mn-cycles" viewBox="0 0 900 170" width="100%" role="img" aria-label="Money raised by cycle"></svg>
+<p class="note" id="mn-totn"></p></div>
+<div class="ctl"><label>Race<select id="mn-race"></select></label></div>
+<div class="card"><h2 id="mn-rt"></h2><p class="note" id="mn-rs" style="margin-top:0"></p><div class="cands" id="mn-cands" style="margin-top:10px"></div><div id="mn-field"></div>
+<div class="legend" style="margin-top:8px"><span><i class="sw" style="background:var(--accent)"></i>Individual donors</span><span><i class="sw" style="background:#8fa3b8"></i>PACs</span><span><i class="sw" style="background:#b9a37a"></i>Party committees</span><span><i class="sw" style="background:var(--i)"></i>Candidate's own money</span><span><i class="sw" style="background:#a8a59c"></i>Transfers and other</span><span><b style="color:var(--fg)">(I)</b> incumbent</span></div></div>
+<div class="card" id="mn-iecard"><h2>Outside money: super PACs, parties and groups</h2><p class="note" style="margin-top:0">Independent expenditures reported to the FEC: ad buys, mail and other spending for or against each candidate, made without coordinating with the campaign. <b>Dark money</b> is spending by groups that don't have to name their donors (mostly 501(c)(4) nonprofits and trade associations), plus money those groups give to super PACs. Spending that never names a candidate, or runs outside the pre-election windows, isn't reported to the FEC at all; TV stations' political files and the Meta and Google ad libraries would be the next sources for it.</p>
+<div id="mn-ie"></div></div>
+<div class="card" id="mn-dncard"><h2>Biggest donors</h2><p class="note" style="margin-top:0">The largest donors to each finalist's campaign, people and PACs listed separately, and who funds the outside groups spending most in the race. Individuals can give a campaign at most $3,500 per election (primary and general count separately); super PACs can take unlimited amounts, so their donor lists are where the biggest checks show up.</p>
+<div id="mn-dn"></div></div>
+<div class="two">
+<div class="card geo"><h2>Where the money comes from</h2><p class="note" style="margin-top:0" id="mn-geon">Itemized donations (gifts over $200) by where the donor lives.</p>
+<div id="mn-split"></div>
+<svg id="mn-geo" viewBox="-70 0 1045 610" width="100%" role="img" aria-label="Donations by donor state"></svg>
+<div class="legend" id="mn-geol"></div>
+<div class="msg" id="mn-geomsg"><div><b>No itemized donations pulled for this race yet.</b> The map shades every state by the dollars its donors gave the selected candidate, with the home state outlined, and the bar above splits the money into in-district (House), rest of the state and out of state.</div></div></div>
+<div class="card"><h2>Money and the result, every Senate race since 2008</h2><p class="note" style="margin-top:0">Democrat's share of the two main candidates' money against the Democratic margin. Grey: 2008-2024; colored: 2026 (unofficial results).</p>
+<svg id="mn-sc" viewBox="0 0 520 340" width="100%" role="img" aria-label="Money share against margin"></svg>
+<p class="note" id="mn-scn"></p></div></div>
+<div class="card" id="mn-wrcard"><h2>Who's running</h2><p class="note" style="margin-top:0" id="mn-wrn">Candidates who have filed with the FEC (a Statement of Candidacy is due within 15 days of raising or spending $5,000), checked daily.</p>
+<div class="ctl" style="margin:6px 0"><label>Race<select id="mn-wrsel" style="min-width:12rem"><option value="P">2028 President</option><option value="S">2028 Senate</option><option value="H">2028 House</option><option value="new">Latest filings</option></select></label><label style="display:flex;gap:6px;align-items:center;flex-direction:row;margin-bottom:6px"><input type="checkbox" id="mn-wrser" checked> Serious candidates only ($100K+ raised)</label></div>
+<div id="mn-wr"></div></div>
+<div class="card"><h2>Biggest fundraisers, 2026 Senate and House</h2><div class="tblwrap"><table id="mn-top"></table></div>
+<p class="note">Presidential totals cover the four years before each election (two FEC cycles); the 2024 file is missing Trump and DeSantis, and a few fringe filings with impossible totals are left out. Senate money is the 2025-26 cycle only, so senators' totals leave out what they raised in earlier years of a six-year term. "Own money" is contributions plus loans from the candidate. Governors' races file with the states, not the FEC, and aren't included yet. House races here are the closest 2026 races.</p></div>
+
+    <div id="mn-tip"></div>
     </div>
   </section>
 
@@ -646,7 +736,7 @@ const DEF = { tfrom: '2000', tab: 'needles', nrace: 'GA-senate', myear: '2024', 
 const P = () => ({ ...DEF, ...Object.fromEntries(Object.entries(dash.params()).filter(([, v]) => v != null)) });
 document.querySelectorAll('.bc-tab').forEach((b) => b.addEventListener('click', () => { dash.setParams({ tab: b.dataset.tab }); dash.setLink(b.dataset.tab); }));
 const named = location.hash.slice(1);
-if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas', 'sim'].includes(named)) dash.setParams({ tab: named });
+if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas', 'sim', 'money'].includes(named)) dash.setParams({ tab: named });
 dash.onData(() => {
   const tab = P().tab;
   document.querySelectorAll('.bc-page').forEach((s) => { s.hidden = s.dataset.page !== tab; });
@@ -1425,6 +1515,96 @@ dash.draw('es-root', (el) => {
   const g = dash.data('electorate_sim'), m = dash.data('map_states');
   if (bcFail(el, g.status) || g.status !== 'ok' || m.status !== 'ok' || el.dataset.ready) return;
   el.dataset.ready = '1'; esInit(g.data, m.data);
+});
+</script>
+<script>
+// ---- Campaign money tab ----
+window.mnInit = (FIN, MAPS) => {
+
+const D=FIN, MAP=MAPS.map((s)=>({s:s.state_po,d:s.d})), $=(i)=>document.getElementById(i), tip=$('mn-tip');
+const money=(v)=>v>=1e9?'$'+(v/1e9).toFixed(2)+'B':v>=1e6?'$'+(v/1e6).toFixed(v>=1e8?0:1)+'M':v>=1e3?'$'+Math.round(v/1e3)+'K':'$'+Math.round(v);
+const nm=(c)=>c.name+(c.inc?' <span class="inc" title="Incumbent">(I)</span>':''), pc=(p)=>p==='DEMOCRAT'?'D':p==='REPUBLICAN'?'R':'I', fm=(m)=>m==null?'—':Math.abs(m)<0.05?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(1);
+const fin=(r)=>r.cands.filter(c=>c.stage!=='primary'), tot=(r)=>r.cands.reduce((a,c)=>a+c.raised,0);
+const ORD={S:0,P:1,H:2},races=D.races.slice().sort((a,b)=>(a.office===b.office?(a.office==='P'?b.id.localeCompare(a.id):tot(b)-tot(a)):ORD[a.office]-ORD[b.office]));
+$('mn-race').innerHTML='<optgroup label="Senate 2026 (with the primary field)">'+races.filter(r=>r.office==='S').map(r=>`<option value="${r.id}">${r.id.replace('-Sen',' Senate')} · ${money(tot(r))}</option>`).join('')+'</optgroup><optgroup label="President (with the primary field)">'+races.filter(r=>r.office==='P').map(r=>`<option value="${r.id}">${r.id} · ${money(tot(r))}</option>`).join('')+'</optgroup><optgroup label="House (closest 2026 races)">'+races.filter(r=>r.office==='H').map(r=>`<option value="${r.id}">${r.id} · ${money(tot(r))}</option>`).join('')+'</optgroup>';
+$('mn-geo').innerHTML=MAP.map(p=>`<path data-s="${p.s}" d="${p.d}"/>`).join('');
+function show(){const r=races.find(x=>x.id===$('mn-race').value)||races[0];
+ $('mn-rt').textContent=r.id.replace('-Sen',' Senate')+(r.office==='H'?' (House)':r.office==='P'?' race':'');
+ $('mn-rs').textContent=`Result (${r.status==='unofficial'?'unofficial':'certified'}${r.office==='P'?', national popular vote':''}): ${fm(r.margin)} · ${r.cands.length} candidate${r.cands.length===1?'':'s'} raised ${money(tot(r))} combined`+(r.note?' · '+r.note:'');
+ const F=fin(r),mx=Math.max(...F.map(c=>c.raised));
+ $('mn-cands').innerHTML=F.map(c=>{const p=pc(c.party),o=Math.max(0,c.raised-c.indiv-c.pac-c.party_money-c.self),parts=[[c.indiv,'var(--accent)'],[c.pac,'#8fa3b8'],[c.party_money,'#b9a37a'],[c.self,'var(--i)'],[o,'#a8a59c']];
+  return `<div class="cand"><h3 class="${p}">${nm(c)}</h3><div class="p">${c.party.toLowerCase()} · FEC ${c.fec_id} · through ${c.through}</div><div class="big">${money(c.raised)}</div>
+  <div class="stack" style="width:${Math.max(8,100*c.raised/mx)}%">${parts.map(([v,col])=>v>0?`<i style="width:${100*v/c.raised}%;background:${col}" title="${money(v)}"></i>`:'').join('')}</div>
+  <div class="kv"><span>From individual donors</span><span>${money(c.indiv)} (${Math.round(100*c.indiv/c.raised)}%)</span><span>From PACs</span><span>${money(c.pac)}</span><span>From party committees</span><span>${money(c.party_money)}</span><span>Own money</span><span>${money(c.self)}</span><span>Spent</span><span>${money(c.spent)}</span><span>Cash on hand</span><span>${money(c.cash)}</span></div></div>`;}).join('');
+ const P=r.cands.filter(c=>c.stage==='primary');
+ $('mn-field').innerHTML=P.length?`<h3 style="font-size:14px;margin:14px 0 4px">${r.office==='P'?'Primary field (lost the nomination or dropped out)':'Primary field and others who raised $100K+'}</h3><div class="tblwrap"><table><tr><th>Candidate</th><th>Party</th><th>Raised</th><th>Individuals</th><th>Own money</th><th>Spent</th></tr>`+P.map(c=>`<tr><td class="${pc(c.party)}">${nm(c)}</td><td style="text-align:left">${c.party.toLowerCase()}</td><td>${money(c.raised)}</td><td>${c.raised?Math.round(100*c.indiv/c.raised):0}%</td><td>${money(c.self)}</td><td>${money(c.spent)}</td></tr>`).join('')+'</table></div>':'';
+ drawGeo(r); drawIE(r); drawDN(r); drawSc(r);}
+const G=D.geo||{}, IE=D.ie||{};
+function drawGeo(r){const F=fin(r),have=F.filter(c=>G[c.k]);$('mn-geomsg').style.display=have.length?'none':'flex';
+ const col=(c)=>c.party==='DEMOCRAT'?'var(--d)':c.party==='REPUBLICAN'?'var(--r)':'var(--i)';
+ $('mn-split').innerHTML=have.map(c=>{const g=G[c.k],t=g.total_itemized||1,ind=g.in_district||0,st=g.in_state-ind,out=g.out_of_state;
+  return `<div style="font-size:12.5px;margin-top:6px"><b class="${pc(c.party)}">${nm(c)}</b> · ${money(t)} itemized</div><div class="split">${r.office==='H'?`<i style="width:${100*ind/t}%;background:var(--accent)" title="In district ${money(ind)}"></i>`:''}<i style="width:${100*st/t}%;background:#b9a37a" title="Rest of ${r.state} ${money(st)}"></i><i style="width:${100*out/t}%;background:#a8a59c" title="Out of state ${money(out)}"></i></div><div class="legend">${r.office==='H'?`<span><i class="sw" style="background:var(--accent)"></i>In district ${Math.round(100*ind/t)}%</span>`:''}<span><i class="sw" style="background:#b9a37a"></i>${r.office==='H'?'Rest of ':''}${r.state} ${Math.round(100*st/t)}%</span><span><i class="sw" style="background:#a8a59c"></i>Out of state ${Math.round(100*out/t)}%</span></div>`;}).join('');
+ const c=have[0],g=c?G[c.k]:null,mx=g?Math.max(...Object.entries(g.by_state).filter(([s])=>s!==r.state).map(([,v])=>v),1):1;
+ $('mn-geo').querySelectorAll('path').forEach(p=>{const v=g?g.by_state[p.dataset.s]:null;p.style.fill=!g||!v?'':`color-mix(in srgb,${col(c)} ${Math.round(15+85*Math.min(1,Math.sqrt(v/mx)))}%,var(--empty))`;p.style.stroke=g&&p.dataset.s===r.state?'var(--fg)':'';p.style.strokeWidth=g&&p.dataset.s===r.state?'2.5':'';});
+ $('mn-geol').textContent=g?`Map: ${c.name}'s donors by state (darker = more money; home state outlined).${have.length>1?' The other finalist is in the bars above.':''}`:'';}
+function drawIE(r){const F=fin(r),have=F.filter(c=>IE[c.k]);
+ if(!have.length){$('mn-ie').innerHTML='<div class="empty"><b>No outside spending pulled for this race yet.</b> Each finalist gets money spent for and against them split into super PACs, parties, other PACs and dark money groups, pre-election "issue" ads naming them, the biggest spenders, and what it bought (TV, digital, mail); In the last weeks before an election these reports come in within 24-48 hours, so the panel stays close to current.</div>';return;}
+ const mx=Math.max(...have.map(c=>Math.max(IE[c.k].support,IE[c.k].oppose)),1);
+ $('mn-ie').innerHTML='<div class="ierow">'+have.map(c=>{const e=IE[c.k];return `<div><h3 class="${pc(c.party)}" style="margin:0 0 4px;font-size:15px">${nm(c)}</h3>
+  <div class="iebar"><span>For</span><span class="b" style="width:${100*e.support/mx}%;background:var(--d);background:${c.party==='REPUBLICAN'?'var(--r)':'var(--d)'}"></span><span>${money(e.support)}</span></div>
+  <div class="iebar"><span>Against</span><span class="b" style="width:${100*e.oppose/mx}%;background:#a8a59c"></span><span>${money(e.oppose)}</span></div>
+  <div class="kv" style="margin-top:6px">${[['super_PAC','Super PACs'],['party','Party committees'],['PAC','Other PACs'],['dark_money','Dark money groups (donors not disclosed)']].map(([k,l])=>`<span>${l}</span><span>${money(e[k+'_support']||0)} for · ${money(e[k+'_oppose']||0)} against</span>`).join('')}<span>"Issue" ads naming them (electioneering)</span><span>${money((e.electioneering||{}).total||0)}</span></div>
+  <table style="margin-top:6px"><tr><th>Spender</th><th>Type</th><th>For</th><th>Against</th></tr>${e.spenders.slice(0,6).map(s=>`<tr><td>${s.name}</td><td style="text-align:left">${s.kind==='dark money'?'<b>dark money</b>':s.kind||''}</td><td>${money(s.support)}</td><td>${money(s.oppose)}</td></tr>`).join('')}</table>
+  <p class="note">Bought: ${e.purposes.slice(0,4).map(p=>p.purpose+' '+money(p.amount)).join(' · ')}</p></div>`;}).join('')+'</div>';}
+const DN=D.donors||{};
+function drawDN(r){const F=fin(r),have=F.filter(c=>DN[c.k]);
+ if(!have.length){$('mn-dn').innerHTML='<div class="empty"><b>No donor lists pulled for this race yet.</b> Each finalist gets two lists: the biggest individual donors (name, employer, occupation and state) and the biggest PACs, party and other committees, plus the top donors behind the three outside groups spending most for or against them. Donations routed through ActBlue or WinRed are credited to the actual donor.</div>';return;}
+ const lst=(a,ind)=>a.length?`<table><tr><th>${ind?'Person':'Committee'}</th><th>${ind?'Employer / occupation':'Type'}</th><th>Given</th></tr>${a.map(x=>`<tr><td>${x.name}${ind&&x.state?' <span class="note">'+x.state+'</span>':''}</td><td style="text-align:left">${ind?[x.employer,x.occupation].filter(Boolean).join(' · '):x.kind}</td><td>${money(x.amount)}</td></tr>`).join('')}</table>`:'<p class="note">None itemized.</p>';
+ $('mn-dn').innerHTML='<div class="ierow">'+have.map(c=>{const d=DN[c.k];return `<div><h3 class="${pc(c.party)}" style="margin:0 0 4px;font-size:15px">${nm(c)}</h3>
+  <h4 style="margin:8px 0 2px;font-size:13px">Individuals</h4>${lst(d.individuals.slice(0,10),true)}
+  <h4 style="margin:10px 0 2px;font-size:13px">PACs and committees</h4>${lst(d.committees.slice(0,10),false)}
+  ${d.outside.map(o=>`<h4 style="margin:10px 0 2px;font-size:13px">Who funds ${o.spender}${o.from_nondisclosing_groups?` <span class="note">(${money(o.from_nondisclosing_groups)} from groups that don't disclose their own donors)</span>`:''}</h4>${lst(o.individuals.concat(o.committees).sort((a,b)=>b.amount-a.amount).slice(0,6).map(x=>({...x,employer:x.employer||'',occupation:x.kind==='individual'?x.occupation:x.kind})),true)}`).join('')}</div>`;}).join('')+'</div>';}
+function drawSc(sel){const svg=$('mn-sc'),W=520,H=340,m={l:46,r:12,t:12,b:38},X=v=>m.l+v*(W-m.l-m.r),Y=v=>m.t+(60-v)/120*(H-m.t-m.b);let h='';
+ for(let y=-60;y<=60;y+=20)h+=`<line x1="${m.l}" x2="${W-m.r}" y1="${Y(y)}" y2="${Y(y)}" stroke="${y?'var(--grid)':'var(--muted)'}"/><text class="ax" x="${m.l-6}" y="${Y(y)+4}" text-anchor="end">${y?(y>0?'D+':'R+')+Math.abs(y):'Even'}</text>`;
+ for(let x=0;x<=1;x+=.25)h+=`<text class="ax" x="${X(x)}" y="${H-m.b+16}" text-anchor="middle">${x*100}%</text>`;
+ h+=`<line x1="${X(.5)}" x2="${X(.5)}" y1="${m.t}" y2="${H-m.b}" stroke="var(--grid)"/><text class="ax" x="${(W+m.l)/2}" y="${H-4}" text-anchor="middle">Democrat's share of the two candidates' money</text>`;
+ D.hist.forEach(p=>{h+=`<circle cx="${X(p.dem_money_share)}" cy="${Y(Math.max(-60,Math.min(60,p.margin)))}" r="3" fill="var(--muted)" fill-opacity=".35" data-t="${p.year} ${p.state}: ${p.dem_cand} vs ${p.rep_cand}|${Math.round(100*p.dem_money_share)}% of the money · result ${fm(p.margin)}"/>`;});
+ D.races.filter(r=>r.office==='S'&&r.margin!=null).forEach(r=>{const d=fin(r).find(c=>c.party==='DEMOCRAT'||c.party==='INDEPENDENT'),q=fin(r).find(c=>c.party==='REPUBLICAN');if(!d||!q)return;const s=d.raised/(d.raised+q.raised);
+  h+=`<circle cx="${X(s)}" cy="${Y(Math.max(-60,Math.min(60,r.margin)))}" r="${r.id===sel.id?7:5}" fill="${r.margin>0?'var(--d)':'var(--r)'}" stroke="${r.id===sel.id?'var(--fg)':'var(--panel)'}" stroke-width="1.5" data-t="2026 ${r.state}: ${d.name}${d.inc?' (I)':''} vs ${q.name}${q.inc?' (I)':''}|${Math.round(100*s)}% of the money · result ${fm(r.margin)}"/>`;});
+ svg.innerHTML=h;}
+$('mn-sc').onmousemove=e=>{const t=e.target.dataset&&e.target.dataset.t;if(!t){tip.style.display='none';return}const [a,b]=t.split('|');tip.innerHTML=`<b>${a}</b><br>${b}`;tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';};$('mn-sc').onmouseleave=()=>tip.style.display='none';
+const hs=D.hist,mx=hs.reduce((a,p)=>a+p.dem_money_share,0)/hs.length,my=hs.reduce((a,p)=>a+p.margin,0)/hs.length,cr=hs.reduce((a,p)=>a+(p.dem_money_share-mx)*(p.margin-my),0)/Math.sqrt(hs.reduce((a,p)=>a+(p.dem_money_share-mx)**2,0)*hs.reduce((a,p)=>a+(p.margin-my)**2,0));
+$('mn-scn').textContent=`Correlation ${cr.toFixed(2)} over ${hs.length} contested Senate races, 2008-2024. Money mostly follows candidates who were going to win anyway (donors give to likely winners and incumbents), so this shows how lopsided money is, not how many votes it buys.`;
+const all=D.races.filter(r=>r.office!=='P').flatMap(r=>r.cands.map(c=>({...c,race:r.id}))).sort((a,b)=>b.raised-a.raised).slice(0,25);
+$('mn-top').innerHTML='<tr><th>Candidate</th><th>Race</th><th>Raised</th><th>Individuals</th><th>Own money</th><th>Cash on hand</th></tr>'+all.map(c=>`<tr><td class="${pc(c.party)}">${nm(c)}</td><td style="text-align:left">${c.race.replace('-Sen',' Sen')}</td><td>${money(c.raised)}</td><td>${Math.round(100*c.indiv/c.raised)}%</td><td>${money(c.self)}</td><td>${money(c.cash)}</td></tr>`).join('');
+const T=D.totals,cycs=[...new Set(T.rows.map(r=>r.cycle))].sort((a,b)=>b-a);
+$('mn-cyc').innerHTML=cycs.map(y=>`<option value="${y}">${y-1}-${String(y).slice(2)}</option>`).join('');
+const sum=(f)=>T.rows.filter(f).reduce((a,r)=>({raised:a.raised+r.raised,spent:a.spent+r.spent,n:a.n+r.n}),{raised:0,spent:0,n:0});
+function tots(){const y=+$('mn-cyc').value,A=sum(r=>r.cycle===y),Dm=sum(r=>r.cycle===y&&r.party==='D'),Rp=sum(r=>r.cycle===y&&r.party==='R'),off=(o)=>sum(r=>r.cycle===y&&r.office===o);
+ $('mn-totasof').textContent=`All federal candidates' campaign committees · `+(y===2026?`running total, latest report through ${T.asof[y]}; grows as campaigns file`:`full ${y-1}-${String(y).slice(2)} cycle`);
+ $('mn-tiles').innerHTML=[[money(A.raised),'Raised'],[money(A.spent),'Spent'],[`<span class="D">${money(Dm.raised)}</span>`,'Raised by Democrats'],[`<span class="R">${money(Rp.raised)}</span>`,'Raised by Republicans'],[money(off('S').raised),'Senate candidates'],[money(off('H').raised),'House candidates'],[money(off('P').raised),'Presidential candidates']].map(([v,k])=>`<div class="tile"><div class="v">${v}</div><div class="k">${k}</div></div>`).join('');
+ const svg=$('mn-cycles'),W=900,H=170,l=40,b=24,mx=Math.max(...cycs.map(c=>sum(r=>r.cycle===c).raised)),bw=(W-l)/cycs.length,asc=cycs.slice().reverse();let h='';
+ for(const v of [0,2e9,4e9,6e9,8e9])if(v<=mx*1.05)h+=`<line x1="${l}" x2="${W}" y1="${H-b-(H-b-10)*v/mx}" y2="${H-b-(H-b-10)*v/mx}" stroke="var(--grid)"/><text class="ax" x="${l-6}" y="${H-b-(H-b-10)*v/mx+4}" text-anchor="end">${v?'$'+v/1e9+'B':'0'}</text>`;
+ asc.forEach((c,i)=>{const x=l+i*bw+bw*.18,w=bw*.64;let y0=H-b;for(const [p,col] of [['D','var(--d)'],['R','var(--r)'],['O','var(--i)']]){const v=sum(r=>r.cycle===c&&r.party===p).raised,hh=(H-b-10)*v/mx;y0-=hh;h+=`<rect x="${x}" y="${y0}" width="${w}" height="${hh}" fill="${col}" opacity="${c===y?1:.45}"><title>${c}: ${p} ${money(v)}</title></rect>`;}
+  h+=`<text x="${x+w/2}" y="${H-6}" text-anchor="middle" font-weight="${c===y?600:400}">${c}</text>`;});
+ svg.innerHTML=h;
+ $('mn-totn').textContent='Raised by each cycle, stacked by party (blue Democrats, red Republicans, purple others). Presidential years run higher; 2020 was the record. Candidate committees only: money that passes between a candidate\'s committees can be counted twice, a few filings with impossible totals are left out, and 2024 is missing Trump\'s and DeSantis\'s campaign totals (an FEC summary-file gap).';}
+$('mn-cyc').onchange=tots;tots();
+const FL=D.filings;
+function drawWR(){const el=$('mn-wr');if(!FL){el.innerHTML='<div class="empty"><b>Filings not loaded.</b> This lists everyone registered for the 2027-28 races with the date they first filed, money raised and cash on hand, plus a feed of the newest filings. Hundreds of people register for President every cycle, most raising nothing, so the serious-candidate filter is on by default. Announcing isn\'t filing: someone can declare weeks before their paperwork shows up.</div>';return;}
+ const v=$('mn-wrsel').value,ser=$('mn-wrser').checked,P={DEM:'D',REP:'R'};
+ if(v==='new'){el.innerHTML='<div class="tblwrap"><table><tr><th>Filed</th><th>Candidate</th><th>Office</th><th>Party</th></tr>'+FL.recent.slice(0,80).map(r=>`<tr><td>${r.date}</td><td style="text-align:left">${r.name||''}${r.amendment?' <span class="note">(amended)</span>':''}</td><td style="text-align:left">${r.office==='P'?'President':r.office==='S'?r.state+' Senate':r.state+'-'+(r.district||'')}</td><td style="text-align:left">${r.party||''}</td></tr>`).join('')+'</table></div>';return;}
+ const rows=FL.fields.filter(r=>r.office===v&&r.year===2028&&(!ser||r.receipts>=1e5));
+ el.innerHTML=rows.length?'<div class="tblwrap"><table><tr><th>Candidate</th><th>Race</th><th>Party</th><th>First filed</th><th>Raised</th><th>Cash on hand</th></tr>'+rows.slice(0,150).map(r=>`<tr><td class="${P[r.party]||'I'}">${r.name}${r.incumbent?' <span class="inc">(I)</span>':''}</td><td style="text-align:left">${v==='P'?'President':v==='S'?r.state:r.state+'-'+r.district}</td><td style="text-align:left">${r.party||''}</td><td>${(r.first_filed||'').slice(0,10)}</td><td>${money(r.receipts)}</td><td>${money(r.cash)}</td></tr>`).join('')+'</table></div>':'<p class="note">Nobody has filed yet for this, with the current filter.</p>';
+ $('mn-wrn').textContent=`Candidates who have filed with the FEC (a Statement of Candidacy is due within 15 days of raising or spending $5,000), checked daily · updated ${FL.updated.slice(0,10)}.`;}
+$('mn-wrsel').onchange=drawWR;$('mn-wrser').onchange=drawWR;drawWR();
+$('mn-race').onchange=show;show();
+
+};
+dash.draw('mn-root', (el) => {
+  const g = dash.data('money'), m = dash.data('map_states');
+  if (bcFail(el, g.status) || g.status !== 'ok' || m.status !== 'ok' || el.dataset.ready) return;
+  el.dataset.ready = '1'; mnInit(g.data, m.data);
 });
 </script>
 
