@@ -589,9 +589,9 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
 <p class="note" id="mn-dnper" style="display:none"><b>Whole cycle:</b> donor lists and the map below aren't split by period.</p><div id="mn-dn"></div></div>
 <div class="two">
 <div class="card geo"><h2>Where the money comes from</h2><p class="note" style="margin-top:0" id="mn-geon">Itemized donations (gifts over $200) by where the donor lives.</p>
-<div id="mn-split"></div>
+<div id="mn-split"></div><div class="ctl" style="margin:10px 0 4px"><label>Map<select id="mn-geoc" style="min-width:14rem"></select></label></div>
 <svg id="mn-geo" viewBox="-70 0 1045 610" width="100%" role="img" aria-label="Donations by donor state"></svg>
-<div class="legend" id="mn-geol"></div>
+<p class="note" id="mn-geol" style="margin-top:6px"></p>
 <div class="msg" id="mn-geomsg"><div><b>No itemized donations pulled for this race yet.</b> The map shades every state by the dollars its donors gave the selected candidate, with the home state outlined, and the bar above splits the money into in-district (House), rest of the state and out of state.</div></div></div>
 <div class="card"><h2>Money and the result, every Senate race since 2008</h2><p class="note" style="margin-top:0">Democrat's share of the two main candidates' money against the Democratic margin. Grey: 2008-2024; colored: 2026 (unofficial results).</p>
 <svg id="mn-sc" viewBox="0 0 520 340" width="100%" role="img" aria-label="Money share against margin"></svg>
@@ -1553,9 +1553,26 @@ function drawGeo(r){const F=fin(r),have=F.filter(c=>G[c.k]);$('mn-geomsg').style
  const col=(c)=>c.party==='DEMOCRAT'?'var(--d)':c.party==='REPUBLICAN'?'var(--r)':'var(--i)';
  $('mn-split').innerHTML=have.map(c=>{const g=G[c.k],t=g.total_itemized||1,ind=g.in_district||0,st=g.in_state-ind,out=g.out_of_state;
   return `<div style="font-size:12.5px;margin-top:6px"><b class="${pc(c.party)}">${nm(c)}</b> · ${money(t)} itemized</div><div class="split">${r.office==='H'?`<i style="width:${100*ind/t}%;background:var(--accent)" title="In district ${money(ind)}"></i>`:''}<i style="width:${100*st/t}%;background:#b9a37a" title="Rest of ${r.state} ${money(st)}"></i><i style="width:${100*out/t}%;background:#a8a59c" title="Out of state ${money(out)}"></i></div><div class="legend">${r.office==='H'?`<span><i class="sw" style="background:var(--accent)"></i>In district ${Math.round(100*ind/t)}%</span>`:''}<span><i class="sw" style="background:#b9a37a"></i>${r.office==='H'?'Rest of ':''}${r.state} ${Math.round(100*st/t)}%</span><span><i class="sw" style="background:#a8a59c"></i>Out of state ${Math.round(100*out/t)}%</span></div>`;}).join('');
- const c=have[0],g=c?G[c.k]:null,mx=g?Math.max(...Object.entries(g.by_state).filter(([s])=>s!==r.state).map(([,v])=>v),1):1;
- $('mn-geo').querySelectorAll('path').forEach(p=>{const v=g?g.by_state[p.dataset.s]:null;p.style.fill=!g||!v?'':`color-mix(in srgb,${col(c)} ${Math.round(15+85*Math.min(1,Math.sqrt(v/mx)))}%,var(--empty))`;p.style.stroke=g&&p.dataset.s===r.state?'var(--fg)':'';p.style.strokeWidth=g&&p.dataset.s===r.state?'2.5':'';});
- $('mn-geol').textContent=g?`Map: ${c.name}'s donors by state (darker = more money; home state outlined).${have.length>1?' The other finalist is in the bars above.':''}`:'';}
+ // map picker: each finalist, the head-to-head comparison, then anyone from the primary field with donor data
+ const field=r.cands.filter(c=>c.stage==='primary'&&G[c.k]&&G[c.k].total_itemized>0),two=have.length===2;
+ const opts=[...(two?[['cmp','Compare the finalists: who raised more in each state']]:[]),...have.map(c=>[c.k,c.name+' · '+money(G[c.k].total_itemized||0)+' itemized']),...field.map(c=>[c.k,c.name+' (primary) · '+money(G[c.k].total_itemized||0)])];
+ const sel=$('mn-geoc'),prev=sel.dataset.race===r.id?sel.value:null;sel.dataset.race=r.id;
+ sel.innerHTML=opts.map(([v,t])=>`<option value="${v}">${t}</option>`).join('');sel.disabled=!opts.length;
+ if(prev&&opts.some(o=>o[0]===prev))sel.value=prev;else if(opts.length)sel.value=two?'cmp':opts[0][0];
+ const states=(c)=>Object.entries(G[c.k].by_state||{}).filter(([s])=>s!==r.state);
+ const paint=(f)=>$('mn-geo').querySelectorAll('path').forEach(p=>{const st=p.dataset.s,o=f(st)||{};p.style.fill=o.fill||'';p.style.stroke=st===r.state&&opts.length?'var(--fg)':'';p.style.strokeWidth=st===r.state&&opts.length?'2.5':'';p.dataset.t=o.t||'';});
+ const v=sel.value;
+ if(!opts.length){paint(()=>null);$('mn-geol').textContent='';return;}
+ if(v==='cmp'){const [a,b]=have,ga=G[a.k].by_state||{},gb=G[b.k].by_state||{},mx=Math.max(1,...Object.keys({...ga,...gb}).filter(s=>s!==r.state).map(s=>(ga[s]||0)+(gb[s]||0)));
+  paint(st=>{const x=ga[st]||0,y=gb[st]||0;if(!x&&!y)return {t:`${st}|no itemized donations to either`};const w=x>=y?a:b,sh=Math.max(x,y)/(x+y);
+   return {fill:`color-mix(in srgb,${col(w)} ${Math.round(20+80*Math.min(1,(sh-.5)*2*.6+.4*Math.sqrt((x+y)/mx)))}%,var(--empty))`,t:`${st}|${a.name} ${money(x)} · ${b.name} ${money(y)}`};});
+  $('mn-geol').innerHTML=`Each state in the color of the finalist its donors gave more (<b class="${pc(a.party)}">${a.name}</b> or <b class="${pc(b.party)}">${b.name}</b>); darker = more lopsided and more money. Home state outlined. Hover a state for both amounts.`;return;}
+ const c=r.cands.find(x=>x.k===v),g=G[c.k],mx=Math.max(1,...states(c).map(([,x])=>x)),tot=g.total_itemized||1;
+ paint(st=>{const x=(g.by_state||{})[st];return x?{fill:`color-mix(in srgb,${col(c)} ${Math.round(15+85*Math.min(1,Math.sqrt(x/mx)))}%,var(--empty))`,t:`${st}|${money(x)} to ${c.name} (${(100*x/tot).toFixed(1)}% of itemized)`}:{t:`${st}|no itemized donations to ${c.name}`};});
+ const top=states(c).sort((p,q)=>q[1]-p[1]).slice(0,3).map(([s,x])=>`${s} ${money(x)}`).join(', ');
+ $('mn-geol').innerHTML=`<b class="${pc(c.party)}">${c.name}</b>'s itemized donors by state (darker = more money; home state outlined, ${r.state} ${money((g.by_state||{})[r.state]||0)}). Biggest outside ${r.state}: ${top||'none'}.`;}
+$('mn-geo').onmousemove=e=>{const t=e.target.dataset&&e.target.dataset.t;if(!t){tip.style.display='none';return}const [a,b]=t.split('|');tip.innerHTML=`<b>${a}</b><br>${b}`;tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';};$('mn-geo').onmouseleave=()=>tip.style.display='none';
+$('mn-geoc').onchange=()=>drawGeo(races.find(x=>x.id===$('mn-race').value)||races[0]);
 function drawIE(r){const F=fin(r),have=F.filter(c=>IE[c.k]),per=$('mn-per').value;
  if(have.length&&per!=='all'&&!have.some(c=>IE[c.k].stage_ready)){$('mn-ie').innerHTML='<div class="empty"><b>Not split by election yet.</b> The next FEC refresh tags every expenditure in this race as primary or general; switch to Whole cycle meanwhile.</div>';return;}
  if(!have.length){$('mn-ie').innerHTML='<div class="empty"><b>No outside spending pulled for this race yet.</b> Each finalist gets money spent for and against them split into super PACs, parties, other PACs and dark money groups, pre-election "issue" ads naming them, the biggest spenders, and what it bought (TV, digital, mail); In the last weeks before an election these reports come in within 24-48 hours, so the panel stays close to current.</div>';return;}
