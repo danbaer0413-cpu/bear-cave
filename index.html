@@ -1437,8 +1437,8 @@ $('es-start').innerHTML=startKeys.map(k=>`<option value="${k}">${S.starts[k].lab
 const yrs=Object.keys(S.targets).sort().reverse();
 let st={};
 function setYears(){const off=S.starts[$('es-start').value].office;
- $('es-ty').innerHTML=yrs.map(y=>`<option value="${y}">${y} ${S.targets[y].office==='H'?'midterm':'presidential'} electorate</option>`).join('');
- $('es-vy').innerHTML=yrs.filter(y=>S.targets[y].office===off).map(y=>`<option value="${y}">${y} ${off==='H'?'House':'presidential'} vote</option>`).join('');}
+ $('es-ty').innerHTML=yrs.map(y=>`<option value="${y}">${S.targets[y].label?S.targets[y].label+' electorate':y+' '+(S.targets[y].office==='H'?'midterm':'presidential')+' electorate'}</option>`).join('');
+ $('es-vy').innerHTML=yrs.filter(y=>S.targets[y].office===off).map(y=>`<option value="${y}">${S.targets[y].label?S.targets[y].label+' vote':y+' '+(off==='H'?'House':'presidential')+' vote'}</option>`).join('');}
 // ---------- engine ----------
 function pool(){return S.pools[S.starts[st.start].pool];}
 function rake(P,shares){ // national weights: state-normalized cell weight x the state's actual total; IPF on each dimension's shares
