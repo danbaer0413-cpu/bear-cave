@@ -41,7 +41,7 @@ print("house", len(h), h.groupby(["party", "status"]).size().to_dict(), "flips v
 # Senate: holdovers from config, 2026 races from contests + senate calls
 cfg = json.load(open(f"{repo}/config/senate_seats.json"))
 s26 = c[(c.year == "2026") & (c.office == "U.S. Senate")].copy()
-uncalled = {"MS", "AK"}
+uncalled = {"AK"}   # MS called for Colom (D) Nov 11
 srows = [dict(key=f"hold-D-{i}", state_po="", seat="not up in 2026", party="DEMOCRAT", status="holdover", candidate="", margin=None, pct_in=None) for i in range(cfg["holdover_D"])]
 srows += [dict(key=f"hold-R-{i}", state_po="", seat="not up in 2026", party="REPUBLICAN", status="holdover", candidate="", margin=None, pct_in=None) for i in range(cfg["holdover_R"])]
 for _, r in s26.iterrows():
