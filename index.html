@@ -500,6 +500,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
 <label for="es-start">Start from</label><select id="es-start"></select>
 <label for="es-ty">Who votes, like</label><select id="es-ty"></select>
 <label for="es-vy">How groups vote, like</label><select id="es-vy"></select>
+<span id="es-pxw" style="display:none;grid-column:1/-1"><label for="es-px">Presidential-year turnout <output id="es-pxo">100%</output></label><input type="range" id="es-px" min="0" max="120" step="5" value="100" style="width:100%"><label for="es-pxl">Those extra voters lean, beyond the CES pattern <output id="es-pxlo">even</output></label><input type="range" id="es-pxl" min="-30" max="30" step="1" value="0" style="width:100%"><span class="note" style="display:block;margin:2px 0 0">A midterm electorate on a presidential map. 0% = only the people who voted in the midterm; 100% = a normal presidential year, adding the voters who skip midterms. Those extra voters change each group's size and vote by what the CES shows for 2018 and 2022 drop-off voters; the second slider shifts how they vote, e.g. toward Republicans as in 2024, when lower-turnout voters broke for Trump.</span></span>
 </div><button id="es-reset">Reset to the starting election</button>
 <div id="es-groups" style="margin-top:8px"></div>
 <p class="note">Under each group: its share of all adults, and the share of them who would have to vote to reach the share of voters on the slider (holding national turnout at that year's actual rate). Share: the group's share of all voters (the rest of that group's row rescales to keep 100%). Vote: the group's margin. Moving a vote slider frees the other categories' vote numbers, which then show what follows from your change.</p></div></div>
@@ -1438,7 +1439,7 @@ const yrs=Object.keys(S.targets).sort().reverse();
 let st={};
 function setYears(){const off=S.starts[$('es-start').value].office,sst=S.starts[$('es-start').value].state,okS=y=>!S.targets[y].state||S.targets[y].state===sst;
  $('es-ty').innerHTML=yrs.filter(okS).map(y=>`<option value="${y}">${S.targets[y].label?S.targets[y].label+' electorate':y+' '+(S.targets[y].office==='H'?'midterm':'presidential')+' electorate'}</option>`).join('');
- $('es-vy').innerHTML=yrs.filter(y=>S.targets[y].office===off&&okS(y)).map(y=>`<option value="${y}">${S.targets[y].label?S.targets[y].label+' vote':y+' '+(off==='H'?'House':'presidential')+' vote'}</option>`).join('');}
+ $('es-vy').innerHTML=yrs.filter(y=>(S.targets[y].office===off||(off==='P'&&S.targets[y].office==='H'&&!S.targets[y].state))&&okS(y)).map(y=>`<option value="${y}">${S.targets[y].label?S.targets[y].label+' vote':y+' '+(off==='H'?'House':'presidential')+' vote'}</option>`).join('');}
 // ---------- engine ----------
 function pool(){return S.pools[S.starts[st.start].pool];}
 function rake(P,shares){ // national weights: state-normalized cell weight x the state's actual total; IPF on each dimension's shares
@@ -1460,8 +1461,9 @@ function evaluate(shares,votes){const P=pool(),w=rake(P,shares),m=shiftFit(P,w,v
  const W=new Float64Array(ns),M=new Float64Array(ns);for(let j=0;j<w.length;j++){W[c.st[j]]+=w[j];M[c.st[j]]+=w[j]*m[j];}
  const grp={};DIMS.forEach(([k,,L])=>{const s=new Float64Array(L.length),mm=new Float64Array(L.length);for(let j=0;j<w.length;j++){s[c[k][j]]+=w[j];mm[c[k][j]]+=w[j]*m[j];}const tot=s.reduce((a,b)=>a+b);grp[k]={share:[...s].map(x=>100*x/tot),margin:[...mm].map((x,i)=>x/s[i])};});
  return {W,M,grp};}
-const targetMargins=(y)=>{const o={};DIMS.forEach(([k])=>{const t=S.targets[y][k];o[k]=t?t.vote.map(v=>v[0]-v[1]):null;});return o;};
-const targetShares=(y,fallback)=>{const o={};DIMS.forEach(([k])=>{const t=S.targets[y][k];o[k]=t?t.share.slice():(fallback?fallback[k]:null);});return o;};
+const TG=(y)=>{const T=S.targets[y],sd=S.starts[st.start];if(!T||T.office!=='H'||!sd||sd.office!=='P'||!S.dropoff)return T;const x=(st.px==null?100:st.px)/100,o={...T};DIMS.forEach(([k])=>{const t=T[k],F=S.dropoff.f[k],L=S.dropoff.lean[k];if(!t||!F)return;const a=F.map(f=>x*f/(1-f)),sh=t.share.map((s,i)=>s*(1+a[i])),z=sh.reduce((p,q)=>p+q,0);o[k]={share:sh.map(s=>100*s/z),vote:t.vote.map((v,i)=>{const d=(L[i]+(st.pxl||0))*a[i]/(1+a[i]);return [v[0]+d/2,v[1]-d/2,v[2]];})};});return o;};
+const targetMargins=(y)=>{const o={};DIMS.forEach(([k])=>{const t=TG(y)[k];o[k]=t?t.vote.map(v=>v[0]-v[1]):null;});return o;};
+const targetShares=(y,fallback)=>{const o={};DIMS.forEach(([k])=>{const t=TG(y)[k];o[k]=t?t.share.slice():(fallback?fallback[k]:null);});return o;};
 function preset(){ // sliders to the chosen years' real values
  st.shares=targetShares(st.ty,null);st.votes=targetMargins(st.vy);st.mode={};st.smode={};DIMS.forEach(([k])=>{st.mode[k]=st.votes[k]?'preset':'free';st.smode[k]=st.shares[k]?'preset':'free';});}
 function baseline(){const y=S.starts[st.start].tkey||String(S.starts[st.start].year);const sh=targetShares(y,null),v=targetMargins(y);const b0=evaluate(sh,v);DIMS.forEach(([k])=>{if(!sh[k])sh[k]=b0.grp[k].share.slice();});st.base=evaluate(sh,v);}
@@ -1474,7 +1476,7 @@ function buildSliders(){g.innerHTML=DIMS.map(([k,name,L],di)=>`<details ${di<2||
   run(el);}));}
 function syncSliders(skip){const grp=st.cur.grp;g.querySelectorAll('input').forEach(el=>{if(el===skip)return;const k=el.dataset.k,i=+el.dataset.i;const v=el.dataset.f==='s'?grp[k].share[i]:grp[k].margin[i];el.value=v;});
  g.querySelectorAll('input').forEach(el=>{const k=el.dataset.k,i=+el.dataset.i,o=el.nextElementSibling;if(el.dataset.f==='s')o.textContent=grp[k].share[i].toFixed(1)+'%';else{const m=grp[k].margin[i];o.textContent=isFinite(m)?fm0(m):'—';o.parentElement.className='rng '+(m>0.5?'D':m<-0.5?'R':'');}});
- const py=S.pop[st.ty]?st.ty:(S.targets[st.ty].office==='H'?'2018':'2016'),PP=S.pop[py],T=S.turnout_all[st.ty]||PP.turnout;
+ const py=S.pop[st.ty]?st.ty:NP(),PP=S.pop[py],T=TT()||PP.turnout;
  const SO=S.starts[st.start].office==='S';DIMS.forEach(([k,,L])=>L.forEach((l,i)=>{if(SO){$('es-pop-'+k+'-'+i).textContent='';$('es-imp-'+k+'-'+i).textContent='';return;}const pp=PP[k].pop[i],rate=st.cur.grp[k].share[i]*T/pp,mx=Math.min(100,100*pp/T);$('es-pop-'+k+'-'+i).textContent=pp.toFixed(1)+'% of adults';const im=$('es-imp-'+k+'-'+i);im.textContent=rate>100?'needs '+rate.toFixed(0)+'% to vote: not possible (max '+mx.toFixed(0)+'%)':rate.toFixed(0)+'% of them vote';im.className='imp'+(rate>100?' bad':'');}));
  DIMS.forEach(([k])=>{const t=$('es-src-'+k),bits=[];
   if(st.smode[k]==='user')bits.push('your turnout');else if(st.smode[k]==='free'&&S.targets[st.ty][k]&&Object.values(st.smode).includes('user'))bits.push('turnout follows your changes');
@@ -1483,7 +1485,10 @@ function syncSliders(skip){const grp=st.cur.grp;g.querySelectorAll('input').forE
 const col=m=>{const a=Math.min(1,Math.abs(m)/15),c=m>0?'var(--d)':'var(--r)';return Math.abs(m)<0.05?'var(--empty)':`color-mix(in srgb,${c} ${Math.round(18+82*a)}%,var(--empty))`;};
 const svg=$('es-map');svg.innerHTML=MAP.map(p=>`<path data-s="${p.s}" d="${p.d}"/>`).join('');const tip=$('es-tip');let last={};
 svg.onmousemove=e=>{const s=e.target.dataset&&e.target.dataset.s,x=s&&last[s];if(!x){tip.style.display='none';return}const H=S.starts[st.start].office==='H';tip.innerHTML=`<b>${s}</b> · ${x.ev} ${H?'seats':'EV'}<br>Simulated ${fm(x.m)}<br>Actual ${S.starts[st.start].year}: ${fm(x.m0)}${H?'<br>Simulated seats: '+x.dS+' D, '+x.rS+' R':''}`;tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';};svg.onmouseleave=()=>tip.style.display='none';
-function run(skip){const sd=S.starts[st.start],RS=sd.res,P=pool(),H=sd.office==='H';st.cur=evaluate(st.shares,st.votes);const b=st.base,c=st.cur;
+function NP(){const y=S.targets[st.ty].year||+st.ty;return Object.keys(S.pop).reduce((p,q)=>Math.abs(q-y)<Math.abs(p-y)?q:p);}
+function TT(){const ty=S.targets[st.ty],base=S.turnout_all[st.ty]||S.turnout_all[ty&&ty.office==='H'?'2022':'2024'];if(ty&&ty.office==='H'&&S.starts[st.start].office==='P'){const x=(st.px==null?100:st.px)/100;return +(base+(S.turnout_all['2024']-base)*x).toFixed(1);}return base;}
+function pxVis(){const on=S.starts[st.start].office==='P'&&[st.ty,st.vy].some(y=>S.targets[y]&&S.targets[y].office==='H');$('es-pxw').style.display=on?'':'none';}
+function run(skip){pxVis();const sd=S.starts[st.start],RS=sd.res,P=pool(),H=sd.office==='H';st.cur=evaluate(st.shares,st.votes);const b=st.base,c=st.cur;
  let n0=0,n1=0,t0=0,t1=0;S.states.forEach((s,i)=>{const T=RS[s].t;if(!T||!b.W[i])return;n0+=b.M[i]/b.W[i]*T;n1+=c.M[i]/c.W[i]*T*c.W[i]/b.W[i];t0+=T;t1+=T*c.W[i]/b.W[i];});
  const dNat=n1/t1-n0/t0,tNat=t1/t0,out=[];let evD=0,evR=0,pv=0,tot=0;
  S.states.forEach((s,i)=>{const r=RS[s];if(!r.t){return;}const lam=P.n[i]/(P.n[i]+300),dl=b.W[i]?lam*(c.M[i]/c.W[i]-b.M[i]/b.W[i])+(1-lam)*dNat:dNat,tr=b.W[i]?(lam*(c.W[i]/b.W[i])+(1-lam)*tNat)/tNat:1,m=r.m+dl,t=r.t*tr;
@@ -1506,9 +1511,10 @@ function run(skip){const sd=S.starts[st.start],RS=sd.res,P=pool(),H=sd.office===
  svg.querySelectorAll('path').forEach(p=>{const x=last[p.dataset.s];p.setAttribute('fill',x&&RS[p.dataset.s].t?col(x.m):'var(--empty)')});
  const mv=out.slice().sort((a,b)=>Math.abs(b.m-b.m0)-Math.abs(a.m-a.m0)).slice(0,8);
  $('es-moves').innerHTML=`<tr><th>State</th><th class="n">Actual</th><th class="n">Simulated</th><th class="n">${H?'Seats':'EV'}</th></tr>`+mv.map(x=>`<tr><td>${x.st}${!H&&Math.sign(x.m)!==Math.sign(x.m0)?' <b class="'+(x.m>0?'D':'R')+'">flips</b>':''}</td><td class="n">${fm(x.m0)}</td><td class="n ${x.m>0?'D':'R'}">${fm(x.m)}</td><td class="n">${x.ev}</td></tr>`).join('');
- const sy=String(sd.year);$('es-srcs').textContent=`Starting result: ${sd.office==='S'?'':'certified '}${sd.label}. Who votes: ${st.ty} (${S.targets[st.ty].src}). How groups vote: ${st.vy} (${S.targets[st.vy].src}). Survey respondents: CES ${sd.pool} validated voters${sd.office==='S'?' in '+sd.state+'.':'.'+` Population: ${S.pop[st.ty]?st.ty:(S.targets[st.ty].office==='H'?'2018':'2016')+' (nearest year with survey data)'}; ${S.popnote} With national turnout at ${S.turnout_all[st.ty]}% of eligible voters in ${st.ty}, a group can make up at most its share of adults divided by that rate.`}`;
+ const sy=String(sd.year);$('es-srcs').textContent=`Starting result: ${sd.office==='S'?'':'certified '}${sd.label}. Who votes: ${st.ty} (${S.targets[st.ty].src}). How groups vote: ${st.vy} (${S.targets[st.vy].src}). Survey respondents: CES ${sd.pool} validated voters${sd.office==='S'?' in '+sd.state+'.':'.'+` Population: ${S.pop[st.ty]?st.ty:NP()+' (nearest year with survey data)'}; ${S.popnote} With national turnout at ${TT()}% of eligible voters${S.turnout_all[st.ty]?' in '+st.ty:' (2026 not final yet: 2022\'s rate'+(S.starts[st.start].office==='P'?', moved toward 2024\'s by the presidential-turnout slider':'')+')'}, a group can make up at most its share of adults divided by that rate.`}`;
  syncSliders(skip);}
 function onStart(){st.start=$('es-start').value;setYears();const y=S.starts[st.start].tkey||String(S.starts[st.start].year);$('es-ty').value=y;$('es-vy').value=y;st.ty=y;st.vy=y;baseline();preset();run();}
+$('es-px').oninput=()=>{st.px=+$('es-px').value;$('es-pxo').textContent=st.px+'%';preset();run();};$('es-pxl').oninput=()=>{st.pxl=+$('es-pxl').value;$('es-pxlo').textContent=st.pxl===0?'even':(st.pxl>0?'D+':'R+')+Math.abs(st.pxl);preset();run();};
 $('es-start').onchange=onStart;$('es-ty').onchange=()=>{st.ty=$('es-ty').value;const keepV=st.votes,keepM=st.mode;preset();st.votes=keepV;st.mode=keepM;run();};
 $('es-vy').onchange=()=>{st.vy=$('es-vy').value;const keepS=st.shares;preset();st.shares=keepS;run();};
 $('es-reset').onclick=onStart;buildSliders();$('es-start').value='P2024';onStart();
