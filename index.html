@@ -154,6 +154,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     <button class="bc-tab" role="tab" data-tab="forecast" id="tab-forecast">2026 forecast check</button>
     <button class="bc-tab" role="tab" data-tab="gas" id="tab-gas">Gas prices</button>
     <button class="bc-tab" role="tab" data-tab="sim" id="tab-sim">Electorate simulator</button>
+    <button class="bc-tab" role="tab" data-tab="fcast" id="tab-fcast">Forecaster</button>
     <button class="bc-tab" role="tab" data-tab="money" id="tab-money">Campaign money</button>
   </nav>
 
@@ -607,6 +608,101 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     </div>
   </section>
 
+  <!-- FORECASTER -->
+  <section class="bc-page" id="fcast" data-page="fcast" hidden>
+    <style>
+#fcast{--d:var(--bc-dem);--r:var(--bc-rep);--empty:var(--bc-mid);--line:var(--color-border-line);--panel:var(--color-panel);--muted:var(--color-fg-muted);--fg:var(--color-fg);--accent:#7a4b2a}
+#fcast #fc-tip{background:var(--cds-surface-popover);border-color:var(--cds-border);box-shadow:var(--cds-shadow-popover)}
+#fcast .fc-sub{max-width:62rem}
+#fcast,#fcast .layout>*,#fcast .kpis>*{min-width:0}
+#fcast h2{font-size:15px;margin:0 0 6px}
+#fcast .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+#fcast .layout{display:grid;grid-template-columns:430px minmax(0,1fr);gap:14px;align-items:start}
+@media(max-width:900px){#fcast .layout{grid-template-columns:1fr}}
+#fcast .ctl{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;margin-bottom:8px}
+#fcast .ctl label{color:var(--muted);font-size:12.5px}
+#fcast select,#fcast button{font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+#fcast button{cursor:pointer}
+#fcast .g{display:grid;grid-template-columns:88px minmax(0,1fr) minmax(0,1fr);gap:4px 10px;align-items:center;font-size:13px}
+#fcast .g .h{color:var(--muted);font-size:11.5px}
+#fcast .rng{display:grid;grid-template-columns:minmax(0,1fr) 50px;align-items:center;gap:4px}
+#fcast .rng input{width:100%;accent-color:var(--accent);margin:0}
+#fcast .rng output{text-align:right;font-variant-numeric:tabular-nums;font-size:12.5px}
+#fcast .rng.D output{color:var(--d)}
+#fcast .rng.R output{color:var(--r)}
+#fcast details{border-top:1px solid var(--line);padding:8px 0}
+#fcast summary{cursor:pointer;font-weight:600;margin-bottom:6px}
+#fcast summary .src{font-weight:400;color:var(--muted);font-size:11.5px;margin-left:6px}
+#fcast .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:600px){#fcast .kpis{grid-template-columns:1fr}}
+#fcast .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+#fcast .kpi .l{color:var(--muted);font-size:12px}
+#fcast .kpi .v{font-size:24px;font-weight:600;font-variant-numeric:tabular-nums}
+#fcast .kpi .s{font-size:12px;color:var(--muted)}
+#fcast .bar{height:14px;border-radius:7px;overflow:hidden;display:flex;background:var(--empty);margin:6px 0 2px;position:relative}
+#fcast .bar i{display:block;height:100%}
+#fcast .bar b{position:absolute;left:50%;top:-3px;bottom:-3px;border-left:2px solid var(--fg)}
+#fcast .D{color:var(--d)}
+#fcast .R{color:var(--r)}
+#fcast svg.map path{stroke:var(--panel);stroke-width:.8}
+#fcast .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){#fcast .two{grid-template-columns:1fr}}
+#fcast table{border-collapse:collapse;width:100%;font-size:13px}
+#fcast th,#fcast td{text-align:left;padding:5px 6px;border-bottom:1px solid var(--line)}
+#fcast th{color:var(--muted);font-weight:500}
+#fcast td.n{text-align:right;font-variant-numeric:tabular-nums}
+#fcast .note{color:var(--muted);font-size:12.5px;margin:6px 0 0}
+#fcast .legend{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+#fcast .legend span{width:22px;height:10px;display:inline-block}
+#fcast #fc-tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.15);display:none;z-index:5}
+#fcast .pop{display:block;font-size:11px;color:var(--muted);line-height:1.2}
+#fcast .imp{grid-column:1/3;font-size:11px;color:var(--muted);line-height:1.2;margin-top:-1px}
+#fcast .imp.bad{color:var(--r);font-weight:600}
+#fcast .sl{margin:10px 0 4px}
+#fcast .sl label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+#fcast .sl label output{color:var(--fg);font-weight:600;font-variant-numeric:tabular-nums}
+#fcast .sl input{width:100%;accent-color:var(--accent);margin:4px 0 0}
+#fcast .tk{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+#fcast .bt{margin:0 0 10px;table-layout:fixed}
+#fcast .bt th:first-child,#fcast .bt td:first-child{width:28%}
+#fcast .bt th:nth-child(2){width:26%}
+#fcast .bt th:nth-child(3){width:22%}
+#fcast .bt th:first-child{color:var(--fg);font-weight:600}
+#fcast .bt td,#fcast .bt th{padding:4px 5px;font-size:12.5px}
+#fcast .was{color:var(--muted)}
+#fcast .over{color:var(--r)}
+#fcast #reset{margin-top:10px}
+#fcast #explain{margin-top:10px;font-size:13px;color:var(--fg)}
+    </style>
+    <div data-draw="fc-root" data-source="electorate_sim map_states">
+
+<p class="bc-note fc-sub">Pick a race and a result to aim for. The Forecaster works backward from the real result to the electorate that would produce your target: each group's share of voters, how many of them turn out, and how they would have to vote. Drag the turnout slider to make the whole electorate bigger or smaller, and use the last slider to choose how much of the gain comes from turning out your own voters versus winning over the other side's.</p>
+<div class="layout"><div>
+<div class="card"><div class="ctl">
+<label for="fc-off">Race</label><select id="fc-off"><option value="P">President</option><option value="S">Senate (2026)</option><option value="G">Governor (2026)</option><option value="H">House (national vote)</option></select>
+<label for="fc-plc">Where</label><select id="fc-plc"></select>
+</div>
+<div class="sl"><label for="fc-tgt">Target result <output id="fc-tgto"></output></label><input type="range" id="fc-tgt" min="-30" max="30" step="0.5"><div class="tk"><span>R</span><span id="fc-tgtb"></span><span>D</span></div></div>
+<div class="sl"><label for="fc-trn">Total turnout <output id="fc-trno"></output></label><input type="range" id="fc-trn" min="50" max="160" step="1" value="100"><div class="tk" id="fc-trnk"></div></div>
+<div class="sl"><label for="fc-mix">How the gain happens <output id="fc-mixo"></output></label><input type="range" id="fc-mix" min="0" max="100" step="5" value="50"><div class="tk"><span>All turnout</span><span>All persuasion</span></div></div>
+<button id="fc-reset">Back to the actual result</button>
+<p class="note" id="fc-explain"></p>
+</div>
+<div class="card" id="fc-mapc"><svg class="map" id="fc-map" viewBox="-70 0 1045 610" width="100%" role="img" aria-label="Margin by state at the target"></svg>
+<div class="legend"><span style="background:var(--r)"></span>R+15 <span style="background:color-mix(in srgb,var(--r) 30%,var(--empty))"></span> <span style="background:var(--empty)"></span>even <span style="background:color-mix(in srgb,var(--d) 30%,var(--empty))"></span> <span style="background:var(--d)"></span>D+15 · hover a state</div></div>
+</div>
+<div>
+<div class="kpis" style="margin-bottom:14px"><div class="kpi"><div class="l" id="fc-k1l"></div><div class="v" id="fc-k1"></div><div class="bar" id="fc-k1b"></div><div class="s" id="fc-k1s"></div></div>
+<div class="kpi"><div class="l" id="fc-k2l"></div><div class="v" id="fc-k2"></div><div class="s" id="fc-k2s"></div></div>
+<div class="kpi"><div class="l" id="fc-k3l"></div><div class="v" id="fc-k3"></div><div class="s" id="fc-k3s"></div></div></div>
+<div class="card"><h2 id="fc-bth">Benchmarks</h2><p class="note" id="fc-bts" style="margin:0 0 8px"></p><div id="fc-bench"></div></div>
+<div class="card"><h2>How it works</h2><p class="note" style="margin-top:0" id="fc-srcs"></p>
+<p class="note">The starting point is the real result (2024 for President, 2026 for the rest), rebuilt from confirmed voters in the CES survey and reweighted to match that race's exit poll. Then three things move. <b>Total turnout</b> grows or shrinks every group by how much its turnout really swings between midterm and presidential years (CES 2022 vs 2024): young, Hispanic and less-engaged voters come and go most, while 65+ voters are steady. <b>Turnout</b> on the last slider means one party's voters show up at a higher rate than the other's, and that tilt follows how strongly each group leans. <b>Persuasion</b> means voters switch sides: every voter becomes equally more likely to back the target party, which moves swing groups and independents a lot and loyal partisans very little. The Forecaster solves for whatever mix you pick, so every row in the table is what that path would need. Turnout rates are shown nationally only (population figures by group are national); state races show ballots instead. House seats use 2022 district lines with a uniform swing in each state, so states that redrew for 2026 are approximate.</p></div>
+</div></div>
+    <div id="fc-tip"></div>
+    </div>
+  </section>
+
   <p class="bc-note">Sources: MIT Election Data and Science Lab (official returns), OpenElections, Virginia Department of Elections, New Jersey Division of Elections, Kentucky State Board of Elections, U.S. Census Bureau ACS, NBC News/AP (2026, unofficial). Odd-year House specials use Wikipedia's tables of certified results.</p>
 </div>
 
@@ -737,7 +833,7 @@ const DEF = { tfrom: '2000', tab: 'needles', nrace: 'GA-senate', myear: '2024', 
 const P = () => ({ ...DEF, ...Object.fromEntries(Object.entries(dash.params()).filter(([, v]) => v != null)) });
 document.querySelectorAll('.bc-tab').forEach((b) => b.addEventListener('click', () => { dash.setParams({ tab: b.dataset.tab }); dash.setLink(b.dataset.tab); }));
 const named = location.hash.slice(1);
-if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas', 'sim', 'money'].includes(named)) dash.setParams({ tab: named });
+if (['needles', 'senate', 'house', 'maps', 'results', 'trends', 'counties', 'forecast', 'gas', 'sim', 'money', 'fcast'].includes(named)) dash.setParams({ tab: named });
 dash.onData(() => {
   const tab = P().tab;
   document.querySelectorAll('.bc-page').forEach((s) => { s.hidden = s.dataset.page !== tab; });
@@ -1643,6 +1739,130 @@ dash.draw('mn-root', (el) => {
   const g = dash.data('money'), m = dash.data('map_states');
   if (bcFail(el, g.status) || g.status !== 'ok' || m.status !== 'ok' || el.dataset.ready) return;
   el.dataset.ready = '1'; mnInit(g.data, m.data);
+});
+</script>
+<script>
+// ---- Forecaster tab ----
+window.fcInit = (SIM, MAPS) => {
+const S=SIM, MAP=MAPS.map((s)=>({s:s.state_po,d:s.d}));
+const DIMS=[['ri','Race',['White','Black','Hispanic','Asian','Other']],['ai','Age',['18–29','30–44','45–64','65+']],['ei','Education',['No degree','College degree']],['si','Sex',['Women','Men']],['pi','Party ID',['Democrats','Republicans','Independents']]];
+const NAME={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
+const $=(id)=>document.getElementById(id), fm=(m)=>Math.abs(m)<0.05?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(1), fm0=(m)=>Math.abs(m)<0.5?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(0);
+const fv=(v)=>v>=1e6?(v/1e6).toFixed(v>=1e8?0:v>=1e7?1:2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(Math.round(v));
+const PRES=S.turnout_all['2024']/S.turnout_all['2022'];
+const EL={};DIMS.forEach(([k])=>{EL[k]=S.dropoff.f[k].map(f=>-Math.log(1-f)/Math.log(PRES));});
+// ---------- races ----------
+function races(off){
+ if(off==='P')return [{v:'US',label:'Nationwide (Electoral College)',start:'P2024',tk:'2024'}].concat(S.states.filter(s=>S.starts.P2024.res[s].t).map(s=>({v:s,label:NAME[s]||s,start:'P2024',tk:'2024',st:s})));
+ if(off==='H')return [{v:'US',label:'Nationwide',start:'H2022',tk:'2026'}];
+ return Object.keys(S.starts).filter(k=>k.startsWith('S2026-')&&k.endsWith('-'+off)).map(k=>{const sd=S.starts[k],p=(sd.label.match(/\((.*)\)/)||[,''])[1].replace(/, unofficial$/,'');return {v:sd.state,label:(NAME[sd.state]||sd.state)+(p?' · '+p:''),start:k,tk:sd.tkey,st:sd.state};}).sort((a,b)=>a.label.localeCompare(b.label));}
+// ---------- engine (same survey engine as the Electorate simulator) ----------
+function rake(sd,P,shares){const R=sd.res,c=P.cols,n=P.w.length,w=new Float64Array(n);for(let j=0;j<n;j++)w[j]=P.w[j]*R[S.states[c.st[j]]].t;
+ const f=DIMS.map(([k,,L])=>new Float64Array(L.length).fill(1));
+ for(let it=0;it<25;it++)DIMS.forEach(([k,,L],di)=>{const tg=shares[k];if(!tg)return;const tot=new Float64Array(L.length);let all=0;
+  for(let j=0;j<n;j++){let x=w[j];for(let e=0;e<5;e++)x*=f[e][c[DIMS[e][0]][j]];tot[c[k][j]]+=x;all+=x;}
+  for(let g=0;g<L.length;g++)if(tot[g]>0)f[di][g]*=(tg[g]/100*all)/tot[g];});
+ const out=new Float64Array(n);for(let j=0;j<n;j++){let x=w[j];for(let e=0;e<5;e++)x*=f[e][c[DIMS[e][0]][j]];out[j]=x;}return out;}
+function shiftFit(P,w,votes){const c=P.cols,n=P.w.length,del=DIMS.map(([,,L])=>new Float64Array(L.length)),base=new Float64Array(n);
+ for(let j=0;j<n;j++)base[j]=c.v[j]===0?100:c.v[j]===1?-100:0;
+ const act=DIMS.filter(([k])=>votes[k]);
+ for(let it=0;it<30&&act.length;it++)for(const [k,,L] of act){const di=DIMS.findIndex(d=>d[0]===k),num=new Float64Array(L.length),den=new Float64Array(L.length);
+  for(let j=0;j<n;j++){let m=base[j];for(let e=0;e<5;e++)m+=del[e][c[DIMS[e][0]][j]];m=m>100?100:m<-100?-100:m;num[c[k][j]]+=w[j]*m;den[c[k][j]]+=w[j];}
+  for(let g=0;g<L.length;g++)if(den[g]>0){const t=votes[k][g];if(t!=null)del[di][g]+=t-num[g]/den[g];}}
+ const m=new Float64Array(n);for(let j=0;j<n;j++){let x=base[j];for(let e=0;e<5;e++)x+=del[e][c[DIMS[e][0]][j]];m[j]=x>100?100:x<-100?-100:x;}return m;}
+let X=null;const st={};
+function setup(){const off=$('fc-off').value,RL=races(off),R=RL.find(r=>r.v===$('fc-plc').value)||RL[0];
+ const sd=S.starts[R.start],P=S.pools[sd.pool],T=S.targets[R.tk],c=P.cols,n=P.w.length,RS=sd.res;
+ const sh={},vo={};DIMS.forEach(([k])=>{sh[k]=T[k]?T[k].share:null;vo[k]=T[k]?T[k].vote.map(v=>v[0]-v[1]):null;});
+ const w=rake(sd,P,sh),m=shiftFit(P,w,vo),fi=R.st?S.states.indexOf(R.st):-1,foc=new Uint8Array(n);
+ let W0=0,M0=0;const gs=DIMS.map(([,,L])=>new Float64Array(L.length));
+ for(let j=0;j<n;j++){if(!(w[j]>0)||(fi>=0&&c.st[j]!==fi))continue;foc[j]=1;W0+=w[j];M0+=w[j]*m[j];DIMS.forEach(([k],d)=>gs[d][c[k][j]]+=w[j]);}
+ const b0=DIMS.map(([k],d)=>[...gs[d]].map(x=>x/W0));
+ const natT=S.states.reduce((a,s)=>a+RS[s].t,0),natM=S.states.reduce((a,s)=>a+RS[s].m*RS[s].t,0)/natT,fs=fi>=0?S.states[fi]:null;
+ const act=off==='H'?M0/W0:fs?RS[fs].m:natM,votes0=fs?RS[fs].t:natT,resp=fs?P.n[fi]:P.n.reduce((a,b)=>a+b,0);
+ X={off,R,sd,P,w,m,foc,fi,fs,W0,b0,cache:{},cal:act-M0/W0,act,votes0,natM,resp};
+ if(!fs){X.rate0=S.turnout_all[off==='P'?'2024':'2022'];X.PP=S.pop[off==='P'?'2024':'2022'];X.VEP=votes0/(X.rate0/100);}
+ X.base=comp(1,0,0);X.bg=groups(X.base,1);
+ const lim=fs?50:30;$('fc-tgt').min=-lim;$('fc-tgt').max=lim;$('fc-tgtb').textContent='actual '+fm(act);}
+function atTurnout(r){const key=r.toFixed(3);if(X.cache[key])return X.cache[key];const {w,foc}=X,c=X.P.cols,n=w.length,out=Float64Array.from(w);
+ if(Math.abs(r-1)>1e-9){const tg=DIMS.map(([k],d)=>{const a=X.b0[d].map((s0,g)=>s0*Math.pow(r,EL[k][g])),z=a.reduce((p,q)=>p+q,0);return a.map(x=>x/z);});
+  for(let it=0;it<20;it++)DIMS.forEach(([k,,L],d)=>{const t=new Float64Array(L.length);let all=0;for(let j=0;j<n;j++)if(foc[j]){t[c[k][j]]+=out[j];all+=out[j];}
+   const f=t.map((x,g)=>x>0?tg[d][g]*all/x:1);for(let j=0;j<n;j++)if(foc[j])out[j]*=f[c[k][j]];});}
+ return X.cache[key]=out;}
+const LG=x=>{const p=Math.min(.995,Math.max(.005,(x+100)/200));return Math.log(p/(1-p));};
+function comp(r,k,s){const {m,foc}=X,w=atTurnout(r),n=w.length,W=new Float64Array(n),mm=new Float64Array(n);let tot=0,M=0;
+ if(!X.lg){X.lg=new Float64Array(n);for(let j=0;j<n;j++)X.lg[j]=LG(m[j]);}
+ for(let j=0;j<n;j++)if(foc[j]){W[j]=w[j]*Math.exp(k*m[j]/100);tot+=W[j];}
+ const sc=r*X.W0/tot;for(let j=0;j<n;j++)if(foc[j]){W[j]*=sc;mm[j]=s?m[j]+200*(1/(1+Math.exp(-(X.lg[j]+s)))-1/(1+Math.exp(-X.lg[j]))):m[j];M+=W[j]*mm[j];}
+ return {W,mm,M:M/(r*X.W0)+X.cal};}
+function groups(o,r){const c=X.P.cols,out={};DIMS.forEach(([k,,L])=>{const s=new Float64Array(L.length),mm=new Float64Array(L.length);let t=0;
+  for(let j=0;j<o.W.length;j++)if(X.foc[j]){s[c[k][j]]+=o.W[j];mm[c[k][j]]+=o.W[j]*o.mm[j];t+=o.W[j];}
+  out[k]=L.map((_,g)=>{const share=100*s[g]/t,votes=share/100*X.votes0*r;return {share,margin:mm[g]/s[g]+X.cal,votes,rate:X.PP?100*votes/(X.PP[k].pop[g]/100*X.VEP):null,pop:X.PP?X.PP[k].pop[g]:null};});});return out;}
+const bis=(f,lo,hi)=>{let flo=f(lo);if(flo*f(hi)>0)return Math.abs(flo)<Math.abs(f(hi))?lo:hi;for(let i=0;i<44;i++){const mid=(lo+hi)/2,fm_=f(mid);if(fm_*flo>0){lo=mid;flo=fm_;}else hi=mid;}return (lo+hi)/2;};
+function solve(){const r=st.trn/100,mix=st.mix/100,Mr=comp(r,0,0).M,Mt=Mr+(1-mix)*(st.tgt-Mr);
+ const KMAX=4,k=mix>=1?0:bis(x=>comp(r,x,0).M-Mt,-KMAX,KMAX),Mk=comp(r,k,0).M,s=bis(x=>comp(r,k,x).M-st.tgt,-6,6),o=comp(r,k,s);
+ return {r,k,s,o,Mr,Mk,capped:Math.abs(k)>=KMAX-1e-6&&Math.abs(Mk-Mt)>0.2,miss:Math.abs(o.M-st.tgt)>0.2};}
+// ---------- states (Electorate College / House seats) ----------
+function stateSums(o){const c=X.P.cols,ns=S.states.length,W=new Float64Array(ns),M=new Float64Array(ns);for(let j=0;j<o.W.length;j++)if(X.foc[j]){W[c.st[j]]+=o.W[j];M[c.st[j]]+=o.W[j]*o.mm[j];}return {W,M};}
+function byState(sol){const b=stateSums(X.base),c=stateSums(sol.o),RS=X.sd.res,P=X.P,dNat=sol.o.M-X.act,shift=X.act-X.natM,out=[];
+ S.states.forEach((s,i)=>{const r=RS[s];if(!r.t)return;const lam=P.n[i]/(P.n[i]+300),dl=(b.W[i]&&c.W[i]?lam*(c.M[i]/c.W[i]-b.M[i]/b.W[i])+(1-lam)*dNat:dNat)+shift;out.push({st:s,m:r.m+dl,m0:r.m,ev:r.ev,dl});});return out;}
+const col=m=>{const a=Math.min(1,Math.abs(m)/15),c=m>0?'var(--d)':'var(--r)';return Math.abs(m)<0.05?'var(--empty)':`color-mix(in srgb,${c} ${Math.round(18+82*a)}%,var(--empty))`;};
+const svg=$('fc-map');svg.innerHTML=MAP.map(p=>`<path data-s="${p.s}" d="${p.d}"/>`).join('');const tip=$('fc-tip');let last={};
+svg.onmousemove=e=>{const s=e.target.dataset&&e.target.dataset.s,x=s&&last[s];if(!x){tip.style.display='none';return}const H=X.off==='H';tip.innerHTML=`<b>${NAME[s]||s}</b> · ${H?x.dS+' D, '+x.rS+' R seats':x.ev+' EV'}<br>At the target: ${fm(x.m)}<br>Actual ${X.sd.year}: ${fm(x.m0)}`;tip.style.display='block';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY+12)+'px';};svg.onmouseleave=()=>tip.style.display='none';
+// ---------- UI ----------
+const arrow=(a,b,f,cls)=>{const same=f(a)===f(b);return same?`<span class="${cls?cls(b):''}">${f(b)}</span>`:`<span class="was">${f(a)}</span> → <span class="${cls?cls(b):''}"><b>${f(b)}</b></span>`;};
+const mc=m=>m>0.5?'D':m<-0.5?'R':'';
+function run(){const sol=solve(),g=groups(sol.o,sol.r),b=X.bg,nat=!X.fs,H=X.off==='H',RS=X.sd.res;
+ $('fc-tgto').textContent=fm(st.tgt);$('fc-tgto').className=mc(st.tgt);
+ $('fc-trno').textContent=st.trn+'% of actual · '+fv(X.votes0*sol.r)+' votes'+(nat?' · '+(X.rate0*sol.r).toFixed(1)+'% of eligible':'');
+ const mid=X.off==='P';$('fc-trnk').innerHTML=`<span>Smaller</span><span>${mid?'midterm-year level ≈ '+Math.round(100/PRES)+'%':'presidential-year level ≈ '+Math.round(100*PRES)+'%'}</span><span>Bigger</span>`;
+ $('fc-mixo').textContent=st.mix===0?'all turnout':st.mix===100?'all persuasion':(100-st.mix)+'% turnout · '+st.mix+'% persuasion';
+ // KPIs
+ const who=X.off==='P'?'President':X.off==='H'?'House':X.off==='S'?'Senate':'Governor',place=X.fs?NAME[X.fs]:'Nationwide';
+ if(nat){const out=byState(sol);last={};out.forEach(x=>last[x.st]=x);$('fc-mapc').style.display='';
+  if(!H){let d=0,r=0;out.forEach(x=>{if(x.m>0)d+=x.ev;else r+=x.ev;});const ord=out.slice().sort((a,b2)=>(d>=270?1:-1)*(b2.m-a.m));let cum=0,tp=null;for(const x of ord){cum+=x.ev;if(cum>=270){tp=x;break}}
+   $('fc-k1l').textContent='Electoral votes at '+fm(st.tgt);$('fc-k1').innerHTML=`<span class="D">${d}</span> – <span class="R">${r}</span>`;$('fc-k1b').innerHTML=`<i style="width:${d/5.38}%;background:var(--d)"></i><i style="flex:1"></i><i style="width:${r/5.38}%;background:var(--r)"></i><b></b>`;
+   $('fc-k1s').textContent=(d>=270?'Democrat wins':r>=270?'Republican wins':'269–269 tie')+(tp?' · tipping point '+tp.st+' '+fm(tp.m):'')+' · actual 2024: 226–312';}
+  else{let d=0,r=0;const dl=Object.fromEntries(out.map(x=>[x.st,x.dl])),byS={};for(const [si,m,w] of X.sd.dists){const s=S.states[si];byS[s]=byS[s]||{d:0,r:0};const ok=(w===1&&m>0)||(w===0&&m<0);const win=Math.abs(m)>=99.9||!ok?(w===1?1:0):(m+(dl[s]||0)>0?1:0);if(win){d++;byS[s].d++}else{r++;byS[s].r++}}
+   out.forEach(x=>{x.dS=(byS[x.st]||{}).d||0;x.rS=(byS[x.st]||{}).r||0;});
+   $('fc-k1l').textContent='House seats at '+fm(st.tgt);$('fc-k1').innerHTML=`<span class="D">${d}</span> – <span class="R">${r}</span>`;$('fc-k1b').innerHTML=`<i style="width:${d/4.35}%;background:var(--d)"></i><i style="flex:1"></i><i style="width:${r/4.35}%;background:var(--r)"></i><b></b>`;
+   $('fc-k1s').textContent=(d>=218?'Democratic majority':'Republican majority')+' · on 2022 district lines, uniform swing within each state';}
+  svg.querySelectorAll('path').forEach(p=>{const x=last[p.dataset.s];p.setAttribute('fill',x?col(x.m):'var(--empty)')});}
+ else{$('fc-mapc').style.display='none';$('fc-k1l').textContent=place+' '+who;$('fc-k1').innerHTML=`<span class="${mc(st.tgt)}">${fm(st.tgt)}</span>`;$('fc-k1b').innerHTML='';$('fc-k1s').textContent=(st.tgt>0?'Democrat wins':st.tgt<0?'Republican wins':'Tie')+' · actual '+fm(X.act);}
+ $('fc-k2l').textContent='Votes cast';$('fc-k2').textContent=fv(X.votes0*sol.r);$('fc-k2s').textContent=nat?(X.rate0*sol.r).toFixed(1)+'% of eligible · actual '+X.rate0+'%':'actual '+fv(X.votes0);
+ const pt=x=>(x>=0?'D+':'R+')+Math.abs(x).toFixed(1);
+ $('fc-k3l').textContent='Where the change comes from';$('fc-k3').innerHTML=`<span class="${mc(st.tgt-X.act)}">${pt(st.tgt-X.act)}</span>`;
+ $('fc-k3s').innerHTML=`Bigger/smaller electorate ${pt(sol.Mr-X.act)} · turnout gap ${pt(sol.Mk-sol.Mr)} · persuasion ${pt(sol.o.M-sol.Mk)}`;
+ // benchmarks
+ const pc=x=>x.toFixed(1)+'%',p0=x=>x>=99.5?'100%+':x.toFixed(0)+'%';
+ $('fc-bth').textContent=`What ${fm(st.tgt)} takes · ${place} ${who}`;
+ $('fc-bts').textContent=`Each row: the actual ${X.sd.year===2024?'2024':'2026'} number, then what the target needs. ${nat?'Turnout is the share of the group’s eligible adults who vote.':'Votes are each group’s ballots cast.'}`;
+ let bad=[];
+ $('fc-bench').innerHTML=DIMS.map(([k,name,L])=>`<table class="bt"><tr><th>${name}</th><th class="n">Share of voters</th><th class="n">${nat?'Turnout':'Votes'}</th><th class="n">Margin</th></tr>`+L.map((l,i)=>{const a=b[k][i],z=g[k][i];
+   let tcell;if(nat){const over=z.rate>97;if(over)bad.push(l);tcell=`<span class="was">${p0(a.rate)}</span> → <b class="${over?'over':''}">${p0(z.rate)}</b>`;}else tcell=arrow(a.votes,z.votes,fv);
+   return `<tr><td>${l}${nat?`<span class="pop">${a.pop.toFixed(0)}% of adults</span>`:''}</td><td class="n">${arrow(a.share,z.share,pc)}</td><td class="n">${tcell}</td><td class="n">${arrow(a.margin,z.margin,fm0,mc)}</td></tr>`;}).join('')+'</table>').join('');
+ // plain-language summary
+ const pd=g.pi[0],pr=g.pi[1],bd=b.pi[0],br=b.pi[1];let tx=`${place} ${who} at ${fm(st.tgt)} (actual ${fm(X.act)})`;
+ tx+=nat?`: Democrats are ${pc(pd.share)} of voters (actual ${pc(bd.share)}) and turn out at ${p0(pd.rate)} of their eligible adults (actual ${p0(bd.rate)}); Republicans are ${pc(pr.share)} (actual ${pc(br.share)}) at ${p0(pr.rate)} (actual ${p0(br.rate)}).`
+   :`: Democrats are ${pc(pd.share)} of voters (actual ${pc(bd.share)}), about ${fv(pd.votes)} ballots (actual ${fv(bd.votes)}); Republicans ${pc(pr.share)} (actual ${pc(br.share)}), about ${fv(pr.votes)} (actual ${fv(br.votes)}).`;
+ const pp=sol.o.M-sol.Mk;if(Math.abs(pp)>=0.5)tx+=` On top of that, voters swing ${Math.abs(pp).toFixed(1)} points toward ${pp>0?'Democrats':'Republicans'} overall, most of it among independents and other swing voters (party loyalists barely move).`;
+ if(sol.capped)tx+=' Turnout alone runs out of room here, so persuasion covers the rest.';
+ if(sol.miss)tx+=' This target is out of reach even with every group voting one way.';
+ if(bad.length)tx+=` <b class="over">Not realistic:</b> ${bad.join(', ')} would need nearly everyone eligible to vote.`;
+ if(X.fs&&X.resp<400)tx+=` Only ${X.resp} survey respondents in ${NAME[X.fs]}, so treat the group detail as rough.`;
+ $('fc-explain').innerHTML=tx;
+ $('fc-srcs').textContent=`Actual result: ${X.sd.label}${X.off==='H'?' district lines and turnout; 2026 national House vote and groups from the Fox News Voter Poll (2026 turnout not final, so turnout uses 2022 totals)':''}. Groups: ${S.targets[X.R.tk].src}. Survey respondents: ${X.resp.toLocaleString()} CES ${X.sd.pool} validated voters${X.fs?' in '+NAME[X.fs]:''}. Turnout swings by group: CES validated vote, 2022 vs 2024.`;}
+function fillPlaces(){const RL=races($('fc-off').value);$('fc-plc').innerHTML=RL.map(r=>`<option value="${r.v}">${r.label}</option>`).join('');$('fc-plc').disabled=RL.length<2;}
+function reset(){setup();st.tgt=+X.act.toFixed(1);st.trn=100;st.mix=50;$('fc-tgt').value=st.tgt;$('fc-trn').value=100;$('fc-mix').value=50;run();}
+$('fc-off').onchange=()=>{fillPlaces();if($('fc-off').value!=='P'&&[...$('fc-plc').options].some(o=>o.value==='TX'))$('fc-plc').value='TX';reset();};$('fc-plc').onchange=reset;$('fc-reset').onclick=reset;
+$('fc-tgt').oninput=()=>{st.tgt=+$('fc-tgt').value;run();};$('fc-trn').oninput=()=>{st.trn=+$('fc-trn').value;run();};$('fc-mix').oninput=()=>{st.mix=+$('fc-mix').value;run();};
+fillPlaces();reset();
+
+};
+dash.draw('fc-root', (el) => {
+  const g = dash.data('electorate_sim'), m = dash.data('map_states');
+  if (bcFail(el, g.status) || g.status !== 'ok' || m.status !== 'ok' || el.dataset.ready) return;
+  el.dataset.ready = '1'; fcInit(g.data, m.data);
 });
 </script>
 
