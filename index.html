@@ -681,6 +681,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
 <div class="card"><div class="ctl">
 <label for="fc-off">Race</label><select id="fc-off"><option value="P">President</option><option value="S">Senate (2026)</option><option value="G">Governor (2026)</option><option value="H">House (national vote)</option></select>
 <label for="fc-plc">Where</label><select id="fc-plc"></select>
+<label for="fc-bse" id="fc-bsel">Starting point</label><select id="fc-bse"><option value="2024">2024 actual result</option><option value="2028">2028 projected electorate</option></select>
 </div>
 <div class="sl"><label for="fc-tgt">Target result <output id="fc-tgto"></output></label><input type="range" id="fc-tgt" min="-30" max="30" step="0.5"><div class="tk"><span>R</span><span id="fc-tgtb"></span><span>D</span></div></div>
 <div class="sl"><label for="fc-trn">Total turnout <output id="fc-trno"></output></label><input type="range" id="fc-trn" min="50" max="160" step="1" value="100"><div class="tk" id="fc-trnk"></div></div>
@@ -697,7 +698,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
 <div class="kpi"><div class="l" id="fc-k3l"></div><div class="v" id="fc-k3"></div><div class="s" id="fc-k3s"></div></div></div>
 <div class="card"><h2 id="fc-bth">Benchmarks</h2><p class="note" id="fc-bts" style="margin:0 0 8px"></p><div id="fc-bench"></div></div>
 <div class="card"><h2>How it works</h2><p class="note" style="margin-top:0" id="fc-srcs"></p>
-<p class="note">The starting point is the real result (2024 for President, 2026 for the rest), rebuilt from confirmed voters in the CES survey and reweighted to match that race's exit poll. Then three things move. <b>Total turnout</b> grows or shrinks every group by how much its turnout really swings between midterm and presidential years (CES 2022 vs 2024): young, Hispanic and less-engaged voters come and go most, while 65+ voters are steady. <b>Turnout</b> on the last slider means one party's voters show up at a higher rate than the other's, and that tilt follows how strongly each group leans. <b>Persuasion</b> means voters switch sides: every voter becomes equally more likely to back the target party, which moves swing groups and independents a lot and loyal partisans very little. The Forecaster solves for whatever mix you pick, so every row in the table is what that path would need. Turnout rates are shown nationally only (population figures by group are national); state races show ballots instead. House seats use 2022 district lines with a uniform swing in each state, so states that redrew for 2026 are approximate.</p></div>
+<p class="note">The starting point is the real result (2024 for President, 2026 for the rest), rebuilt from confirmed voters in the CES survey and reweighted to match that race's exit poll. For President you can instead start from a projected 2028 electorate: the 2016, 2020 and 2024 presidential electorates weighted 20/30/50, each first moved to 2028's eligible population (Pew race trends, Census aging), voting the way each group did in 2024, applied to the 2024 result state by state. Then three things move. <b>Total turnout</b> grows or shrinks every group by how much its turnout really swings between midterm and presidential years (CES 2022 vs 2024): young, Hispanic and less-engaged voters come and go most, while 65+ voters are steady. <b>Turnout</b> on the last slider means one party's voters show up at a higher rate than the other's, and that tilt follows how strongly each group leans. <b>Persuasion</b> means voters switch sides: every voter becomes equally more likely to back the target party, which moves swing groups and independents a lot and loyal partisans very little. The Forecaster solves for whatever mix you pick, so every row in the table is what that path would need. Turnout rates are shown nationally only (population figures by group are national); state races show ballots instead. House seats use 2022 district lines with a uniform swing in each state, so states that redrew for 2026 are approximate.</p></div>
 </div></div>
     <div id="fc-tip"></div>
     </div>
@@ -1749,6 +1750,7 @@ const DIMS=[['ri','Race',['White','Black','Hispanic','Asian','Other']],['ai','Ag
 const NAME={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
 const $=(id)=>document.getElementById(id), fm=(m)=>Math.abs(m)<0.05?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(1), fm0=(m)=>Math.abs(m)<0.5?'Even':(m>0?'D+':'R+')+Math.abs(m).toFixed(0);
 const fv=(v)=>v>=1e6?(v/1e6).toFixed(v>=1e8?0:v>=1e7?1:2)+'M':v>=1e3?Math.round(v/1e3)+'K':String(Math.round(v));
+const G28={votes:254.0e6*0.643,vep:254.0e6,race:[59.7/63,12.4/12,16.4/15,5.8/5,5.7/5],old:24.4/23.0};
 const PRES=S.turnout_all['2024']/S.turnout_all['2022'];
 const EL={};DIMS.forEach(([k])=>{EL[k]=S.dropoff.f[k].map(f=>-Math.log(1-f)/Math.log(PRES));});
 // ---------- races ----------
@@ -1771,7 +1773,7 @@ function shiftFit(P,w,votes){const c=P.cols,n=P.w.length,del=DIMS.map(([,,L])=>n
   for(let g=0;g<L.length;g++)if(den[g]>0){const t=votes[k][g];if(t!=null)del[di][g]+=t-num[g]/den[g];}}
  const m=new Float64Array(n);for(let j=0;j<n;j++){let x=base[j];for(let e=0;e<5;e++)x+=del[e][c[DIMS[e][0]][j]];m[j]=x>100?100:x<-100?-100:x;}return m;}
 let X=null;const st={};
-function setup(){const off=$('fc-off').value,RL=races(off),R=RL.find(r=>r.v===$('fc-plc').value)||RL[0];
+function setup(){const off=$('fc-off').value,RL=races(off),R0=RL.find(r=>r.v===$('fc-plc').value)||RL[0],y28=off==='P'&&$('fc-bse').value==='2028',R=y28?{...R0,tk:'2028p'}:R0;
  const sd=S.starts[R.start],P=S.pools[sd.pool],T=S.targets[R.tk],c=P.cols,n=P.w.length,RS=sd.res;
  const sh={},vo={};DIMS.forEach(([k])=>{sh[k]=T[k]?T[k].share:null;vo[k]=T[k]?T[k].vote.map(v=>v[0]-v[1]):null;});
  const w=rake(sd,P,sh),m=shiftFit(P,w,vo),fi=R.st?S.states.indexOf(R.st):-1,foc=new Uint8Array(n);
@@ -1779,11 +1781,14 @@ function setup(){const off=$('fc-off').value,RL=races(off),R=RL.find(r=>r.v===$(
  for(let j=0;j<n;j++){if(!(w[j]>0)||(fi>=0&&c.st[j]!==fi))continue;foc[j]=1;W0+=w[j];M0+=w[j]*m[j];DIMS.forEach(([k],d)=>gs[d][c[k][j]]+=w[j]);}
  const b0=DIMS.map(([k],d)=>[...gs[d]].map(x=>x/W0));
  const natT=S.states.reduce((a,s)=>a+RS[s].t,0),natM=S.states.reduce((a,s)=>a+RS[s].m*RS[s].t,0)/natT,fs=fi>=0?S.states[fi]:null;
- const act=off==='H'?M0/W0:fs?RS[fs].m:natM,votes0=fs?RS[fs].t:natT,resp=fs?P.n[fi]:P.n.reduce((a,b)=>a+b,0);
- X={off,R,sd,P,w,m,foc,fi,fs,W0,b0,cache:{},cal:act-M0/W0,act,votes0,natM,resp};
- if(!fs){X.rate0=S.turnout_all[off==='P'?'2024':'2022'];X.PP=S.pop[off==='P'?'2024':'2022'];X.VEP=votes0/(X.rate0/100);}
- X.base=comp(1,0,0);X.bg=groups(X.base,1);
- const lim=fs?50:30;$('fc-tgt').min=-lim;$('fc-tgt').max=lim;$('fc-tgtb').textContent='actual '+fm(act);}
+ let ref=null,act=off==='H'?M0/W0:fs?RS[fs].m:natM,votes0=fs?RS[fs].t:natT;const resp=fs?P.n[fi]:P.n.reduce((a,b)=>a+b,0);
+ if(y28){const T4=S.targets['2024'],s4={},v4={};DIMS.forEach(([k])=>{s4[k]=T4[k].share;v4[k]=T4[k].vote.map(v=>v[0]-v[1]);});const w4=rake(sd,P,s4),m4=shiftFit(P,w4,v4);let a=0,b=0;
+  for(let j=0;j<n;j++)if(foc[j]){a+=w4[j];b+=w4[j]*m4[j];}act+=M0/W0-b/a;ref={W:w4,mm:m4};votes0*=G28.votes/natT;}
+ X={off,R,sd,P,w,m,foc,fi,fs,W0,b0,cache:{},cal:act-M0/W0,act,votes0,natM,resp,y28,word:y28?'2028 baseline':'actual'};
+ if(!fs){X.rate0=S.turnout_all[off==='P'?'2024':'2022'];X.PP=S.pop[off==='P'?'2024':'2022'];X.VEP=y28?G28.vep:votes0/(X.rate0/100);
+  if(y28){const pp=JSON.parse(JSON.stringify(X.PP));pp.ri.pop=pp.ri.pop.map((x,i)=>x*G28.race[i]);const z=pp.ri.pop.reduce((p,q)=>p+q,0);pp.ri.pop=pp.ri.pop.map(x=>100*x/z);const o=pp.ai.pop[3]*G28.old;pp.ai.pop=pp.ai.pop.slice(0,3).map(x=>x*(100-o)/(100-pp.ai.pop[3])).concat([o]);X.PP=pp;}}
+ X.base=comp(1,0,0);X.bg=groups(X.base,1);X.ref=ref||X.base;X.refM=ref?(fs?RS[fs].m:natM):act;
+ const lim=fs?50:30;$('fc-tgt').min=-lim;$('fc-tgt').max=lim;$('fc-tgtb').textContent=(y28?'2028 baseline ':'actual ')+fm(act);$('fc-bse').style.display=$('fc-bsel').style.display=off==='P'?'':'none';}
 function atTurnout(r){const key=r.toFixed(3);if(X.cache[key])return X.cache[key];const {w,foc}=X,c=X.P.cols,n=w.length,out=Float64Array.from(w);
  if(Math.abs(r-1)>1e-9){const tg=DIMS.map(([k],d)=>{const a=X.b0[d].map((s0,g)=>s0*Math.pow(r,EL[k][g])),z=a.reduce((p,q)=>p+q,0);return a.map(x=>x/z);});
   for(let it=0;it<20;it++)DIMS.forEach(([k,,L],d)=>{const t=new Float64Array(L.length);let all=0;for(let j=0;j<n;j++)if(foc[j]){t[c[k][j]]+=out[j];all+=out[j];}
@@ -1804,7 +1809,7 @@ function solve(){const r=st.trn/100,mix=st.mix/100,Mr=comp(r,0,0).M,Mt=Mr+(1-mix
  return {r,k,s,o,Mr,Mk,capped:Math.abs(k)>=KMAX-1e-6&&Math.abs(Mk-Mt)>0.2,miss:Math.abs(o.M-st.tgt)>0.2};}
 // ---------- states (Electorate College / House seats) ----------
 function stateSums(o){const c=X.P.cols,ns=S.states.length,W=new Float64Array(ns),M=new Float64Array(ns);for(let j=0;j<o.W.length;j++)if(X.foc[j]){W[c.st[j]]+=o.W[j];M[c.st[j]]+=o.W[j]*o.mm[j];}return {W,M};}
-function byState(sol){const b=stateSums(X.base),c=stateSums(sol.o),RS=X.sd.res,P=X.P,dNat=sol.o.M-X.act,shift=X.act-X.natM,out=[];
+function byState(sol){const b=stateSums(X.ref),c=stateSums(sol.o),RS=X.sd.res,P=X.P,dNat=sol.o.M-X.refM,shift=X.refM-X.natM,out=[];
  S.states.forEach((s,i)=>{const r=RS[s];if(!r.t)return;const lam=P.n[i]/(P.n[i]+300),dl=(b.W[i]&&c.W[i]?lam*(c.M[i]/c.W[i]-b.M[i]/b.W[i])+(1-lam)*dNat:dNat)+shift;out.push({st:s,m:r.m+dl,m0:r.m,ev:r.ev,dl});});return out;}
 const col=m=>{const a=Math.min(1,Math.abs(m)/15),c=m>0?'var(--d)':'var(--r)';return Math.abs(m)<0.05?'var(--empty)':`color-mix(in srgb,${c} ${Math.round(18+82*a)}%,var(--empty))`;};
 const svg=$('fc-map');svg.innerHTML=MAP.map(p=>`<path data-s="${p.s}" d="${p.d}"/>`).join('');const tip=$('fc-tip');let last={};
@@ -1828,33 +1833,33 @@ function run(){const sol=solve(),g=groups(sol.o,sol.r),b=X.bg,nat=!X.fs,H=X.off=
    $('fc-k1l').textContent='House seats at '+fm(st.tgt);$('fc-k1').innerHTML=`<span class="D">${d}</span> – <span class="R">${r}</span>`;$('fc-k1b').innerHTML=`<i style="width:${d/4.35}%;background:var(--d)"></i><i style="flex:1"></i><i style="width:${r/4.35}%;background:var(--r)"></i><b></b>`;
    $('fc-k1s').textContent=(d>=218?'Democratic majority':'Republican majority')+' · on 2022 district lines, uniform swing within each state';}
   svg.querySelectorAll('path').forEach(p=>{const x=last[p.dataset.s];p.setAttribute('fill',x?col(x.m):'var(--empty)')});}
- else{$('fc-mapc').style.display='none';$('fc-k1l').textContent=place+' '+who;$('fc-k1').innerHTML=`<span class="${mc(st.tgt)}">${fm(st.tgt)}</span>`;$('fc-k1b').innerHTML='';$('fc-k1s').textContent=(st.tgt>0?'Democrat wins':st.tgt<0?'Republican wins':'Tie')+' · actual '+fm(X.act);}
- $('fc-k2l').textContent='Votes cast';$('fc-k2').textContent=fv(X.votes0*sol.r);$('fc-k2s').textContent=nat?(X.rate0*sol.r).toFixed(1)+'% of eligible · actual '+X.rate0+'%':'actual '+fv(X.votes0);
+ else{$('fc-mapc').style.display='none';$('fc-k1l').textContent=place+' '+who;$('fc-k1').innerHTML=`<span class="${mc(st.tgt)}">${fm(st.tgt)}</span>`;$('fc-k1b').innerHTML='';$('fc-k1s').textContent=(st.tgt>0?'Democrat wins':st.tgt<0?'Republican wins':'Tie')+' · '+X.word+' '+fm(X.act);}
+ $('fc-k2l').textContent='Votes cast';$('fc-k2').textContent=fv(X.votes0*sol.r);$('fc-k2s').textContent=nat?(X.rate0*sol.r).toFixed(1)+'% of eligible · '+(X.y28?'2024':'actual')+' '+X.rate0+'%':X.word+' '+fv(X.votes0);
  const pt=x=>(x>=0?'D+':'R+')+Math.abs(x).toFixed(1);
- $('fc-k3l').textContent='Where the change comes from';$('fc-k3').innerHTML=`<span class="${mc(st.tgt-X.act)}">${pt(st.tgt-X.act)}</span>`;
+ $('fc-k3l').textContent='Change from '+(X.y28?'2028 baseline':'actual result');$('fc-k3').innerHTML=`<span class="${mc(st.tgt-X.act)}">${pt(st.tgt-X.act)}</span>`;
  $('fc-k3s').innerHTML=`Bigger/smaller electorate ${pt(sol.Mr-X.act)} · turnout gap ${pt(sol.Mk-sol.Mr)} · persuasion ${pt(sol.o.M-sol.Mk)}`;
  // benchmarks
  const pc=x=>x.toFixed(1)+'%',p0=x=>x>=99.5?'100%+':x.toFixed(0)+'%';
  $('fc-bth').textContent=`What ${fm(st.tgt)} takes · ${place} ${who}`;
- $('fc-bts').textContent=`Each row: the actual ${X.sd.year===2024?'2024':'2026'} number, then what the target needs. ${nat?'Turnout is the share of the group’s eligible adults who vote.':'Votes are each group’s ballots cast.'}`;
+ $('fc-bts').textContent=`Each row: the ${X.y28?'2028 baseline':'actual '+(X.sd.year===2024?'2024':'2026')} number, then what the target needs. ${nat?'Turnout is the share of the group’s eligible adults who vote.':'Votes are each group’s ballots cast.'}`;
  let bad=[];
  $('fc-bench').innerHTML=DIMS.map(([k,name,L])=>`<table class="bt"><tr><th>${name}</th><th class="n">Share of voters</th><th class="n">${nat?'Turnout':'Votes'}</th><th class="n">Margin</th></tr>`+L.map((l,i)=>{const a=b[k][i],z=g[k][i];
    let tcell;if(nat){const over=z.rate>97;if(over)bad.push(l);tcell=`<span class="was">${p0(a.rate)}</span> → <b class="${over?'over':''}">${p0(z.rate)}</b>`;}else tcell=arrow(a.votes,z.votes,fv);
    return `<tr><td>${l}${nat?`<span class="pop">${a.pop.toFixed(0)}% of adults</span>`:''}</td><td class="n">${arrow(a.share,z.share,pc)}</td><td class="n">${tcell}</td><td class="n">${arrow(a.margin,z.margin,fm0,mc)}</td></tr>`;}).join('')+'</table>').join('');
  // plain-language summary
- const pd=g.pi[0],pr=g.pi[1],bd=b.pi[0],br=b.pi[1];let tx=`${place} ${who} at ${fm(st.tgt)} (actual ${fm(X.act)})`;
- tx+=nat?`: Democrats are ${pc(pd.share)} of voters (actual ${pc(bd.share)}) and turn out at ${p0(pd.rate)} of their eligible adults (actual ${p0(bd.rate)}); Republicans are ${pc(pr.share)} (actual ${pc(br.share)}) at ${p0(pr.rate)} (actual ${p0(br.rate)}).`
-   :`: Democrats are ${pc(pd.share)} of voters (actual ${pc(bd.share)}), about ${fv(pd.votes)} ballots (actual ${fv(bd.votes)}); Republicans ${pc(pr.share)} (actual ${pc(br.share)}), about ${fv(pr.votes)} (actual ${fv(br.votes)}).`;
+ const pd=g.pi[0],pr=g.pi[1],bd=b.pi[0],br=b.pi[1];let tx=`${place} ${who} at ${fm(st.tgt)} (${X.word} ${fm(X.act)})`;
+ tx+=nat?`: Democrats are ${pc(pd.share)} of voters (${X.word} ${pc(bd.share)}) and turn out at ${p0(pd.rate)} of their eligible adults (${X.word} ${p0(bd.rate)}); Republicans are ${pc(pr.share)} (${X.word} ${pc(br.share)}) at ${p0(pr.rate)} (${X.word} ${p0(br.rate)}).`
+   :`: Democrats are ${pc(pd.share)} of voters (${X.word} ${pc(bd.share)}), about ${fv(pd.votes)} ballots (${X.word} ${fv(bd.votes)}); Republicans ${pc(pr.share)} (${X.word} ${pc(br.share)}), about ${fv(pr.votes)} (${X.word} ${fv(br.votes)}).`;
  const pp=sol.o.M-sol.Mk;if(Math.abs(pp)>=0.5)tx+=` On top of that, voters swing ${Math.abs(pp).toFixed(1)} points toward ${pp>0?'Democrats':'Republicans'} overall, most of it among independents and other swing voters (party loyalists barely move).`;
  if(sol.capped)tx+=' Turnout alone runs out of room here, so persuasion covers the rest.';
  if(sol.miss)tx+=' This target is out of reach even with every group voting one way.';
  if(bad.length)tx+=` <b class="over">Not realistic:</b> ${bad.join(', ')} would need nearly everyone eligible to vote.`;
  if(X.fs&&X.resp<400)tx+=` Only ${X.resp} survey respondents in ${NAME[X.fs]}, so treat the group detail as rough.`;
  $('fc-explain').innerHTML=tx;
- $('fc-srcs').textContent=`Actual result: ${X.sd.label}${X.off==='H'?' district lines and turnout; 2026 national House vote and groups from the Fox News Voter Poll (2026 turnout not final, so turnout uses 2022 totals)':''}. Groups: ${S.targets[X.R.tk].src}. Survey respondents: ${X.resp.toLocaleString()} CES ${X.sd.pool} validated voters${X.fs?' in '+NAME[X.fs]:''}. Turnout swings by group: CES validated vote, 2022 vs 2024.`;}
+ $('fc-srcs').textContent=`${X.y28?'Starting point: the 2024 result moved by the projected 2028 electorate ('+fm(X.act)+(X.fs?'':' nationally')+'). ':''}Actual result: ${X.sd.label}${X.off==='H'?' district lines and turnout; 2026 national House vote and groups from the Fox News Voter Poll (2026 turnout not final, so turnout uses 2022 totals)':''}. Groups: ${S.targets[X.R.tk].src}. Survey respondents: ${X.resp.toLocaleString()} CES ${X.sd.pool} validated voters${X.fs?' in '+NAME[X.fs]:''}. Turnout swings by group: CES validated vote, 2022 vs 2024.`;}
 function fillPlaces(){const RL=races($('fc-off').value);$('fc-plc').innerHTML=RL.map(r=>`<option value="${r.v}">${r.label}</option>`).join('');$('fc-plc').disabled=RL.length<2;}
 function reset(){setup();st.tgt=+X.act.toFixed(1);st.trn=100;st.mix=50;$('fc-tgt').value=st.tgt;$('fc-trn').value=100;$('fc-mix').value=50;run();}
-$('fc-off').onchange=()=>{fillPlaces();if($('fc-off').value!=='P'&&[...$('fc-plc').options].some(o=>o.value==='TX'))$('fc-plc').value='TX';reset();};$('fc-plc').onchange=reset;$('fc-reset').onclick=reset;
+$('fc-bse').onchange=reset;$('fc-off').onchange=()=>{fillPlaces();if($('fc-off').value!=='P'&&[...$('fc-plc').options].some(o=>o.value==='TX'))$('fc-plc').value='TX';reset();};$('fc-plc').onchange=reset;$('fc-reset').onclick=reset;
 $('fc-tgt').oninput=()=>{st.tgt=+$('fc-tgt').value;run();};$('fc-trn').oninput=()=>{st.trn=+$('fc-trn').value;run();};$('fc-mix').oninput=()=>{st.mix=+$('fc-mix').value;run();};
 fillPlaces();reset();
 
