@@ -1794,11 +1794,19 @@ function atTurnout(r){const key=r.toFixed(3);if(X.cache[key])return X.cache[key]
   for(let it=0;it<20;it++)DIMS.forEach(([k,,L],d)=>{const t=new Float64Array(L.length);let all=0;for(let j=0;j<n;j++)if(foc[j]){t[c[k][j]]+=out[j];all+=out[j];}
    const f=t.map((x,g)=>x>0?tg[d][g]*all/x:1);for(let j=0;j<n;j++)if(foc[j])out[j]*=f[c[k][j]];});}
  return X.cache[key]=out;}
-const LG=x=>{const p=Math.min(.995,Math.max(.005,(x+100)/200));return Math.log(p/(1-p));};
+const SIG=x=>1/(1+Math.exp(-x)),LGT=p=>Math.log(p/(1-p)),CL=p=>Math.min(.99,Math.max(.01,p));
+// Each voter's persuadability comes from their group profile, not their own recorded vote: a logistic fit (additive in log-odds
+// across race, age, education, sex and party ID) that reproduces every group's baseline margin.
+function fitEta(){const {w,m,foc}=X,c=X.P.cols,n=w.length,a=DIMS.map(([,,L])=>new Float64Array(L.length)),eta=new Float64Array(n);
+ const tg=DIMS.map(([k,,L])=>{const s=new Float64Array(L.length),t=new Float64Array(L.length);for(let j=0;j<n;j++)if(foc[j]){s[c[k][j]]+=w[j]*m[j];t[c[k][j]]+=w[j];}return L.map((_,g)=>t[g]>0?CL((s[g]/t[g]+100)/200):.5);});
+ for(let it=0;it<30;it++)DIMS.forEach(([k,,L],d)=>{const s=new Float64Array(L.length),t=new Float64Array(L.length);
+  for(let j=0;j<n;j++)if(foc[j]){let e=0;for(let q=0;q<5;q++)e+=a[q][c[DIMS[q][0]][j]];s[c[k][j]]+=w[j]*SIG(e);t[c[k][j]]+=w[j];}
+  for(let g=0;g<L.length;g++)if(t[g]>0)a[d][g]+=LGT(tg[d][g])-LGT(CL(s[g]/t[g]));});
+ for(let j=0;j<n;j++){let e=0;for(let q=0;q<5;q++)e+=a[q][c[DIMS[q][0]][j]];eta[j]=e;}return eta;}
 function comp(r,k,s){const {m,foc}=X,w=atTurnout(r),n=w.length,W=new Float64Array(n),mm=new Float64Array(n);let tot=0,M=0;
- if(!X.lg){X.lg=new Float64Array(n);for(let j=0;j<n;j++)X.lg[j]=LG(m[j]);}
+ if(!X.eta)X.eta=fitEta();
  for(let j=0;j<n;j++)if(foc[j]){W[j]=w[j]*Math.exp(k*m[j]/100);tot+=W[j];}
- const sc=r*X.W0/tot;for(let j=0;j<n;j++)if(foc[j]){W[j]*=sc;mm[j]=s?m[j]+200*(1/(1+Math.exp(-(X.lg[j]+s)))-1/(1+Math.exp(-X.lg[j]))):m[j];M+=W[j]*mm[j];}
+ const sc=r*X.W0/tot;for(let j=0;j<n;j++)if(foc[j]){W[j]*=sc;if(s){const p=SIG(X.eta[j]),p2=SIG(X.eta[j]+s);mm[j]=s>0?m[j]+(p2-p)/(1-p)*(100-m[j]):m[j]-(p-p2)/p*(m[j]+100);}else mm[j]=m[j];M+=W[j]*mm[j];}
  return {W,mm,M:M/(r*X.W0)+X.cal};}
 function groups(o,r){const c=X.P.cols,out={};DIMS.forEach(([k,,L])=>{const s=new Float64Array(L.length),mm=new Float64Array(L.length);let t=0;
   for(let j=0;j<o.W.length;j++)if(X.foc[j]){s[c[k][j]]+=o.W[j];mm[c[k][j]]+=o.W[j]*o.mm[j];t+=o.W[j];}
