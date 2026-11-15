@@ -411,7 +411,7 @@ select, input[type="search"] { background: var(--color-panel); border: 1px solid
     </div>
     <div class="bc-card" id="fc-card">
       <h2>Locked Nov 2 forecast against the count</h2>
-      <p class="bc-note">Grey dot: our final forecast margin. Colored dot: NBC/AP count on Nov 4 (unofficial). Alaska and Mississippi Senate are still being counted.</p>
+      <p class="bc-note">Grey dot: our final forecast margin. Colored dot: the latest NBC/AP count (unofficial until states certify). Alaska's two races are left out of the scorecard until its ranked-choice count on Nov. 18.</p>
       <div class="bc-chart" data-draw="fc-chart" data-source="forecast_2026 forecast_check"></div>
     </div>
   </section>
@@ -775,7 +775,7 @@ dash.calc('county_view', {
 dash.calc('forecast_check', {
   inputs: ['forecast_2026'],
   title: 'Forecast scorecard',
-  description: 'Over races NBC/AP had counted (Alaska and Mississippi Senate left out): winners called right, average miss of the forecast and of the poll average.',
+  description: 'Over races with a full first count (the two Alaska ranked-choice races left out): winners called right, average miss of the forecast and of the poll average.',
   fn: (forecast_2026) => {
     const s = forecast_2026.filter((r) => !/ranked|tied/.test(r.status) && r.result_margin !== '' && r.result_margin != null);
     const err = s.map((r) => +r.result_margin - +r.fc_margin);
