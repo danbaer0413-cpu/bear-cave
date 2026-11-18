@@ -7,7 +7,7 @@ rows = []
 for rid, r in d["races"].items():
     s = r.get("summary") or {}
     m = r.get("meta") or {}
-    rows.append(dict(race=rid, state=rid.split("-")[0], office=("Senate" if "senate" in rid else "Governor"), dem=names.dem.get(rid, "Dem"), rep=names.rep.get(rid, "GOP"),
+    rows.append(dict(race=rid, state=rid.split("-")[0], office=("Senate" if "senate" in rid else f"House {rid.rsplit('-', 1)[1]} runoff (Dec 12)" if "-house-" in rid else "Governor"), dem=names.dem.get(rid, "Dem"), rep=names.rep.get(rid, "GOP"),
                      pct_in=round(s.get("pct_in") or 0, 1), median=round(s.get("median") or 0, 2), p10=round(s.get("p10") or 0, 2), p90=round(s.get("p90") or 0, 2),
                      win_prob=s.get("win_prob"), as_of=r.get("as_of") or d.get("updated")))
 # a called race is decided: the model's leftover count uncertainty should not show as a live chance
