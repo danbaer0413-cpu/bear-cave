@@ -39,5 +39,5 @@ if os.path.exists(fcp):
         if r.race not in now.index: continue
         n = now.loc[r.race]
         fc.loc[i, "result_margin"] = round(float(n["median"]), 1); fc.loc[i, "pct_in"] = n.pct_in
-        fc.loc[i, "status"] = ("ranked choice count Nov 18" if r.race.startswith("AK-") else "called" if r.race in called else "final count" if n.pct_in >= 99.5 else "near final")
+        fc.loc[i, "status"] = ("called" if r.race in called else "ranked choice count Nov 18" if r.race.startswith("AK-") else "final count" if n.pct_in >= 99.5 else "near final")
     fc.to_csv(fcp, index=False); print("forecast check refreshed")
