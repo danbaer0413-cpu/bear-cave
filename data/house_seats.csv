@@ -1,436 +1,436 @@
 key,state_po,district,party,status,leader,margin,pct_in,note,party_2024,flip
-AK-1,AK,1,REPUBLICAN,leading,Nick Begich,-42.3,74,,REPUBLICAN,False
-AL-1,AL,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-AL-2,AL,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-AL-3,AL,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-AL-4,AL,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-AL-5,AL,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-AL-6,AL,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-AL-7,AL,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-AR-1,AR,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-AR-2,AR,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-AR-3,AR,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-AR-4,AR,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-AZ-1,AZ,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-AZ-2,AZ,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-AZ-3,AZ,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-AZ-4,AZ,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-AZ-5,AZ,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-AZ-6,AZ,6,DEMOCRAT,called,,,,,REPUBLICAN,True
-AZ-7,AZ,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-AZ-8,AZ,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-AZ-9,AZ,9,REPUBLICAN,called,,,,,REPUBLICAN,False
-CA-1,CA,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-CA-2,CA,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-3,CA,3,DEMOCRAT,called,,,,,REPUBLICAN,True
-CA-4,CA,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-5,CA,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-CA-6,CA,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-7,CA,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-8,CA,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-9,CA,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-10,CA,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-11,CA,11,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-12,CA,12,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-13,CA,13,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-14,CA,14,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-15,CA,15,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-16,CA,16,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-17,CA,17,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-18,CA,18,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-19,CA,19,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-20,CA,20,REPUBLICAN,called,,,,,REPUBLICAN,False
-CA-21,CA,21,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-22,CA,22,DEMOCRAT,called,,,,,REPUBLICAN,True
-CA-23,CA,23,REPUBLICAN,leading,Jay Obernolte,-1.6,100,,REPUBLICAN,False
-CA-24,CA,24,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-25,CA,25,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-26,CA,26,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-27,CA,27,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-28,CA,28,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-29,CA,29,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-30,CA,30,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-31,CA,31,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-32,CA,32,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-33,CA,33,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-34,CA,34,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-35,CA,35,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-36,CA,36,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-37,CA,37,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-38,CA,38,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-39,CA,39,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-40,CA,40,REPUBLICAN,called,,,,,REPUBLICAN,False
-CA-41,CA,41,DEMOCRAT,called,,,,,REPUBLICAN,True
-CA-42,CA,42,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-43,CA,43,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-44,CA,44,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-45,CA,45,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-46,CA,46,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-47,CA,47,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-48,CA,48,DEMOCRAT,called,,,,,REPUBLICAN,True
-CA-49,CA,49,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-50,CA,50,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-51,CA,51,DEMOCRAT,called,,,,,DEMOCRAT,False
-CA-52,CA,52,DEMOCRAT,called,,,,,DEMOCRAT,False
-CO-1,CO,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-CO-2,CO,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-CO-3,CO,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-CO-4,CO,4,DEMOCRAT,called,,,,,REPUBLICAN,True
-CO-5,CO,5,DEMOCRAT,called,,,,,REPUBLICAN,True
-CO-6,CO,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-CO-7,CO,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-CO-8,CO,8,DEMOCRAT,called,,,,,REPUBLICAN,True
-CT-1,CT,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-CT-2,CT,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-CT-3,CT,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-CT-4,CT,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-CT-5,CT,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-DE-1,DE,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-1,FL,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-2,FL,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-3,FL,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-4,FL,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-5,FL,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-6,FL,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-7,FL,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-8,FL,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-9,FL,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-10,FL,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-11,FL,11,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-12,FL,12,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-13,FL,13,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-14,FL,14,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-15,FL,15,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-16,FL,16,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-17,FL,17,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-18,FL,18,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-19,FL,19,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-20,FL,20,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-21,FL,21,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-22,FL,22,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-23,FL,23,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-24,FL,24,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-25,FL,25,DEMOCRAT,called,,,,,DEMOCRAT,False
-FL-26,FL,26,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-27,FL,27,REPUBLICAN,called,,,,,REPUBLICAN,False
-FL-28,FL,28,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-1,GA,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-2,GA,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-GA-3,GA,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-4,GA,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-GA-5,GA,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-GA-6,GA,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-GA-7,GA,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-8,GA,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-9,GA,9,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-10,GA,10,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-11,GA,11,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-12,GA,12,REPUBLICAN,called,,,,,REPUBLICAN,False
-GA-13,GA,13,DEMOCRAT,called,,,,,DEMOCRAT,False
-GA-14,GA,14,REPUBLICAN,called,,,,,REPUBLICAN,False
-HI-1,HI,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-HI-2,HI,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-IA-1,IA,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-IA-2,IA,2,DEMOCRAT,called,,,,,REPUBLICAN,True
-IA-3,IA,3,DEMOCRAT,called,,,,,REPUBLICAN,True
-IA-4,IA,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-ID-1,ID,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-ID-2,ID,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-IL-1,IL,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-2,IL,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-3,IL,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-4,IL,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-5,IL,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-6,IL,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-7,IL,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-8,IL,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-9,IL,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-10,IL,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-11,IL,11,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-12,IL,12,REPUBLICAN,called,,,,,REPUBLICAN,False
-IL-13,IL,13,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-14,IL,14,DEMOCRAT,called,,,,,DEMOCRAT,False
-IL-15,IL,15,REPUBLICAN,called,,,,,REPUBLICAN,False
-IL-16,IL,16,REPUBLICAN,called,,,,,REPUBLICAN,False
-IL-17,IL,17,DEMOCRAT,called,,,,,DEMOCRAT,False
-IN-1,IN,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-IN-2,IN,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-IN-3,IN,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-IN-4,IN,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-IN-5,IN,5,DEMOCRAT,called,,,,,REPUBLICAN,True
-IN-6,IN,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-IN-7,IN,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-IN-8,IN,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-IN-9,IN,9,REPUBLICAN,called,,,,,REPUBLICAN,False
-KS-1,KS,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-KS-2,KS,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-KS-3,KS,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-KS-4,KS,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-KY-1,KY,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-KY-2,KY,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-KY-3,KY,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-KY-4,KY,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-KY-5,KY,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-KY-6,KY,6,DEMOCRAT,called,,,,,REPUBLICAN,True
-LA-1,LA,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-LA-2,LA,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-LA-3,LA,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-LA-4,LA,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-LA-5,LA,5,DEMOCRAT,leading,Patricia Moore,0.7,99,,REPUBLICAN,True
-LA-6,LA,6,DEMOCRAT,leading,Chauna Banks,0.2,99,,DEMOCRAT,False
-MA-1,MA,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-2,MA,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-3,MA,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-4,MA,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-5,MA,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-6,MA,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-7,MA,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-8,MA,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-MA-9,MA,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-1,MD,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-MD-2,MD,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-3,MD,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-4,MD,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-5,MD,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-6,MD,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-7,MD,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-MD-8,MD,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-ME-1,ME,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-ME-2,ME,2,REPUBLICAN,called,,,,,DEMOCRAT,True
-MI-1,MI,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-MI-2,MI,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-MI-3,MI,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-MI-4,MI,4,DEMOCRAT,called,,,,,REPUBLICAN,True
-MI-5,MI,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-MI-6,MI,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-MI-7,MI,7,DEMOCRAT,called,,,,,REPUBLICAN,True
-MI-8,MI,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-MI-9,MI,9,REPUBLICAN,called,,,,,REPUBLICAN,False
-MI-10,MI,10,DEMOCRAT,called,,,,,REPUBLICAN,True
-MI-11,MI,11,DEMOCRAT,called,,,,,DEMOCRAT,False
-MI-12,MI,12,DEMOCRAT,called,,,,,DEMOCRAT,False
-MI-13,MI,13,DEMOCRAT,called,,,,,DEMOCRAT,False
-MN-1,MN,1,DEMOCRAT,leading,Jake Johnson,0.1,100,,REPUBLICAN,True
-MN-2,MN,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-MN-3,MN,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-MN-4,MN,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-MN-5,MN,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-MN-6,MN,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-MN-7,MN,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-MN-8,MN,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-MO-1,MO,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-MO-2,MO,2,DEMOCRAT,called,,,,,REPUBLICAN,True
-MO-3,MO,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-MO-4,MO,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-MO-5,MO,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-MO-6,MO,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-MO-7,MO,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-MO-8,MO,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-MS-1,MS,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-MS-2,MS,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-MS-3,MS,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-MS-4,MS,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-MT-1,MT,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-MT-2,MT,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-NC-1,NC,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-NC-2,NC,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-NC-3,NC,3,DEMOCRAT,called,,,,,REPUBLICAN,True
-NC-4,NC,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-NC-5,NC,5,DEMOCRAT,leading,Chuck Hubbard,0.1,100,,REPUBLICAN,True
-NC-6,NC,6,DEMOCRAT,called,,,,,REPUBLICAN,True
-NC-7,NC,7,REPUBLICAN,leading,David Rouzer,-0.7,100,,REPUBLICAN,False
-NC-8,NC,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-NC-9,NC,9,DEMOCRAT,called,,,,,REPUBLICAN,True
-NC-10,NC,10,REPUBLICAN,called,,,,,REPUBLICAN,False
-NC-11,NC,11,DEMOCRAT,called,,,,,REPUBLICAN,True
-NC-12,NC,12,DEMOCRAT,called,,,,,DEMOCRAT,False
-NC-13,NC,13,DEMOCRAT,called,,,,,REPUBLICAN,True
-NC-14,NC,14,DEMOCRAT,called,,,,,REPUBLICAN,True
-ND-1,ND,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-NE-1,NE,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-NE-2,NE,2,DEMOCRAT,called,,,,,REPUBLICAN,True
-NE-3,NE,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-NH-1,NH,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-NH-2,NH,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-1,NJ,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-2,NJ,2,DEMOCRAT,called,,,,,REPUBLICAN,True
-NJ-3,NJ,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-4,NJ,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-NJ-5,NJ,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-6,NJ,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-7,NJ,7,DEMOCRAT,called,,,,,REPUBLICAN,True
-NJ-8,NJ,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-9,NJ,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-10,NJ,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-11,NJ,11,DEMOCRAT,called,,,,,DEMOCRAT,False
-NJ-12,NJ,12,DEMOCRAT,called,,,,,DEMOCRAT,False
-NM-1,NM,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-NM-2,NM,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-NM-3,NM,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-NV-1,NV,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-NV-2,NV,2,DEMOCRAT,called,,,,,REPUBLICAN,True
-NV-3,NV,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-NV-4,NV,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-1,NY,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-NY-2,NY,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-NY-3,NY,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-4,NY,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-5,NY,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-6,NY,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-7,NY,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-8,NY,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-9,NY,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-10,NY,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-11,NY,11,REPUBLICAN,called,,,,,REPUBLICAN,False
-NY-12,NY,12,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-13,NY,13,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-14,NY,14,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-15,NY,15,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-16,NY,16,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-17,NY,17,DEMOCRAT,called,,,,,REPUBLICAN,True
-NY-18,NY,18,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-19,NY,19,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-20,NY,20,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-21,NY,21,REPUBLICAN,called,,,,,REPUBLICAN,False
-NY-22,NY,22,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-23,NY,23,REPUBLICAN,called,,,,,REPUBLICAN,False
-NY-24,NY,24,REPUBLICAN,called,,,,,REPUBLICAN,False
-NY-25,NY,25,DEMOCRAT,called,,,,,DEMOCRAT,False
-NY-26,NY,26,DEMOCRAT,called,,,,,DEMOCRAT,False
-OH-1,OH,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-OH-2,OH,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-3,OH,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-OH-4,OH,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-5,OH,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-6,OH,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-7,OH,7,DEMOCRAT,called,,,,,REPUBLICAN,True
-OH-8,OH,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-9,OH,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-OH-10,OH,10,DEMOCRAT,called,,,,,REPUBLICAN,True
-OH-11,OH,11,DEMOCRAT,called,,,,,DEMOCRAT,False
-OH-12,OH,12,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-13,OH,13,DEMOCRAT,called,,,,,DEMOCRAT,False
-OH-14,OH,14,REPUBLICAN,called,,,,,REPUBLICAN,False
-OH-15,OH,15,DEMOCRAT,called,,,,,REPUBLICAN,True
-OK-1,OK,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-OK-2,OK,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-OK-3,OK,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-OK-4,OK,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-OK-5,OK,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-OR-1,OR,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-OR-2,OR,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-OR-3,OR,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-OR-4,OR,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-OR-5,OR,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-OR-6,OR,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-1,PA,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-PA-2,PA,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-3,PA,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-4,PA,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-5,PA,5,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-6,PA,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-7,PA,7,DEMOCRAT,called,,,,,REPUBLICAN,True
-PA-8,PA,8,DEMOCRAT,called,,,,,REPUBLICAN,True
-PA-9,PA,9,REPUBLICAN,called,,,,,REPUBLICAN,False
-PA-10,PA,10,DEMOCRAT,called,,,,,REPUBLICAN,True
-PA-11,PA,11,REPUBLICAN,called,,,,,REPUBLICAN,False
-PA-12,PA,12,DEMOCRAT,called,,,,,DEMOCRAT,False
-PA-13,PA,13,REPUBLICAN,called,,,,,REPUBLICAN,False
-PA-14,PA,14,REPUBLICAN,called,,,,,REPUBLICAN,False
-PA-15,PA,15,REPUBLICAN,called,,,,,REPUBLICAN,False
-PA-16,PA,16,REPUBLICAN,called,,,,,REPUBLICAN,False
-PA-17,PA,17,DEMOCRAT,called,,,,,DEMOCRAT,False
-RI-1,RI,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-RI-2,RI,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-SC-1,SC,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-SC-2,SC,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-SC-3,SC,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-SC-4,SC,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-SC-5,SC,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-SC-6,SC,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-SC-7,SC,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-SD-1,SD,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-1,TN,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-2,TN,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-3,TN,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-4,TN,4,DEMOCRAT,leading,Victoria Broderick,0.1,100,,REPUBLICAN,True
-TN-5,TN,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-6,TN,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-7,TN,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-8,TN,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-TN-9,TN,9,REPUBLICAN,called,,,,,DEMOCRAT,True
-TX-1,TX,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-2,TX,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-3,TX,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-4,TX,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-5,TX,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-6,TX,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-7,TX,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-8,TX,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-9,TX,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-10,TX,10,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-11,TX,11,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-12,TX,12,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-13,TX,13,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-14,TX,14,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-15,TX,15,DEMOCRAT,called,,,,,REPUBLICAN,True
-TX-16,TX,16,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-17,TX,17,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-18,TX,18,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-19,TX,19,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-20,TX,20,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-21,TX,21,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-22,TX,22,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-23,TX,23,DEMOCRAT,called,,,,,REPUBLICAN,True
-TX-24,TX,24,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-25,TX,25,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-26,TX,26,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-27,TX,27,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-28,TX,28,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-29,TX,29,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-30,TX,30,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-31,TX,31,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-32,TX,32,REPUBLICAN,called,,,,,DEMOCRAT,True
-TX-33,TX,33,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-34,TX,34,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-35,TX,35,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-36,TX,36,REPUBLICAN,called,,,,,REPUBLICAN,False
-TX-37,TX,37,DEMOCRAT,called,,,,,DEMOCRAT,False
-TX-38,TX,38,REPUBLICAN,called,,,,,REPUBLICAN,False
-UT-1,UT,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-UT-2,UT,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-UT-3,UT,3,REPUBLICAN,called,,,,,REPUBLICAN,False
-UT-4,UT,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-VA-1,VA,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-VA-2,VA,2,DEMOCRAT,called,,,,,REPUBLICAN,True
-VA-3,VA,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-VA-4,VA,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-VA-5,VA,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-VA-6,VA,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-VA-7,VA,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-VA-8,VA,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-VA-9,VA,9,REPUBLICAN,called,,,,,REPUBLICAN,False
-VA-10,VA,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-VA-11,VA,11,DEMOCRAT,called,,,,,DEMOCRAT,False
-VT-1,VT,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-1,WA,1,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-2,WA,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-3,WA,3,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-4,WA,4,REPUBLICAN,called,,,,,REPUBLICAN,False
-WA-5,WA,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-WA-6,WA,6,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-7,WA,7,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-8,WA,8,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-9,WA,9,DEMOCRAT,called,,,,,DEMOCRAT,False
-WA-10,WA,10,DEMOCRAT,called,,,,,DEMOCRAT,False
-WI-1,WI,1,DEMOCRAT,called,,,,,REPUBLICAN,True
-WI-2,WI,2,DEMOCRAT,called,,,,,DEMOCRAT,False
-WI-3,WI,3,DEMOCRAT,called,,,,,REPUBLICAN,True
-WI-4,WI,4,DEMOCRAT,called,,,,,DEMOCRAT,False
-WI-5,WI,5,REPUBLICAN,called,,,,,REPUBLICAN,False
-WI-6,WI,6,REPUBLICAN,called,,,,,REPUBLICAN,False
-WI-7,WI,7,REPUBLICAN,called,,,,,REPUBLICAN,False
-WI-8,WI,8,REPUBLICAN,called,,,,,REPUBLICAN,False
-WV-1,WV,1,REPUBLICAN,called,,,,,REPUBLICAN,False
-WV-2,WV,2,REPUBLICAN,called,,,,,REPUBLICAN,False
-WY-1,WY,1,REPUBLICAN,called,,,,,REPUBLICAN,False
+AK-1,AK,1,REPUBLICAN,leading,Nick Begich III,-5.78,,main opponent is nonpartisan,REPUBLICAN,False
+AL-1,AL,1,REPUBLICAN,called,Jerry Carl,-18.14,100.0,,REPUBLICAN,False
+AL-2,AL,2,DEMOCRAT,called,Shomari Figures,7.5,100.0,,DEMOCRAT,False
+AL-3,AL,3,REPUBLICAN,called,Mike Rogers,-27.9,100.0,,REPUBLICAN,False
+AL-4,AL,4,REPUBLICAN,called,Robert Aderholt,-49.8,100.0,,REPUBLICAN,False
+AL-5,AL,5,REPUBLICAN,called,Dale Strong,-6.48,100.0,,REPUBLICAN,False
+AL-6,AL,6,REPUBLICAN,called,Gary Palmer,-14.94,100.0,,REPUBLICAN,False
+AL-7,AL,7,DEMOCRAT,called,Terri Sewell,38.8,100.0,,DEMOCRAT,False
+AR-1,AR,1,REPUBLICAN,called,Rick Crawford,-34.4,100.0,,REPUBLICAN,False
+AR-2,AR,2,REPUBLICAN,called,French Hill,-1.62,100.0,,REPUBLICAN,False
+AR-3,AR,3,REPUBLICAN,called,Steve Womack,-13.29,100.0,,REPUBLICAN,False
+AR-4,AR,4,REPUBLICAN,called,Bruce Westerman,-30.94,100.0,,REPUBLICAN,False
+AZ-1,AZ,1,DEMOCRAT,called,Amish Shah,6.96,100.0,,REPUBLICAN,True
+AZ-2,AZ,2,REPUBLICAN,called,Eli Crane,-1.05,100.0,,REPUBLICAN,False
+AZ-3,AZ,3,DEMOCRAT,called,Yassamin Ansari,85.3,100.0,,DEMOCRAT,False
+AZ-4,AZ,4,DEMOCRAT,called,Greg Stanton,27.16,100.0,,DEMOCRAT,False
+AZ-5,AZ,5,REPUBLICAN,called,Mark Lamb,-3.36,100.0,,REPUBLICAN,False
+AZ-6,AZ,6,DEMOCRAT,called,Joanna Mendoza,8.1,100.0,,REPUBLICAN,True
+AZ-7,AZ,7,DEMOCRAT,called,Adelita Grijalva,43.86,100.0,,DEMOCRAT,False
+AZ-8,AZ,8,REPUBLICAN,called,Abraham Hamadeh,-2.37,100.0,,REPUBLICAN,False
+AZ-9,AZ,9,REPUBLICAN,called,Paul Gosar,-14.95,100.0,,REPUBLICAN,False
+CA-1,CA,1,DEMOCRAT,called,Mike McGuire,17.44,100.0,,REPUBLICAN,True
+CA-2,CA,2,DEMOCRAT,called,Jared Huffman,33.04,100.0,,DEMOCRAT,False
+CA-3,CA,3,DEMOCRAT,called,Ami Bera,17.42,100.0,,REPUBLICAN,True
+CA-4,CA,4,DEMOCRAT,called,Eric Jones,5.08,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-5,CA,5,REPUBLICAN,called,Tom McClintock,-11.3,100.0,,REPUBLICAN,False
+CA-6,CA,6,DEMOCRAT,called,Richard Pan,58.85,100.0,no Republican on the ballot,DEMOCRAT,False
+CA-7,CA,7,DEMOCRAT,called,Doris Matsui,4.82,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-8,CA,8,DEMOCRAT,called,John Garamendi,46.84,100.0,,DEMOCRAT,False
+CA-9,CA,9,DEMOCRAT,called,Josh Harder,34.3,100.0,,DEMOCRAT,False
+CA-10,CA,10,DEMOCRAT,called,Mark Desaulnier,39.4,100.0,,DEMOCRAT,False
+CA-11,CA,11,DEMOCRAT,called,Scott Wiener,6.6,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-12,CA,12,DEMOCRAT,called,Lateefah Simon,60.82,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-13,CA,13,DEMOCRAT,called,Adam Gray,25.38,100.0,,DEMOCRAT,False
+CA-14,CA,14,DEMOCRAT,called,Aisha Wahab,15.14,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-15,CA,15,DEMOCRAT,called,Kevin Mullin,59.9,100.0,,DEMOCRAT,False
+CA-16,CA,16,DEMOCRAT,called,Sam Liccardo,55.98,100.0,,DEMOCRAT,False
+CA-17,CA,17,DEMOCRAT,called,Ro Khanna,45.54,100.0,,DEMOCRAT,False
+CA-18,CA,18,DEMOCRAT,called,Zoe Lofgren,46.14,100.0,,DEMOCRAT,False
+CA-19,CA,19,DEMOCRAT,called,Jimmy Panetta,43.98,100.0,,DEMOCRAT,False
+CA-20,CA,20,REPUBLICAN,called,Vince Fong,-22.48,100.0,,REPUBLICAN,False
+CA-21,CA,21,DEMOCRAT,called,Jim Costa,29.42,100.0,,DEMOCRAT,False
+CA-22,CA,22,DEMOCRAT,called,Randy Villegas,35.68,100.0,,REPUBLICAN,True
+CA-23,CA,23,REPUBLICAN,leading,Jay Obernolte,-1.64,,,REPUBLICAN,False
+CA-24,CA,24,DEMOCRAT,called,Salud Carbajal,32.6,100.0,,DEMOCRAT,False
+CA-25,CA,25,DEMOCRAT,called,Raul Ruiz,31.82,100.0,,DEMOCRAT,False
+CA-26,CA,26,DEMOCRAT,called,Jacqui Irwin,26.92,100.0,,DEMOCRAT,False
+CA-27,CA,27,DEMOCRAT,called,George Whitesides,28.44,100.0,,DEMOCRAT,False
+CA-28,CA,28,DEMOCRAT,called,Judy Chu,39.2,100.0,,DEMOCRAT,False
+CA-29,CA,29,DEMOCRAT,called,Luz Rivas,14.54,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-30,CA,30,DEMOCRAT,called,Laura Friedman,55.28,100.0,,DEMOCRAT,False
+CA-31,CA,31,DEMOCRAT,called,Gil Cisneros,32.8,100.0,,DEMOCRAT,False
+CA-32,CA,32,DEMOCRAT,called,Brad Sherman,34.24,100.0,,DEMOCRAT,False
+CA-33,CA,33,DEMOCRAT,called,Pete Aguilar,37.9,100.0,,DEMOCRAT,False
+CA-34,CA,34,DEMOCRAT,called,Angela Gonzales-Torres,24.4,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-35,CA,35,DEMOCRAT,called,Norma Torres,33.7,100.0,,DEMOCRAT,False
+CA-36,CA,36,DEMOCRAT,called,Ted Lieu,46.06,100.0,,DEMOCRAT,False
+CA-37,CA,37,DEMOCRAT,called,Sydney Kamlager-Dove,21.58,100.0,both finalists Democrats; margin is the gap between them,DEMOCRAT,False
+CA-38,CA,38,DEMOCRAT,called,Hilda Solis,34.92,100.0,,DEMOCRAT,False
+CA-39,CA,39,DEMOCRAT,called,Mark Takano,38.02,100.0,,DEMOCRAT,False
+CA-40,CA,40,REPUBLICAN,called,Ken Calvert,-5.12,100.0,both finalists Republicans; margin is the gap between them,REPUBLICAN,False
+CA-41,CA,41,DEMOCRAT,called,Linda SáNchez,35.18,100.0,,REPUBLICAN,True
+CA-42,CA,42,DEMOCRAT,called,Robert Garcia,23.92,100.0,,DEMOCRAT,False
+CA-43,CA,43,DEMOCRAT,called,Maxine Waters,65.94,100.0,,DEMOCRAT,False
+CA-44,CA,44,DEMOCRAT,called,Nanette BarragáN,63.54,100.0,,DEMOCRAT,False
+CA-45,CA,45,DEMOCRAT,called,Derek Tran,22.04,100.0,,DEMOCRAT,False
+CA-46,CA,46,DEMOCRAT,called,Lou Correa,43.1,100.0,,DEMOCRAT,False
+CA-47,CA,47,DEMOCRAT,called,Dave Min,17.16,100.0,,DEMOCRAT,False
+CA-48,CA,48,DEMOCRAT,called,Marni Von Wilpert,19.48,100.0,,REPUBLICAN,True
+CA-49,CA,49,DEMOCRAT,called,Mike Levin,19.02,100.0,,DEMOCRAT,False
+CA-50,CA,50,DEMOCRAT,called,Scott Peters,27.42,100.0,,DEMOCRAT,False
+CA-51,CA,51,DEMOCRAT,called,Sara Jacobs,32.36,100.0,,DEMOCRAT,False
+CA-52,CA,52,DEMOCRAT,called,Juan Vargas,43.58,100.0,,DEMOCRAT,False
+CO-1,CO,1,DEMOCRAT,called,Melat Kiros,64.24,100.0,,DEMOCRAT,False
+CO-2,CO,2,DEMOCRAT,called,Joe Neguse,51.26,100.0,,DEMOCRAT,False
+CO-3,CO,3,REPUBLICAN,called,Jeff Hurd,-1.78,100.0,,REPUBLICAN,False
+CO-4,CO,4,DEMOCRAT,called,Eileen Laubacher,0.91,100.0,,REPUBLICAN,True
+CO-5,CO,5,DEMOCRAT,called,Jessica Killin,5.09,100.0,,REPUBLICAN,True
+CO-6,CO,6,DEMOCRAT,called,Jason Crow,34.62,100.0,,DEMOCRAT,False
+CO-7,CO,7,DEMOCRAT,called,Brittany Pettersen,24.56,100.0,,DEMOCRAT,False
+CO-8,CO,8,DEMOCRAT,called,Manny Rutinel,14.91,100.0,,REPUBLICAN,True
+CT-1,CT,1,DEMOCRAT,called,Luke Bronin,36.32,100.0,,DEMOCRAT,False
+CT-2,CT,2,DEMOCRAT,called,Joe Courtney,24.91,100.0,,DEMOCRAT,False
+CT-3,CT,3,DEMOCRAT,called,Rosa Delauro,25.65,100.0,,DEMOCRAT,False
+CT-4,CT,4,DEMOCRAT,called,Jim Himes,33.07,100.0,,DEMOCRAT,False
+CT-5,CT,5,DEMOCRAT,called,Jahana Hayes,15.68,100.0,,DEMOCRAT,False
+DE-1,DE,1,DEMOCRAT,called,Sarah McBride,28.7,100.0,,DEMOCRAT,False
+FL-1,FL,1,REPUBLICAN,called,Jimmy Patronis,-26.87,100.0,,REPUBLICAN,False
+FL-2,FL,2,REPUBLICAN,called,Austin Rogers,-4.16,100.0,,REPUBLICAN,False
+FL-3,FL,3,REPUBLICAN,called,Kat Cammack,-12.15,100.0,,REPUBLICAN,False
+FL-4,FL,4,REPUBLICAN,called,Aaron Bean,-2.09,100.0,,REPUBLICAN,False
+FL-5,FL,5,REPUBLICAN,called,John Rutherford,-12.79,100.0,,REPUBLICAN,False
+FL-6,FL,6,REPUBLICAN,called,Randy Fine,-18.99,100.0,,REPUBLICAN,False
+FL-7,FL,7,REPUBLICAN,called,Ryan Elijah,-0.5,100.0,,REPUBLICAN,False
+FL-8,FL,8,REPUBLICAN,called,Mike Haridopolos,-6.34,100.0,,REPUBLICAN,False
+FL-9,FL,9,DEMOCRAT,called,Darren Soto,0.54,100.0,,DEMOCRAT,False
+FL-10,FL,10,DEMOCRAT,called,Maxwell Frost,0.0,,no Republican on the ballot,DEMOCRAT,False
+FL-11,FL,11,REPUBLICAN,called,Joe Strada,-6.94,100.0,,REPUBLICAN,False
+FL-12,FL,12,REPUBLICAN,called,Gus Bilirakis,-6.78,100.0,,REPUBLICAN,False
+FL-13,FL,13,REPUBLICAN,called,Anna Paulina Luna,-0.8,100.0,,REPUBLICAN,False
+FL-14,FL,14,DEMOCRAT,called,Kathy Castor,5.37,100.0,,DEMOCRAT,False
+FL-15,FL,15,REPUBLICAN,called,Laurel Lee,-8.57,100.0,,REPUBLICAN,False
+FL-16,FL,16,REPUBLICAN,called,Sydney Gruters,-4.23,100.0,,REPUBLICAN,False
+FL-17,FL,17,REPUBLICAN,called,Greg Steube,-18.3,100.0,,REPUBLICAN,False
+FL-18,FL,18,REPUBLICAN,called,Scott Franklin,-3.63,100.0,,REPUBLICAN,False
+FL-19,FL,19,REPUBLICAN,called,Jim Schwartzel,-23.47,100.0,,REPUBLICAN,False
+FL-20,FL,20,DEMOCRAT,called,Debbie Wasserman Schultz,52.63,100.0,,DEMOCRAT,False
+FL-21,FL,21,REPUBLICAN,called,Brian Mast,-9.07,100.0,,REPUBLICAN,False
+FL-22,FL,22,DEMOCRAT,called,Pia Dandiya,3.8,100.0,,DEMOCRAT,False
+FL-23,FL,23,DEMOCRAT,called,Lois Frankel,31.32,100.0,,DEMOCRAT,False
+FL-24,FL,24,DEMOCRAT,called,Oliver Gilbert,61.19,100.0,,DEMOCRAT,False
+FL-25,FL,25,DEMOCRAT,called,Jared Moskowitz,4.65,100.0,,DEMOCRAT,False
+FL-26,FL,26,REPUBLICAN,called,Mario Diaz-Balart,-0.73,100.0,,REPUBLICAN,False
+FL-27,FL,27,REPUBLICAN,called,Maria Elvira Salazar,-0.44,100.0,,REPUBLICAN,False
+FL-28,FL,28,REPUBLICAN,called,Carlos GiméNez,-7.24,100.0,,REPUBLICAN,False
+GA-1,GA,1,REPUBLICAN,called,Jim Kingston,-2.8,100.0,,REPUBLICAN,False
+GA-2,GA,2,DEMOCRAT,called,Sanford Bishop,21.62,100.0,,DEMOCRAT,False
+GA-3,GA,3,REPUBLICAN,called,Brian Jack,-17.2,100.0,,REPUBLICAN,False
+GA-4,GA,4,DEMOCRAT,called,Hank Johnson,65.28,100.0,,DEMOCRAT,False
+GA-5,GA,5,DEMOCRAT,called,Nikema Williams,80.4,100.0,,DEMOCRAT,False
+GA-6,GA,6,DEMOCRAT,called,Lucy McBath,61.78,100.0,,DEMOCRAT,False
+GA-7,GA,7,REPUBLICAN,called,Rich McCormick,-12.36,100.0,,REPUBLICAN,False
+GA-8,GA,8,REPUBLICAN,called,Austin Scott,-20.8,100.0,,REPUBLICAN,False
+GA-9,GA,9,REPUBLICAN,called,Andrew Clyde,-18.58,100.0,,REPUBLICAN,False
+GA-10,GA,10,REPUBLICAN,called,Houston Gaines,-7.28,100.0,,REPUBLICAN,False
+GA-11,GA,11,REPUBLICAN,called,John Cowan,-10.72,100.0,,REPUBLICAN,False
+GA-12,GA,12,REPUBLICAN,called,Rick Allen,-4.16,100.0,,REPUBLICAN,False
+GA-13,GA,13,DEMOCRAT,called,Jasmine Clark,59.66,100.0,,DEMOCRAT,False
+GA-14,GA,14,REPUBLICAN,called,Clay Fuller,-17.54,100.0,,REPUBLICAN,False
+HI-1,HI,1,DEMOCRAT,called,Ed Case,48.88,100.0,,DEMOCRAT,False
+HI-2,HI,2,DEMOCRAT,called,Jill Tokuda,33.0,100.0,,DEMOCRAT,False
+IA-1,IA,1,DEMOCRAT,called,Christina Bohannan,9.58,100.0,,REPUBLICAN,True
+IA-2,IA,2,DEMOCRAT,called,Lindsay James,3.98,100.0,,REPUBLICAN,True
+IA-3,IA,3,DEMOCRAT,called,Sarah Trone Garriott,7.27,100.0,,REPUBLICAN,True
+IA-4,IA,4,REPUBLICAN,called,Chris McGowan,-18.07,100.0,,REPUBLICAN,False
+ID-1,ID,1,REPUBLICAN,called,Russ Fulcher,-35.3,100.0,,REPUBLICAN,False
+ID-2,ID,2,REPUBLICAN,called,Mike Simpson,-11.4,100.0,,REPUBLICAN,False
+IL-1,IL,1,DEMOCRAT,called,Jonathan Jackson,45.08,100.0,,DEMOCRAT,False
+IL-2,IL,2,DEMOCRAT,called,Donna Miller,47.38,100.0,,DEMOCRAT,False
+IL-3,IL,3,DEMOCRAT,called,Delia Ramirez,55.12,100.0,,DEMOCRAT,False
+IL-4,IL,4,DEMOCRAT,called,Patty Garcia,55.6,100.0,,DEMOCRAT,False
+IL-5,IL,5,DEMOCRAT,called,Mike Quigley,54.6,100.0,,DEMOCRAT,False
+IL-6,IL,6,DEMOCRAT,called,Sean Casten,26.0,100.0,,DEMOCRAT,False
+IL-7,IL,7,DEMOCRAT,called,La Shawn Ford,78.7,100.0,,DEMOCRAT,False
+IL-8,IL,8,DEMOCRAT,called,Melissa Bean,28.86,100.0,,DEMOCRAT,False
+IL-9,IL,9,DEMOCRAT,called,Daniel K. Biss,53.9,100.0,,DEMOCRAT,False
+IL-10,IL,10,DEMOCRAT,called,Brad Schneider,40.9,100.0,,DEMOCRAT,False
+IL-11,IL,11,DEMOCRAT,called,Bill Foster,28.96,100.0,,DEMOCRAT,False
+IL-12,IL,12,REPUBLICAN,called,Mike Bost,-39.02,100.0,,REPUBLICAN,False
+IL-13,IL,13,DEMOCRAT,called,Nikki Budzinski,25.42,100.0,,DEMOCRAT,False
+IL-14,IL,14,DEMOCRAT,called,Lauren Underwood,25.72,100.0,,DEMOCRAT,False
+IL-15,IL,15,REPUBLICAN,called,Mary Miller,-33.78,100.0,,REPUBLICAN,False
+IL-16,IL,16,REPUBLICAN,called,Darin Lahood,-17.46,100.0,,REPUBLICAN,False
+IL-17,IL,17,DEMOCRAT,called,Eric Sorensen,20.34,100.0,,DEMOCRAT,False
+IN-1,IN,1,DEMOCRAT,called,Frank Mrvan,26.05,100.0,,DEMOCRAT,False
+IN-2,IN,2,REPUBLICAN,called,Rudy Yakym,-5.0,100.0,,REPUBLICAN,False
+IN-3,IN,3,REPUBLICAN,called,Marlin Stutzman,-9.74,100.0,,REPUBLICAN,False
+IN-4,IN,4,REPUBLICAN,called,Jim Baird,-8.44,100.0,,REPUBLICAN,False
+IN-5,IN,5,DEMOCRAT,called,J. D. Ford,3.32,100.0,,REPUBLICAN,True
+IN-6,IN,6,REPUBLICAN,called,Jefferson Shreve,-10.16,100.0,,REPUBLICAN,False
+IN-7,IN,7,DEMOCRAT,called,André Carson,56.55,100.0,,DEMOCRAT,False
+IN-8,IN,8,REPUBLICAN,called,Mark Messmer,-10.48,100.0,,REPUBLICAN,False
+IN-9,IN,9,REPUBLICAN,called,Erin Houchin,-10.59,100.0,,REPUBLICAN,False
+KS-1,KS,1,REPUBLICAN,called,Tracey Mann,-21.57,100.0,,REPUBLICAN,False
+KS-2,KS,2,REPUBLICAN,called,Derek Schmidt,-6.17,100.0,,REPUBLICAN,False
+KS-3,KS,3,DEMOCRAT,called,Sharice Davids,21.19,100.0,,DEMOCRAT,False
+KS-4,KS,4,REPUBLICAN,called,Ron Estes,-9.46,100.0,,REPUBLICAN,False
+KY-1,KY,1,REPUBLICAN,called,James Comer,-35.14,100.0,,REPUBLICAN,False
+KY-2,KY,2,REPUBLICAN,called,Brett Guthrie,-27.72,100.0,,REPUBLICAN,False
+KY-3,KY,3,DEMOCRAT,called,Morgan McGarvey,40.66,100.0,,DEMOCRAT,False
+KY-4,KY,4,REPUBLICAN,called,Ed Gallrein,-13.36,100.0,,REPUBLICAN,False
+KY-5,KY,5,REPUBLICAN,called,Hal Rogers,-45.8,100.0,,REPUBLICAN,False
+KY-6,KY,6,DEMOCRAT,called,Zach Dembo,9.4,100.0,,REPUBLICAN,True
+LA-1,LA,1,REPUBLICAN,called,Steve Scalise,-26.75,100.0,,REPUBLICAN,False
+LA-2,LA,2,DEMOCRAT,called,Troy Carter,64.8,100.0,,DEMOCRAT,False
+LA-3,LA,3,REPUBLICAN,called,Clay Higgins,-34.06,100.0,,REPUBLICAN,False
+LA-4,LA,4,REPUBLICAN,called,Mike Johnson,-35.54,100.0,,REPUBLICAN,False
+LA-5,LA,5,DEMOCRAT,leading,"Patricia ""Pat"" Moore",0.72,,"first round (all-party ballot); no one won a majority, runoff Dec 12",REPUBLICAN,True
+LA-6,LA,6,DEMOCRAT,leading,Chauna Banks,0.23,,"first round (all-party ballot); no one won a majority, runoff Dec 12",DEMOCRAT,False
+MA-1,MA,1,DEMOCRAT,called,Richard E. Neal,65.43,100.0,no Republican on the ballot,DEMOCRAT,False
+MA-2,MA,2,DEMOCRAT,called,James P. McGovern,100.0,100.0,no Republican on the ballot,DEMOCRAT,False
+MA-3,MA,3,DEMOCRAT,called,Lori Loureiro Trahan,36.9,100.0,,DEMOCRAT,False
+MA-4,MA,4,DEMOCRAT,called,Jake Auchincloss,32.76,100.0,,DEMOCRAT,False
+MA-5,MA,5,DEMOCRAT,called,Katherine M. Clark,100.0,100.0,no Republican on the ballot,DEMOCRAT,False
+MA-6,MA,6,DEMOCRAT,called,Dan Koh,26.8,100.0,,DEMOCRAT,False
+MA-7,MA,7,DEMOCRAT,called,Ayanna S. Pressley,100.0,100.0,no Republican on the ballot,DEMOCRAT,False
+MA-8,MA,8,DEMOCRAT,called,Stephen F. Lynch,42.58,100.0,,DEMOCRAT,False
+MA-9,MA,9,DEMOCRAT,called,Bill Keating,21.74,100.0,,DEMOCRAT,False
+MD-1,MD,1,REPUBLICAN,called,Andy Harris,-4.41,100.0,,REPUBLICAN,False
+MD-2,MD,2,DEMOCRAT,called,Johnny Olszewski,30.28,100.0,,DEMOCRAT,False
+MD-3,MD,3,DEMOCRAT,called,Sarah Elfreth,35.77,100.0,,DEMOCRAT,False
+MD-4,MD,4,DEMOCRAT,called,Glenn Ivey,83.29,100.0,,DEMOCRAT,False
+MD-5,MD,5,DEMOCRAT,called,Adrian Boafo,41.92,100.0,,DEMOCRAT,False
+MD-6,MD,6,DEMOCRAT,called,April McClain Delaney,21.44,100.0,,DEMOCRAT,False
+MD-7,MD,7,DEMOCRAT,called,Kweisi Mfume,70.63,100.0,,DEMOCRAT,False
+MD-8,MD,8,DEMOCRAT,called,Jamie Raskin,68.9,100.0,,DEMOCRAT,False
+ME-1,ME,1,DEMOCRAT,called,Chellie Pingree,32.22,100.0,,DEMOCRAT,False
+ME-2,ME,2,REPUBLICAN,called,Paul Lepage,-1.65,100.0,,DEMOCRAT,True
+MI-1,MI,1,REPUBLICAN,called,Jack Bergman,-9.55,100.0,,REPUBLICAN,False
+MI-2,MI,2,REPUBLICAN,called,John Moolenaar,-24.49,100.0,,REPUBLICAN,False
+MI-3,MI,3,DEMOCRAT,called,Hillary Scholten,15.88,100.0,,DEMOCRAT,False
+MI-4,MI,4,DEMOCRAT,called,Sean McCann,1.81,100.0,,REPUBLICAN,True
+MI-5,MI,5,REPUBLICAN,called,Tim Walberg,-20.56,100.0,,REPUBLICAN,False
+MI-6,MI,6,DEMOCRAT,called,Debbie Dingell,37.03,100.0,,DEMOCRAT,False
+MI-7,MI,7,DEMOCRAT,called,William Lawrence,3.34,100.0,,REPUBLICAN,True
+MI-8,MI,8,DEMOCRAT,called,Kristen McDonald Rivet,13.61,100.0,,DEMOCRAT,False
+MI-9,MI,9,REPUBLICAN,called,Lisa McClain,-27.92,100.0,,REPUBLICAN,False
+MI-10,MI,10,DEMOCRAT,called,Christina Hines,7.18,100.0,,REPUBLICAN,True
+MI-11,MI,11,DEMOCRAT,called,Jeremy Moss,24.02,100.0,,DEMOCRAT,False
+MI-12,MI,12,DEMOCRAT,called,Rashida Tlaib,54.68,100.0,,DEMOCRAT,False
+MI-13,MI,13,DEMOCRAT,called,Donavan McKinney,56.47,100.0,,DEMOCRAT,False
+MN-1,MN,1,DEMOCRAT,leading,Jake Johnson,0.1,,,REPUBLICAN,True
+MN-2,MN,2,DEMOCRAT,called,Matt Little,14.3,100.0,,DEMOCRAT,False
+MN-3,MN,3,DEMOCRAT,called,Kelly Morrison,28.19,100.0,,DEMOCRAT,False
+MN-4,MN,4,DEMOCRAT,called,Betty McCollum,46.28,100.0,,DEMOCRAT,False
+MN-5,MN,5,DEMOCRAT,called,Ilhan Omar,60.27,100.0,,DEMOCRAT,False
+MN-6,MN,6,REPUBLICAN,called,Tom Emmer,-11.57,100.0,,REPUBLICAN,False
+MN-7,MN,7,REPUBLICAN,called,Michelle Fischbach,-29.86,100.0,,REPUBLICAN,False
+MN-8,MN,8,REPUBLICAN,called,Pete Stauber,-6.18,100.0,,REPUBLICAN,False
+MO-1,MO,1,DEMOCRAT,called,Wesley Bell,67.55,100.0,,DEMOCRAT,False
+MO-2,MO,2,DEMOCRAT,called,Fred Wellman,4.93,100.0,,REPUBLICAN,True
+MO-3,MO,3,REPUBLICAN,called,Bob Onder,-8.47,100.0,,REPUBLICAN,False
+MO-4,MO,4,REPUBLICAN,called,Mark Alford,-25.95,100.0,,REPUBLICAN,False
+MO-5,MO,5,DEMOCRAT,called,Emanuel Cleaver,41.36,100.0,,DEMOCRAT,False
+MO-6,MO,6,REPUBLICAN,called,Chris Stigall,-19.74,100.0,,REPUBLICAN,False
+MO-7,MO,7,REPUBLICAN,called,Eric Burlison,-26.79,100.0,,REPUBLICAN,False
+MO-8,MO,8,REPUBLICAN,called,Jason Smith,-38.56,100.0,,REPUBLICAN,False
+MS-1,MS,1,REPUBLICAN,called,Trent Kelly,-17.33,100.0,,REPUBLICAN,False
+MS-2,MS,2,DEMOCRAT,called,Bennie Thompson,38.19,100.0,,DEMOCRAT,False
+MS-3,MS,3,REPUBLICAN,called,Michael Guest,-15.81,100.0,,REPUBLICAN,False
+MS-4,MS,4,REPUBLICAN,called,Mike Ezell,-24.69,100.0,,REPUBLICAN,False
+MT-1,MT,1,DEMOCRAT,called,Sam Forstag,3.84,100.0,,REPUBLICAN,True
+MT-2,MT,2,REPUBLICAN,called,Troy Downing,-25.85,100.0,,REPUBLICAN,False
+NC-1,NC,1,DEMOCRAT,called,Don Davis,3.44,100.0,,DEMOCRAT,False
+NC-2,NC,2,DEMOCRAT,called,Deborah Ross,51.63,100.0,,DEMOCRAT,False
+NC-3,NC,3,DEMOCRAT,called,Raymond Smith Jr.,0.11,100.0,,REPUBLICAN,True
+NC-4,NC,4,DEMOCRAT,called,Valerie Foushee,60.22,100.0,,DEMOCRAT,False
+NC-5,NC,5,DEMOCRAT,leading,Chuck Hubbard,0.12,,,REPUBLICAN,True
+NC-6,NC,6,DEMOCRAT,called,Cyril Jefferson,2.4,100.0,,REPUBLICAN,True
+NC-7,NC,7,REPUBLICAN,leading,David Rouzer,-0.72,,,REPUBLICAN,False
+NC-8,NC,8,REPUBLICAN,called,Mark Harris,-1.71,100.0,,REPUBLICAN,False
+NC-9,NC,9,DEMOCRAT,called,Richard Ojeda,2.3,100.0,,REPUBLICAN,True
+NC-10,NC,10,REPUBLICAN,called,Pat Harrigan,-0.85,100.0,,REPUBLICAN,False
+NC-11,NC,11,DEMOCRAT,called,Jamie Ager,15.82,100.0,,REPUBLICAN,True
+NC-12,NC,12,DEMOCRAT,called,Alma Adams,62.46,100.0,,DEMOCRAT,False
+NC-13,NC,13,DEMOCRAT,called,Paul Barringer,2.52,100.0,,REPUBLICAN,True
+NC-14,NC,14,DEMOCRAT,called,Lakesha Womack,2.28,100.0,,REPUBLICAN,True
+ND-1,ND,1,REPUBLICAN,called,Julie Fedorchak,-20.66,100.0,,REPUBLICAN,False
+NE-1,NE,1,REPUBLICAN,called,Mike Flood,-2.87,100.0,,REPUBLICAN,False
+NE-2,NE,2,DEMOCRAT,called,Denise Powell,15.92,100.0,,REPUBLICAN,True
+NE-3,NE,3,REPUBLICAN,called,Adrian Smith,-51.01,100.0,,REPUBLICAN,False
+NH-1,NH,1,DEMOCRAT,called,Stefany Shaheen,14.08,100.0,,DEMOCRAT,False
+NH-2,NH,2,DEMOCRAT,called,Maggie Goodlander,20.44,100.0,,DEMOCRAT,False
+NJ-1,NJ,1,DEMOCRAT,called,Donald Norcross,40.75,100.0,,DEMOCRAT,False
+NJ-2,NJ,2,DEMOCRAT,called,Zack Mullock,2.73,100.0,,REPUBLICAN,True
+NJ-3,NJ,3,DEMOCRAT,called,Herb Conaway,27.45,100.0,,DEMOCRAT,False
+NJ-4,NJ,4,REPUBLICAN,called,Chris Smith,-17.96,100.0,,REPUBLICAN,False
+NJ-5,NJ,5,DEMOCRAT,called,Josh Gottheimer,27.9,100.0,,DEMOCRAT,False
+NJ-6,NJ,6,DEMOCRAT,called,Frank Pallone,38.68,100.0,,DEMOCRAT,False
+NJ-7,NJ,7,DEMOCRAT,called,Rebecca Bennett,16.47,100.0,,REPUBLICAN,True
+NJ-8,NJ,8,DEMOCRAT,called,Rob Menendez,87.99,100.0,no Republican on the ballot,DEMOCRAT,False
+NJ-9,NJ,9,DEMOCRAT,called,Nellie Pou,34.94,100.0,,DEMOCRAT,False
+NJ-10,NJ,10,DEMOCRAT,called,Lamonica McIver,69.24,100.0,,DEMOCRAT,False
+NJ-11,NJ,11,DEMOCRAT,called,Analilia Mejia,22.49,100.0,,DEMOCRAT,False
+NJ-12,NJ,12,DEMOCRAT,called,Adam Hamawy,42.6,100.0,,DEMOCRAT,False
+NM-1,NM,1,DEMOCRAT,called,Melanie Stansbury,27.28,100.0,,DEMOCRAT,False
+NM-2,NM,2,DEMOCRAT,called,Gabe Vasquez,17.5,100.0,,DEMOCRAT,False
+NM-3,NM,3,DEMOCRAT,called,Teresa Leger Fernandez,23.32,100.0,,DEMOCRAT,False
+NV-1,NV,1,DEMOCRAT,called,Dina Titus,21.52,100.0,,DEMOCRAT,False
+NV-2,NV,2,DEMOCRAT,called,Teresa Benitez-Thompson,5.86,100.0,,REPUBLICAN,True
+NV-3,NV,3,DEMOCRAT,called,Susie Lee,21.48,100.0,,DEMOCRAT,False
+NV-4,NV,4,DEMOCRAT,called,Steven Horsford,22.67,100.0,,DEMOCRAT,False
+NY-1,NY,1,REPUBLICAN,called,Nick Lalota,-2.24,100.0,,REPUBLICAN,False
+NY-2,NY,2,REPUBLICAN,called,Andrew Garbarino,-2.3,100.0,,REPUBLICAN,False
+NY-3,NY,3,DEMOCRAT,called,Tom Suozzi,10.29,100.0,,DEMOCRAT,False
+NY-4,NY,4,DEMOCRAT,called,Laura Gillen,13.44,100.0,,DEMOCRAT,False
+NY-5,NY,5,DEMOCRAT,called,Gregory Meeks,61.23,100.0,,DEMOCRAT,False
+NY-6,NY,6,DEMOCRAT,called,Grace Meng,38.04,100.0,,DEMOCRAT,False
+NY-7,NY,7,DEMOCRAT,called,Claire Valdez,68.31,100.0,,DEMOCRAT,False
+NY-8,NY,8,DEMOCRAT,called,Hakeem Jeffries,59.26,100.0,,DEMOCRAT,False
+NY-9,NY,9,DEMOCRAT,called,Yvette Clarke,65.07,100.0,,DEMOCRAT,False
+NY-10,NY,10,DEMOCRAT,called,Brad Lander,67.34,100.0,,DEMOCRAT,False
+NY-11,NY,11,REPUBLICAN,called,Nicole Malliotakis,-12.33,100.0,,REPUBLICAN,False
+NY-12,NY,12,DEMOCRAT,called,Micah Lasher,57.18,100.0,,DEMOCRAT,False
+NY-13,NY,13,DEMOCRAT,called,Darializa Avila Chevalier,76.16,100.0,,DEMOCRAT,False
+NY-14,NY,14,DEMOCRAT,called,Alexandria Ocasio-Cortez,56.68,100.0,,DEMOCRAT,False
+NY-15,NY,15,DEMOCRAT,called,Ritchie Torres,66.15,100.0,,DEMOCRAT,False
+NY-16,NY,16,DEMOCRAT,called,George Latimer,51.84,100.0,,DEMOCRAT,False
+NY-17,NY,17,DEMOCRAT,called,Cait Conley,6.11,100.0,,REPUBLICAN,True
+NY-18,NY,18,DEMOCRAT,called,Pat Ryan,25.81,100.0,,DEMOCRAT,False
+NY-19,NY,19,DEMOCRAT,called,Josh Riley,14.68,100.0,,DEMOCRAT,False
+NY-20,NY,20,DEMOCRAT,called,Paul Tonko,27.51,100.0,,DEMOCRAT,False
+NY-21,NY,21,REPUBLICAN,called,Anthony Constantino,-1.61,100.0,,REPUBLICAN,False
+NY-22,NY,22,DEMOCRAT,called,John Mannion,17.0,100.0,,DEMOCRAT,False
+NY-23,NY,23,REPUBLICAN,called,Nick Langworthy,-20.27,100.0,,REPUBLICAN,False
+NY-24,NY,24,REPUBLICAN,called,Claudia Tenney,-20.75,100.0,,REPUBLICAN,False
+NY-25,NY,25,DEMOCRAT,called,Joseph Morelle,26.01,100.0,,DEMOCRAT,False
+NY-26,NY,26,DEMOCRAT,called,Tim Kennedy,32.03,100.0,,DEMOCRAT,False
+OH-1,OH,1,DEMOCRAT,called,Greg Landsman,11.44,100.0,,DEMOCRAT,False
+OH-2,OH,2,REPUBLICAN,called,David J. Taylor,-28.48,100.0,,REPUBLICAN,False
+OH-3,OH,3,DEMOCRAT,called,Joyce Beatty,54.44,100.0,,DEMOCRAT,False
+OH-4,OH,4,REPUBLICAN,called,Jim Jordan,-33.24,100.0,,REPUBLICAN,False
+OH-5,OH,5,REPUBLICAN,called,Bob Latta,-11.7,100.0,,REPUBLICAN,False
+OH-6,OH,6,REPUBLICAN,called,Michael A. Rulli,-20.8,100.0,,REPUBLICAN,False
+OH-7,OH,7,DEMOCRAT,called,Brian Poindexter,9.86,100.0,,REPUBLICAN,True
+OH-8,OH,8,REPUBLICAN,called,Warren Davidson,-4.28,100.0,,REPUBLICAN,False
+OH-9,OH,9,DEMOCRAT,called,Marcy Kaptur,5.45,100.0,,DEMOCRAT,False
+OH-10,OH,10,DEMOCRAT,called,Kristina Knickerbocker,1.63,100.0,,REPUBLICAN,True
+OH-11,OH,11,DEMOCRAT,called,Shontel M. Brown,67.06,100.0,,DEMOCRAT,False
+OH-12,OH,12,REPUBLICAN,called,Troy Balderson,-18.78,100.0,,REPUBLICAN,False
+OH-13,OH,13,DEMOCRAT,called,Emilia Sykes,21.56,100.0,,DEMOCRAT,False
+OH-14,OH,14,REPUBLICAN,called,David P. Joyce,-10.06,100.0,,REPUBLICAN,False
+OH-15,OH,15,DEMOCRAT,called,Don Leonard,6.62,100.0,,REPUBLICAN,True
+OK-1,OK,1,REPUBLICAN,called,Mark Tedford,-4.6,100.0,,REPUBLICAN,False
+OK-2,OK,2,REPUBLICAN,called,Josh Brecheen,-38.99,100.0,,REPUBLICAN,False
+OK-3,OK,3,REPUBLICAN,called,Frank Lucas,-27.92,100.0,,REPUBLICAN,False
+OK-4,OK,4,REPUBLICAN,called,Tom Cole,-18.12,100.0,,REPUBLICAN,False
+OK-5,OK,5,REPUBLICAN,called,Stephanie Bice,-1.26,100.0,,REPUBLICAN,False
+OR-1,OR,1,DEMOCRAT,called,Suzanne Bonamici,42.62,100.0,,DEMOCRAT,False
+OR-2,OR,2,REPUBLICAN,called,Cliff Bentz,-22.97,100.0,,REPUBLICAN,False
+OR-3,OR,3,DEMOCRAT,called,Maxine Dexter,54.94,100.0,,DEMOCRAT,False
+OR-4,OR,4,DEMOCRAT,called,Val Hoyle,10.87,100.0,,DEMOCRAT,False
+OR-5,OR,5,DEMOCRAT,called,Janelle Bynum,10.07,100.0,,DEMOCRAT,False
+OR-6,OR,6,DEMOCRAT,called,Andrea Salinas,16.88,100.0,,DEMOCRAT,False
+PA-1,PA,1,DEMOCRAT,called,Bob Harvie,5.76,100.0,,REPUBLICAN,True
+PA-2,PA,2,DEMOCRAT,called,Brendan Boyle,61.74,100.0,,DEMOCRAT,False
+PA-3,PA,3,DEMOCRAT,called,Chris Rabb,93.61,100.0,no Republican on the ballot,DEMOCRAT,False
+PA-4,PA,4,DEMOCRAT,called,Madeleine Dean,34.5,100.0,,DEMOCRAT,False
+PA-5,PA,5,DEMOCRAT,called,Mary Gay Scanlon,44.44,100.0,,DEMOCRAT,False
+PA-6,PA,6,DEMOCRAT,called,Chrissy Houlahan,28.96,100.0,,DEMOCRAT,False
+PA-7,PA,7,DEMOCRAT,called,Bob Brooks,12.58,100.0,,REPUBLICAN,True
+PA-8,PA,8,DEMOCRAT,called,Paige Cognetti,8.96,100.0,,REPUBLICAN,True
+PA-9,PA,9,REPUBLICAN,called,Dan Meuser,-22.88,100.0,,REPUBLICAN,False
+PA-10,PA,10,DEMOCRAT,called,Janelle Stelson,10.38,100.0,,REPUBLICAN,True
+PA-11,PA,11,REPUBLICAN,called,Lloyd Smucker,-10.78,100.0,,REPUBLICAN,False
+PA-12,PA,12,DEMOCRAT,called,Summer Lee,31.36,100.0,,DEMOCRAT,False
+PA-13,PA,13,REPUBLICAN,called,John Joyce,-34.86,100.0,,REPUBLICAN,False
+PA-14,PA,14,REPUBLICAN,called,Guy Reschenthaler,-15.0,100.0,,REPUBLICAN,False
+PA-15,PA,15,REPUBLICAN,called,Glenn Thompson,-27.56,100.0,,REPUBLICAN,False
+PA-16,PA,16,REPUBLICAN,called,Mike Kelly,-7.66,100.0,,REPUBLICAN,False
+PA-17,PA,17,DEMOCRAT,called,Chris Deluzio,25.94,100.0,,DEMOCRAT,False
+RI-1,RI,1,DEMOCRAT,called,Gabriel Amo,41.12,100.0,,DEMOCRAT,False
+RI-2,RI,2,DEMOCRAT,called,Seth Magaziner,24.1,100.0,,DEMOCRAT,False
+SC-1,SC,1,DEMOCRAT,called,Nancy Lacore,1.03,100.0,,REPUBLICAN,True
+SC-2,SC,2,REPUBLICAN,called,Joe Wilson,-0.99,100.0,,REPUBLICAN,False
+SC-3,SC,3,REPUBLICAN,called,Sheri Biggs,-29.29,100.0,,REPUBLICAN,False
+SC-4,SC,4,REPUBLICAN,called,William Timmons,-6.06,100.0,,REPUBLICAN,False
+SC-5,SC,5,REPUBLICAN,called,Wes Climer,-5.71,100.0,,REPUBLICAN,False
+SC-6,SC,6,DEMOCRAT,called,Jim Clyburn,38.74,100.0,,DEMOCRAT,False
+SC-7,SC,7,REPUBLICAN,called,Russell Fry,-13.48,100.0,,REPUBLICAN,False
+SD-1,SD,1,REPUBLICAN,called,Marty Jackley,-28.0,100.0,,REPUBLICAN,False
+TN-1,TN,1,REPUBLICAN,called,Diana Harshbarger,-30.75,100.0,,REPUBLICAN,False
+TN-2,TN,2,REPUBLICAN,called,Tim Burchett,-16.57,100.0,,REPUBLICAN,False
+TN-3,TN,3,REPUBLICAN,called,Chuck Fleischmann,-17.38,100.0,,REPUBLICAN,False
+TN-4,TN,4,DEMOCRAT,leading,Victoria Broderick,0.14,,,REPUBLICAN,True
+TN-5,TN,5,REPUBLICAN,called,Charlie Hatcher,-4.94,100.0,,REPUBLICAN,False
+TN-6,TN,6,REPUBLICAN,called,Johnny Garrett,-3.26,100.0,,REPUBLICAN,False
+TN-7,TN,7,REPUBLICAN,called,Matt Van Epps,-2.17,100.0,,REPUBLICAN,False
+TN-8,TN,8,REPUBLICAN,called,David Kustoff,-5.27,100.0,,REPUBLICAN,False
+TN-9,TN,9,REPUBLICAN,called,Brent Taylor,-1.13,100.0,,DEMOCRAT,True
+TX-1,TX,1,REPUBLICAN,called,Nathaniel Moran,-38.08,100.0,,REPUBLICAN,False
+TX-2,TX,2,REPUBLICAN,called,Steve Toth,-1.94,100.0,,REPUBLICAN,False
+TX-3,TX,3,REPUBLICAN,called,Keith Self,-5.48,100.0,,REPUBLICAN,False
+TX-4,TX,4,REPUBLICAN,called,Pat Fallon,-12.08,100.0,,REPUBLICAN,False
+TX-5,TX,5,REPUBLICAN,called,Lance Gooden,-2.9,100.0,,REPUBLICAN,False
+TX-6,TX,6,REPUBLICAN,called,Jake Ellzey,-4.3,100.0,,REPUBLICAN,False
+TX-7,TX,7,DEMOCRAT,called,Lizzie Fletcher,43.33,100.0,,DEMOCRAT,False
+TX-8,TX,8,REPUBLICAN,called,Jessica Steinmann,-6.38,100.0,,REPUBLICAN,False
+TX-9,TX,9,DEMOCRAT,called,Leticia Gutierrez,15.12,100.0,,DEMOCRAT,False
+TX-10,TX,10,REPUBLICAN,called,Chris Gober,-7.52,100.0,,REPUBLICAN,False
+TX-11,TX,11,REPUBLICAN,called,August Pfluger,-19.0,100.0,,REPUBLICAN,False
+TX-12,TX,12,REPUBLICAN,called,Craig Goldman,-6.2,100.0,,REPUBLICAN,False
+TX-13,TX,13,REPUBLICAN,called,Ronny Jackson,-30.44,100.0,,REPUBLICAN,False
+TX-14,TX,14,REPUBLICAN,called,Randy Weber,-7.98,100.0,,REPUBLICAN,False
+TX-15,TX,15,DEMOCRAT,called,Bobby Pulido,24.66,100.0,,REPUBLICAN,True
+TX-16,TX,16,DEMOCRAT,called,Veronica Escobar,41.6,100.0,,DEMOCRAT,False
+TX-17,TX,17,REPUBLICAN,called,Pete Sessions,-7.12,100.0,,REPUBLICAN,False
+TX-18,TX,18,DEMOCRAT,called,Christian Menefee,72.08,100.0,,DEMOCRAT,False
+TX-19,TX,19,REPUBLICAN,called,Tom Sell,-38.96,100.0,,REPUBLICAN,False
+TX-20,TX,20,DEMOCRAT,called,Joaquin Castro,55.24,100.0,,DEMOCRAT,False
+TX-21,TX,21,REPUBLICAN,called,Mark Teixeira,-8.9,100.0,,REPUBLICAN,False
+TX-22,TX,22,REPUBLICAN,called,Trever Nehls,-3.58,100.0,,REPUBLICAN,False
+TX-23,TX,23,DEMOCRAT,called,Katy Padilla Stout,8.22,100.0,,REPUBLICAN,True
+TX-24,TX,24,REPUBLICAN,called,Beth Van Duyne,-6.8,100.0,,REPUBLICAN,False
+TX-25,TX,25,REPUBLICAN,called,Roger Williams,-7.42,100.0,,REPUBLICAN,False
+TX-26,TX,26,REPUBLICAN,called,Brandon Gill,-10.3,100.0,,REPUBLICAN,False
+TX-27,TX,27,REPUBLICAN,called,Michael Cloud,-2.32,100.0,,REPUBLICAN,False
+TX-28,TX,28,DEMOCRAT,called,Henry Cuellar,36.12,100.0,,DEMOCRAT,False
+TX-29,TX,29,DEMOCRAT,called,Sylvia Garcia,59.88,100.0,,DEMOCRAT,False
+TX-30,TX,30,DEMOCRAT,called,Frederick Haynes III,65.28,100.0,,DEMOCRAT,False
+TX-31,TX,31,REPUBLICAN,called,John Carter,-8.91,100.0,,REPUBLICAN,False
+TX-32,TX,32,REPUBLICAN,called,Jace Yarbrough,-2.9,100.0,,DEMOCRAT,True
+TX-33,TX,33,DEMOCRAT,called,Colin Allred,57.03,100.0,,DEMOCRAT,False
+TX-34,TX,34,DEMOCRAT,called,Vicente Gonzalez,15.84,100.0,,DEMOCRAT,False
+TX-35,TX,35,DEMOCRAT,called,Johnny Garcia,10.96,100.0,,DEMOCRAT,False
+TX-36,TX,36,REPUBLICAN,called,Brian Babin,-7.08,100.0,,REPUBLICAN,False
+TX-37,TX,37,DEMOCRAT,called,Greg Casar,67.5,100.0,,DEMOCRAT,False
+TX-38,TX,38,REPUBLICAN,called,Jon Bonck,-4.17,100.0,,REPUBLICAN,False
+UT-1,UT,1,DEMOCRAT,called,Ben McAdams,44.7,100.0,,REPUBLICAN,True
+UT-2,UT,2,REPUBLICAN,called,Blake Moore,-7.12,100.0,,REPUBLICAN,False
+UT-3,UT,3,REPUBLICAN,called,Celeste Maloy,-20.52,100.0,,REPUBLICAN,False
+UT-4,UT,4,REPUBLICAN,called,Mike Kennedy,-13.82,100.0,,REPUBLICAN,False
+VA-1,VA,1,DEMOCRAT,called,Shannon Taylor,2.93,100.0,,REPUBLICAN,True
+VA-2,VA,2,DEMOCRAT,called,Elaine Luria,8.97,100.0,,REPUBLICAN,True
+VA-3,VA,3,DEMOCRAT,called,Bobby Scott,49.27,100.0,,DEMOCRAT,False
+VA-4,VA,4,DEMOCRAT,called,Jennifer McClellan,46.87,100.0,,DEMOCRAT,False
+VA-5,VA,5,REPUBLICAN,called,John McGuire,-1.55,100.0,,REPUBLICAN,False
+VA-6,VA,6,REPUBLICAN,called,Ben Cline,-10.24,100.0,,REPUBLICAN,False
+VA-7,VA,7,DEMOCRAT,called,Eugene Vindman,22.61,100.0,,DEMOCRAT,False
+VA-8,VA,8,DEMOCRAT,called,Don Beyer,61.71,100.0,,DEMOCRAT,False
+VA-9,VA,9,REPUBLICAN,called,Morgan Griffith,-30.84,100.0,,REPUBLICAN,False
+VA-10,VA,10,DEMOCRAT,called,Suhas Subramanyam,25.33,100.0,,DEMOCRAT,False
+VA-11,VA,11,DEMOCRAT,called,James Walkinshaw,50.27,100.0,,DEMOCRAT,False
+VT-1,VT,1,DEMOCRAT,called,Becca Balint,34.36,100.0,,DEMOCRAT,False
+WA-1,WA,1,DEMOCRAT,called,Suzan Delbene,35.28,100.0,,DEMOCRAT,False
+WA-2,WA,2,DEMOCRAT,called,Rick Larsen,33.4,100.0,,DEMOCRAT,False
+WA-3,WA,3,DEMOCRAT,called,Marie Gluesenkamp Perez,8.27,100.0,,DEMOCRAT,False
+WA-4,WA,4,REPUBLICAN,called,Amanda McKinney,-7.75,100.0,,REPUBLICAN,False
+WA-5,WA,5,REPUBLICAN,called,Michael Baumgartner,-4.8,100.0,,REPUBLICAN,False
+WA-6,WA,6,DEMOCRAT,called,Emily Randall,25.14,100.0,,DEMOCRAT,False
+WA-7,WA,7,DEMOCRAT,called,Pramila Jayapal,75.57,100.0,,DEMOCRAT,False
+WA-8,WA,8,DEMOCRAT,called,Kim Schrier,14.44,100.0,,DEMOCRAT,False
+WA-9,WA,9,DEMOCRAT,called,Adam Smith,52.13,100.0,,DEMOCRAT,False
+WA-10,WA,10,DEMOCRAT,called,Marilyn Strickland,28.5,100.0,,DEMOCRAT,False
+WI-1,WI,1,DEMOCRAT,called,Mitchell Berman,3.92,100.0,,REPUBLICAN,True
+WI-2,WI,2,DEMOCRAT,called,Mark Pocan,100.0,100.0,no Republican on the ballot,DEMOCRAT,False
+WI-3,WI,3,DEMOCRAT,called,Rebecca Cooke,6.65,100.0,,REPUBLICAN,True
+WI-4,WI,4,DEMOCRAT,called,Gwen Moore,62.5,100.0,,DEMOCRAT,False
+WI-5,WI,5,REPUBLICAN,called,Scott Fitzgerald,-18.1,100.0,,REPUBLICAN,False
+WI-6,WI,6,REPUBLICAN,called,Glenn Grothman,-9.44,100.0,,REPUBLICAN,False
+WI-7,WI,7,REPUBLICAN,called,Michael Alfonso,-13.81,100.0,,REPUBLICAN,False
+WI-8,WI,8,REPUBLICAN,called,Tony Wied,-7.84,100.0,,REPUBLICAN,False
+WV-1,WV,1,REPUBLICAN,called,Carol Miller,-17.43,100.0,,REPUBLICAN,False
+WV-2,WV,2,REPUBLICAN,called,Riley Moore,-18.74,100.0,,REPUBLICAN,False
+WY-1,WY,1,REPUBLICAN,called,Chuck Gray,-20.86,100.0,,REPUBLICAN,False

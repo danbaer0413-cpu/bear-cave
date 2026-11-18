@@ -12,6 +12,21 @@ c = pd.read_csv(f"{app}/contests.csv", dtype=str)
 h24 = c[(c.year == "2024") & (c.office == "U.S. House") & (c.election_type == "general")].copy()
 h24["district"] = h24.district.replace("AT-LARGE", "1")
 w24 = dict(zip(zip(h24.state_po, h24.district), h24.winner_party))
+# 2026 count for every district (results database: civicAPI / NBC-AP, unofficial): winner's name, margin and share counted
+h26 = c[(c.year == "2026") & (c.office == "U.S. House") & (c.election_type == "general")].copy()
+h26["district"] = h26.district.replace("AT-LARGE", "1")
+r26 = {(r.state_po, r.district): r for r in h26.itertuples()}
+import re
+def title(n):
+    """CHAUNA BANKS -> Chauna Banks; keeps II/III/IV and capitalizes after quotes, hyphens and Mc/O' (PATRICIA "PAT" MOORE -> Patricia "Pat" Moore)."""
+    if not isinstance(n, str): return ""
+    out = []
+    for w in n.split():
+        if w.upper() in ("II", "III", "IV", "JR.", "SR."): out.append(w.upper() if w.upper() in ("II", "III", "IV") else w.capitalize()); continue
+        w = re.sub(r"[A-Za-z]+", lambda m: m.group(0).capitalize(), w.lower())
+        w = re.sub(r"^(Mc)([a-z])", lambda m: m.group(1) + m.group(2).upper(), w)
+        out.append(w)
+    return " ".join(out)
 # seat list = every district NBC lists (called + live) ; fall back to 2024 districts
 keys = set(zip(called.state, called.district)) | set(live.index)
 rows = []
@@ -22,12 +37,22 @@ for st, d in sorted(keys, key=lambda k: (k[0], int(k[1]) if k[1].isdigit() else 
     if len(cl):
         party, status = ("DEMOCRAT" if cl.winner.iloc[0] == "D" else "REPUBLICAN"), "called"
         lead, margin, pin = "", None, None
+        x = r26.get((st, d))
+        if x is not None and x.winner_party == party:
+            lead = title(x.winner); margin = float(x.margin) if str(x.margin) not in ("", "nan") else None
+            pin = None if str(x.first_votes) in ("", "nan", "<NA>") or str(x.first_votes) == "0" else 100.0
+            if isinstance(x.margin_note, str) and x.margin_note: note = x.margin_note
     else:
         dp = float(lv.dem_pct) if lv is not None and str(lv.dem_pct) not in ("", "nan") else 0.0
         rp = float(lv.rep_pct) if lv is not None and str(lv.rep_pct) not in ("", "nan") else 0.0
         party = "DEMOCRAT" if dp >= rp else "REPUBLICAN"; status = "leading"
         lead = (lv.dem_name if party == "DEMOCRAT" else lv.rep_name) if lv is not None else ""
         margin = round(dp - rp, 1); pin = lv.pct_in if lv is not None else None
+        x = r26.get((st, d))
+        if x is not None and str(x.margin) not in ("", "nan"):   # the results database has the newer count
+            party = x.winner_party if x.winner_party in ("DEMOCRAT", "REPUBLICAN") else party
+            lead, margin = title(x.winner), float(x.margin); pin = None   # the night file's share counted is older than this count
+            if isinstance(x.margin_note, str) and x.margin_note: note = x.margin_note
         # top-two states: only one name listed means both finalists are from that party, so the D-minus-R gap is meaningless
         one = lv is not None and (str(lv.dem_pct) in ("", "nan")) != (str(lv.rep_pct) in ("", "nan"))
         if st in ("CA", "WA") and one:
