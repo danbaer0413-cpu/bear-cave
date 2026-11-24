@@ -1,5 +1,5 @@
 key,state_po,district,party,status,leader,margin,pct_in,note,party_2024,flip
-AK-1,AK,1,REPUBLICAN,leading,Nick Begich III,-5.78,,main opponent is nonpartisan,REPUBLICAN,False
+AK-1,AK,1,REPUBLICAN,called,Nick Begich III,-5.78,100.0,main opponent is nonpartisan,REPUBLICAN,False
 AL-1,AL,1,REPUBLICAN,called,Jerry Carl,-18.14,100.0,,REPUBLICAN,False
 AL-2,AL,2,DEMOCRAT,called,Shomari Figures,7.5,100.0,,DEMOCRAT,False
 AL-3,AL,3,REPUBLICAN,called,Mike Rogers,-27.9,100.0,,REPUBLICAN,False
@@ -238,7 +238,7 @@ NC-3,NC,3,DEMOCRAT,called,Raymond Smith Jr.,0.11,100.0,,REPUBLICAN,True
 NC-4,NC,4,DEMOCRAT,called,Valerie Foushee,60.22,100.0,,DEMOCRAT,False
 NC-5,NC,5,DEMOCRAT,leading,Chuck Hubbard,0.12,,,REPUBLICAN,True
 NC-6,NC,6,DEMOCRAT,called,Cyril Jefferson,2.4,100.0,,REPUBLICAN,True
-NC-7,NC,7,REPUBLICAN,leading,David Rouzer,-0.72,,,REPUBLICAN,False
+NC-7,NC,7,REPUBLICAN,called,David Rouzer,-0.72,100.0,,REPUBLICAN,False
 NC-8,NC,8,REPUBLICAN,called,Mark Harris,-1.71,100.0,,REPUBLICAN,False
 NC-9,NC,9,DEMOCRAT,called,Richard Ojeda,2.3,100.0,,REPUBLICAN,True
 NC-10,NC,10,REPUBLICAN,called,Pat Harrigan,-0.85,100.0,,REPUBLICAN,False
@@ -353,7 +353,7 @@ SD-1,SD,1,REPUBLICAN,called,Marty Jackley,-28.0,100.0,,REPUBLICAN,False
 TN-1,TN,1,REPUBLICAN,called,Diana Harshbarger,-30.75,100.0,,REPUBLICAN,False
 TN-2,TN,2,REPUBLICAN,called,Tim Burchett,-16.57,100.0,,REPUBLICAN,False
 TN-3,TN,3,REPUBLICAN,called,Chuck Fleischmann,-17.38,100.0,,REPUBLICAN,False
-TN-4,TN,4,DEMOCRAT,leading,Victoria Broderick,0.14,,,REPUBLICAN,True
+TN-4,TN,4,DEMOCRAT,called,Victoria Broderick,0.14,100.0,,REPUBLICAN,True
 TN-5,TN,5,REPUBLICAN,called,Charlie Hatcher,-4.94,100.0,,REPUBLICAN,False
 TN-6,TN,6,REPUBLICAN,called,Johnny Garrett,-3.26,100.0,,REPUBLICAN,False
 TN-7,TN,7,REPUBLICAN,called,Matt Van Epps,-2.17,100.0,,REPUBLICAN,False
